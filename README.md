@@ -1,2 +1,2 @@
 # dotfiles
-dotfiles for my  Arch desctop configuration
+dotfiles for my  Arch desktop configuration
