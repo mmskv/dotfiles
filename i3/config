@@ -166,7 +166,7 @@ mode "resize" {
 gaps inner 8
 gaps outer -2
 #smart_borders on
-#smart_gaps on
+smart_gaps on
 bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -200,7 +200,7 @@ set_from_resource $blk i3wm.color0  #f0f0f0
 client.focused          $bg     $bg    #FFFFF  $bg       $bg
 client.focused_inactive $bg     $bg    #FFFFF  $bg       $bg
 client.unfocused        $dk     $dk    #FFFFF  $dk       $dk
-client.urgent           $bg     $bg    #FFFFF  $bg       $bg
+client.urgent           $bg     $bg    #FFFFF  $bg       $bg.
 client.placeholder      $bg     $bg    #FFFFF  $bg       $bg
 
 client.background       $bg
@@ -210,3 +210,29 @@ client.background       $bg
 
 bindsym $mod+q exec ~/scripts/i3lock-blur.sh
 exec xautolock -time 4 -locker '~/scripts/i3lock-blur.sh'
+
+#startup conky
+exec --no-startup-id conky
+
+#add kb layouts
+#exec "setxkbmap -layout us,ru"
+#exec "setxkbmap -option 'grp:alt_shift_toggle'"
+#bindsym $mod+i exec setxkbmap -layout us
+#bindsym $mod+Shift+i exec setxkbmap -layout ru
+
+exec_always ~/scripts/keyboardbodge
+#bind for telegram
+bindsym $mod+t exec telegram-desktop
+
+#screenshot shotrcut
+bindsym Print exec "maim -s --format=png | xclip -selection clipboard -t image/png"
+
+#autostart clock on workspace 6
+#exec_always --no-startup-id i3-msg 'workspace 2; exec termite -e tty-clock -cbs'
+#
+
+#workspace 2 on second monitor
+workspace $ws2 output DVI-I-1
+
+#fixing floating windows that open too big on 2 monitor
+floating_maximum_size 900 x 600
