@@ -4,21 +4,19 @@
 # Should you change your keyboard layout some time, delete
 # this file and re-run i3-config-wizard(1).
 #
-
 # i3 config file (v4)
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
-
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Source Code Pro 9
+font pango:Source Code Pro 10 
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
-new_window pixel 1
+new_window pixel 1 
 new_float normal
 hide_edge_borders none
 # Before i3 v4.8, we used to recommend this one as the default:
@@ -37,8 +35,9 @@ bindsym $mod+b exec firefox
 # kill focused window
 bindsym $mod+Shift+q kill
 
+bindsym $mod+d exec rofi -show run -lines 4 -eh 2 -width 40 -padding 8 -opacity 85 -bw 0 -bc "#C35055" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color"  -font "System San Francisco Display 15"
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -sb '#C35055' -nb '#120F16' 
+#bindsym $mod+d exec dmenu_run -sb '#C35055' -nb '#120F16' 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -163,27 +162,29 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 # i3 gaps
-gaps inner 8
-gaps outer -2
+gaps inner 10
+gaps outer 70
 #smart_borders on
-smart_gaps on
+#smart_gaps on
 bindsym $mod+r mode "resize"
+exec_always --no-startup-id /home/overaid/usr/scripts/launch-polybar.sh
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-	colors {
-    background $blk
-    statusline #FFFFFF
-    separator  #FFFFFF
-
-    focused_workspace  $bg $bg #FFFFFF
-    active_workspace   $blk $blk #FFFFFF
-    inactive_workspace $blk $blk #888888
-	urgent_workspace   #900000 #900000 #FFFFFF
-    	binding_mode       #900000 #900000 #FFFFFF
-  }
-        status_command i3status
-}
+# bar {
+#	colors {
+#    background $blk
+#    statusline #FFFFFF
+#    separator  #FFFFFF
+#
+#    focused_workspace  $bg $bg #FFFFFF
+#    active_workspace   $blk $blk #FFFFFF
+#    inactive_workspace $blk $blk #888888
+#	urgent_workspace   #900000 #900000 #FFFFFF
+#    	binding_mode       #900000 #900000 #FFFFFF
+#  }
+#        status_command i3blocks
+#	separator_symbol " "
+#}
 # Set colors from Xresources
 # Change 'color7' and 'color2' to whatever colors you want i3 to use 
 # from the generated scheme.
@@ -200,7 +201,7 @@ set_from_resource $blk i3wm.color0  #f0f0f0
 client.focused          $bg     $bg    #FFFFF  $bg       $bg
 client.focused_inactive $bg     $bg    #FFFFF  $bg       $bg
 client.unfocused        $dk     $dk    #FFFFF  $dk       $dk
-client.urgent           $bg     $bg    #FFFFF  $bg       $bg.
+client.urgent           $bg     $bg    #FFFFF  $bg       $bg
 client.placeholder      $bg     $bg    #FFFFF  $bg       $bg
 
 client.background       $bg
@@ -208,19 +209,23 @@ client.background       $bg
 #launck i3lock
 #i3lock -i /home/overaid/cherryblossom.png - -c '#000000' -o '#191d0f' -w '#572020' -l '#ffffff' -e
 
-bindsym $mod+q exec ~/scripts/i3lock-blur.sh
-exec xautolock -time 4 -locker '~/scripts/i3lock-blur.sh'
-
+#bindsym $mod+q exec ~/scripts/i3lock-blur.sh
+#exec xautolock -time 4 -locker '~/scripts/i3lock-blur.sh'
 #startup conky
-exec --no-startup-id conky
 
+exec_always --no-startup-id killall conky
+exec_always --no-startup-id conky
+exec_always --no-startup-id picom --config ~/.config/compton.conf
+
+exec_always /home/overaid/scripts/kbbodge
+#bind for telegram
 #add kb layouts
 #exec "setxkbmap -layout us,ru"
 #exec "setxkbmap -option 'grp:alt_shift_toggle'"
 #bindsym $mod+i exec setxkbmap -layout us
 #bindsym $mod+Shift+i exec setxkbmap -layout ru
-
-exec_always ~/scripts/keyboardbodge
+exec_always --no-startup-id setxkbmap -layout us,ru -option grp:alt_shift_toggle,grp_led:scroll
+exec_always /home/overaid/scripts/kbbodge
 #bind for telegram
 bindsym $mod+t exec telegram-desktop
 
@@ -236,3 +241,14 @@ workspace $ws2 output DVI-I-1
 
 #fixing floating windows that open too big on 2 monitor
 floating_maximum_size 900 x 600
+
+for_window [class="Yad"] floating enable
+
+# change volume or toggle mute
+bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks 
+bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && pkill -RTMIN+1 i3blocks
+bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && pkill -RTMIN+1 i3blocks
+
+exec redshift -b 1:0.8 -t 6500:5001
+
+

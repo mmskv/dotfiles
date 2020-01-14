@@ -1,0 +1,8 @@
+#! /usr/bin/bash
+mkdir /dev/windows && echo /dev/windows directory created
+mount /dev/sdb2 /dev/windows && echo mount successful
+echo 
+echo 
+cd /dev/windows/Users/Рабочий\ стол/ЕГЕ/
+ls 
+Thunar
