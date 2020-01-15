@@ -1,0 +1,353 @@
+[colors]
+background = #B2111111
+foreground = ${xrdb:foreground}
+foreground-alt= #528BFF
+black = #000000
+red = ${xrdb:color1}
+green = ${xrdb:color2}
+blue = ${xrdb:color4}
+yellow = ${xrdb:color3}
+magenta = ${xrdb:color5}
+cyan = ${xrdb:color6}
+white = ${xrdb:color7}
+grey = ${xrdb:color8}
+fg = #f0e1df
+bg = #0d0d0d
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 0
+
+[bar/bottom]
+width = 100%
+height = 35
+offset-y = 2%
+monitor = ${env:MONITOR:}
+;Make bars invisible in full screen
+;enable-ipc = true
+
+override-redirect = true
+wm-restack = i3
+
+font-0 = Fira Code:pixelsize=10;3
+font-1 = octicons:pixelsize=12;3
+font-2 = Weather Icons:size=10;4
+font-3 = FontAwesome5Free:style=Solid:pixelsize=12;4
+font-4 = FontAwesome5Brands:style=Solid:pixelsize=12;4
+font-5 = MaterialIcons:pixelsize=11;4
+font-6 = Wuncon Siji:pixelsize=11;4
+
+padding-left = 4
+padding-right = 4
+
+background = #000f0f0f
+foreground = ${colors.foreground}
+
+modules-center = i3stock
+bottom = true
+
+[bar/top]
+width = 100%
+height = 35
+offset-y = 2%
+monitor = ${env:MONITOR:}
+;Make bars invisible in full screen
+;enable-ipc = true
+
+override-redirect = true
+wm-restack = i3
+
+font-0 = Fira Code:pixelsize=10;3
+font-1 = octicons:pixelsize=12;3
+font-2 = Weather Icons:size=10;4
+font-3 = FontAwesome5Free:style=Solid:pixelsize=12;4
+font-4 = FontAwesome5Brands:style=Solid:pixelsize=12;4
+font-5 = MaterialIcons:pixelsize=11;4
+font-6 = Wuncon Siji:pixelsize=11;4
+
+padding-left = 4
+padding-right = 4
+
+background = #000f0f0f
+foreground = ${colors.foreground}
+
+modules-left = date 
+modules-center = 
+modules-right = keyboard clock
+
+
+label-offline =  mpd is offline
+format-online = <label-song>
+format-online-background = ${colors.fg}
+format-online-padding = 2
+
+label-song-foreground = #FFFFFF
+;#151515
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+; Sink to be used, if it exists (find using `pacmd list-sinks`, name field)
+; If not, uses default sink
+sink = alsa_output.pci-0000_12_00.3.analog-stereo
+
+; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
+; Default: true
+use-ui-max = true
+
+; Interval for volume increase/decrease (in percent points)
+; Default: 5
+interval = 5
+format-volume = <ramp-volume> <label-volume>
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+format-background = ${colors.bg}
+format-foreground = ${colors.fg}
+click-right = pavucontrol &
+
+
+
+[module/wifi]
+type = internal/network
+
+interface = wlp6s0
+interval = 1
+
+label-connected = %{A} %{A:wicd-client &:} %essid%%{A}
+format-connected-foreground = ${colors.black}
+format-connected-background = ${colors.blue}
+format-connected-padding = 2
+
+format-disconnected-padding = 1
+format-disconnected-foreground = ${colors.red}
+format-disconnected-background = ${colors.blue}
+
+label-disconnected = %{A:wicd-client &:} Disconnected%{A}
+
+[module/weather]
+label-padding-left = 0
+type = custom/script
+exec = "sh $HOME/.config/polybar/weather.sh"
+interval = 600
+label-font = 3
+
+format-foreground = ${colors.blue}
+
+label = %output%
+
+[module/xwindow]
+label-padding-left = 1
+type = internal/xwindow
+
+label = %title%
+label-maxlen = 40
+
+format-foreground = ${colors.foreground}
+format-prefix = " "
+format-suffix = " "
+
+format-margin = 5
+
+
+[module/clock]
+type = custom/script
+exec = "sh $HOME/.config/polybar/time.sh"
+interval = 1.0
+
+format = <label>
+format-foreground =  ${colors.fg}
+;#151515
+;#F02E6E
+;format-background = ${colors.bg}
+
+;#00000000 -> transparent
+format-padding = 1
+
+
+[module/date]
+type = internal/date
+
+date =  %d/%m
+
+format = <label>
+format-foreground = ${colors.fg}
+
+label = %date%
+
+
+
+[module/i3stock]
+type = internal/i3
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = true
+
+; This will split the workspace name on ':'
+; Default: false
+strip-wsnumbers = true
+
+; Sort the workspaces by index instead of the default
+; sorting that groups the workspaces by output
+; Default: false
+;index-sort = true
+
+; Create click handler used to focus workspace
+; Default: true
+;enable-click = false
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+
+; Wrap around when reaching the first/last workspace
+; Default: true
+wrapping-scroll = false
+
+; Set the scroll cycle direction
+; Default: true
+reverse-scroll = false
+
+; Use fuzzy (partial) matching on labels when assigning
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces
+; containing 'code' in the label
+; Default: false
+;fuzzy-match = true
+
+; ws-icon-[0-9]+ = label;icon
+; NOTE: The label needs to match the name of the i3 workspace
+ws-icon-0 = 1;♚
+ws-icon-1 = 2;♛
+ws-icon-2 = 3;♜
+ws-icon-3 = 4;♝
+ws-icon-4 = 5;♞
+ws-icon-default = ♟
+; NOTE: You cannot skip icons, e.g. to get a ws-icon-6
+; you must also define a ws-icon-5.
+
+; Available tags:
+;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
+;   <label-mode> (default)
+format = <label-state> <label-mode>
+
+; Available tokens:
+;   %mode%
+; Default: %mode%
+label-mode = "•"
+label-mode-padding = 2
+label-mode-background = ${colors.bg}
+
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-focused = "×"
+;label-focused-background = ${colors.bg}
+;#3f3f3f
+label-focused-padding = 1
+;label-focused-foreground =  ${colors.fg}
+;#d3869b
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-unfocused = "•"
+label-unfocused-padding = 1
+;label-unfocused-foreground = ${colors.fg}
+;label-unfocused-background = ${colors.bg}
+
+;f0e1df
+
+label-visible = "×"
+;label-visible-background = ${colors.bg}
+;#3f3f3f
+label-visible-padding = 1
+;label-visible-foreground =  ${colors.fg}
+;#d3869b
+
+
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+format-background = ${colors.background}
+
+ws-icon-0 = "1;"
+ws-icon-1 = "2;"
+ws-icon-2 = "3;"
+ws-icon-3 = "4;"
+ws-icon-4 = "5;"
+ws-icon-5 = "6;"
+
+;ws-icon-0 = "1;"
+;ws-icon-1 = "2;"
+;ws-icon-2 = "3;"
+;ws-icon-3 = "4;"
+;ws-icon-4 = "5;"
+;ws-icon-5 = "6;"
+;ws-icon-6 = "7;"
+;ws-icon-7 = "8;"
+
+index-sort = true
+wrapping-scroll = true
+strip-wsnumbers = true
+
+;label-focused = ""
+label-focused = "%icon%"
+label-focused-foreground = #83a598
+label-focused-background = #00000000
+;${colors.cyan}
+label-focused-padding = 1
+
+;label-unfocused = ""
+label-unfocused = "%icon%"
+label-unfocused-padding = 1
+label-unfocused-background = #00000000
+;#FFFFFF
+;${colors.grey}
+label-unfocused-foreground = #d3869b
+;${colors.green}
+
+label-urgent = "%icon%"
+label-urgent-foreground = #ffffff
+label-urgent-background = ${colors.red}
+label-urgent-padding = 2
+
+label-visible = "%icon%"
+label-visible-padding = 2
+
+[module/ewmh]
+type = internal/xworkspaces
+pin-workspaces = true
+enable-scroll = true
+
+format = <label-state>
+
+label-active = ×
+label-active-foreground = #89ddff
+label-active-background = ${colors.fg}
+label-active-padding = 1
+
+label-empty = •
+label-empty-foreground = #FFFFFF
+label-empty-background = ${colors.fg}
+label-empty-padding = 1
+
+label-urgent = !
+label-urgent-foreground = #EC5f67
+label-urgent-background = ${colors.fg}
+label-urgent-padding = 1
