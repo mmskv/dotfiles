@@ -11,24 +11,25 @@ magenta = ${xrdb:color5}
 cyan = ${xrdb:color6}
 white = ${xrdb:color7}
 grey = ${xrdb:color8}
-fg = #f0e1df
+;fg = #f0e1df
+fg = #ffffff
 bg = #0d0d0d
 
 [settings]
 screenchange-reload = true
 
 [global/wm]
-margin-top = 5
+margin-top = 3
 margin-bottom = 0
 
 [bar/bottom]
 width = 100%
-height = 35
-offset-y = 2%
+height = 25
+offset-y = 1%
 monitor = ${env:MONITOR:}
 ;Make bars invisible in full screen
 ;enable-ipc = true
-
+radius = 5.0
 override-redirect = true
 wm-restack = i3
 
@@ -40,19 +41,22 @@ font-4 = FontAwesome5Brands:style=Solid:pixelsize=12;4
 font-5 = MaterialIcons:pixelsize=11;4
 font-6 = Wuncon Siji:pixelsize=11;4
 
-padding-left = 4
-padding-right = 4
+padding-left = 3
+padding-right = 3
 
 background = #000f0f0f
 foreground = ${colors.foreground}
 
-modules-center = i3stock
+;background = #00000000
+;foreground = ${colors.foreground}
+
+;modules-center = i3stock
 bottom = true
 
 [bar/top]
-width = 100%
-height = 35
-offset-y = 2%
+width = 160%
+height = 23
+offset-y = 1%
 monitor = ${env:MONITOR:}
 ;Make bars invisible in full screen
 ;enable-ipc = true
@@ -68,15 +72,15 @@ font-4 = FontAwesome5Brands:style=Solid:pixelsize=12;4
 font-5 = MaterialIcons:pixelsize=11;4
 font-6 = Wuncon Siji:pixelsize=11;4
 
-padding-left = 4
-padding-right = 4
+padding-left = 1
+padding-right = 1
 
 background = #000f0f0f
 foreground = ${colors.foreground}
 
-modules-left = date 
-modules-center = 
-modules-right = keyboard clock
+modules-left = date xkeyboard
+modules-center = i3stock
+modules-right = toggl clock
 
 
 label-offline =  mpd is offline
@@ -86,6 +90,43 @@ format-online-padding = 2
 
 label-song-foreground = #FFFFFF
 ;#151515
+
+[module/toggl]
+type = custom/script
+exec = "python3 $HOME/.config/polybar/toggl.py"
+interval = 20.0
+
+format = <label>
+format-foreground =  ${colors.fg}
+;#151515
+;#F02E6E
+;format-background = ${colors.bg}
+
+;#00000000 -> transparent
+format-padding = 1
+
+
+
+[module/title]
+type = internal/xwindow
+; Available tags:
+;   <label> (default)
+format = <label>
+format-foreground = ${colors.fg}
+format-padding = 4
+
+; Available tokens:
+;   %title%
+; Default: %title%
+label = %title%
+label-maxlen = 50
+
+; Used instead of label when there is no window title
+; Available tokens:
+;   None
+label-empty = Empty
+label-empty-foreground = #707880
+
 
 [module/pulseaudio]
 type = internal/pulseaudio
@@ -110,11 +151,47 @@ format-foreground = ${colors.fg}
 click-right = pavucontrol &
 
 
+[module/xkeyboard]
+type = internal/xkeyboard
+
+; List of indicators to ignore
+blacklist-0 = num lock
+blacklist-1 = scroll lock
+; Available tags:
+;   <label-layout> (default)
+;   <label-indicator> (default)
+format = <label-layout> 
+format-spacing = 0
+
+format-foreground = ${colors.fg}
+; Available tokens:
+;   %layout%
+;   %name%
+;   %number%
+;   %icon%
+; Default: %layout%
+label-layout = %layout%
+label-layout-padding = 2
+label-layout-foreground = ${colors.fg}
+
+; Available tokens:
+;   %name%
+; Default: %name%
+; @deprecated, use label-indicator-on
+label-indicator = %name%
+
+; layout-icon-[0-9]+ = layout;icon
+; Assign each layout an icon that will be available as %icon% token for the
+; <label-layout> tag. The part before ';' will try to match %layout% value.
+layout-icon-default = some-icon
+layout-icon-0 = ch;C
+layout-icon-1 = us;U
+
 
 [module/wifi]
 type = internal/network
 
-interface = wlp6s0
+;interface = wlp6s0
 interval = 1
 
 label-connected = %{A} %{A:wicd-client &:} %essid%%{A}
@@ -171,7 +248,7 @@ format-padding = 1
 [module/date]
 type = internal/date
 
-date =  %d/%m
+date =  %d/%m %a
 
 format = <label>
 format-foreground = ${colors.fg}
@@ -256,7 +333,7 @@ label-focused = "×"
 ;label-focused-background = ${colors.bg}
 ;#3f3f3f
 label-focused-padding = 1
-;label-focused-foreground =  ${colors.fg}
+label-focused-foreground =  ${colors.fg}
 ;#d3869b
 
 ; Available tokens:
@@ -267,7 +344,7 @@ label-focused-padding = 1
 ; Default: %icon%  %name%
 label-unfocused = "•"
 label-unfocused-padding = 1
-;label-unfocused-foreground = ${colors.fg}
+label-unfocused-foreground = ${colors.fg}
 ;label-unfocused-background = ${colors.bg}
 
 ;f0e1df
@@ -276,15 +353,20 @@ label-visible = "×"
 ;label-visible-background = ${colors.bg}
 ;#3f3f3f
 label-visible-padding = 1
-;label-visible-foreground =  ${colors.fg}
+label-visible-foreground =  ${colors.fg}
 ;#d3869b
 
+label-urgent = "!"
+label-urgent-foreground = ${colors.fg}
+;label-urgent-background = ${colors.bg}
+label-urgent-padding = 2
 
 
 [module/i3]
 type = internal/i3
 format = <label-state> <label-mode>
-format-background = ${colors.background}
+;format-background = ${colors.background}
+format-background = #FFFFFF
 
 ws-icon-0 = "1;"
 ws-icon-1 = "2;"
@@ -308,12 +390,12 @@ strip-wsnumbers = true
 
 ;label-focused = ""
 label-focused = "%icon%"
-label-focused-foreground = #83a598
+label-focused-foreground = #FFFFFFFF
 label-focused-background = #00000000
 ;${colors.cyan}
 label-focused-padding = 1
 
-;label-unfocused = ""
+;label-unfocused = "!"
 label-unfocused = "%icon%"
 label-unfocused-padding = 1
 label-unfocused-background = #00000000
@@ -322,10 +404,6 @@ label-unfocused-background = #00000000
 label-unfocused-foreground = #d3869b
 ;${colors.green}
 
-label-urgent = "%icon%"
-label-urgent-foreground = #ffffff
-label-urgent-background = ${colors.red}
-label-urgent-padding = 2
 
 label-visible = "%icon%"
 label-visible-padding = 2
@@ -338,16 +416,16 @@ enable-scroll = true
 format = <label-state>
 
 label-active = ×
-label-active-foreground = #89ddff
-label-active-background = ${colors.fg}
+label-active-foreground = ${colors.foreground}
+label-active-background = #000f0f0f
 label-active-padding = 1
 
 label-empty = •
-label-empty-foreground = #FFFFFF
-label-empty-background = ${colors.fg}
+label-empty-foreground = ${colors.foreground}
+label-empty-background = #000f0f0f
 label-empty-padding = 1
 
 label-urgent = !
-label-urgent-foreground = #EC5f67
-label-urgent-background = ${colors.fg}
+label-urgent-foreground = ${colors.foreground}
+label-urgent-background = #000f0f0f
 label-urgent-padding = 1
