@@ -1,8 +1,0 @@
-#!/bin/bash  
-while :; do  
-	setxkbmap -layout ur,ru -option grp:alt_shift_toggle,grp_led:scroll
-	sleep 60  
-done
-
-
-

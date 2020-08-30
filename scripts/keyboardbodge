@@ -1,6 +1,0 @@
-#!/bin/sh
-while true
-do
-    eval 'setxkbmap -layout 'us,ru' -option 'grp:alt_shift_toggle,grp_led:scroll''
-    sleep 4
-done

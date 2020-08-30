@@ -16,5 +16,5 @@ if current['data'] != None and ("pid" in current["data"] or "description" in cur
     out = name + " " + '(' + h + ':' + m + ')'
     print(out)
 else:
-    print("No project is running")
+    print("  ")
 
