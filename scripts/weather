@@ -1,5 +1,0 @@
-#!/usr/bin/python3
-import requests
-response = requests.get('https://wttr.in?0&T&Q' )
-print(response.content.decode('utf-8').rstrip())
-
