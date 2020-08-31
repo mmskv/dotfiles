@@ -1,0 +1,27 @@
+noh
+syntax on
+set t_Co=16
+set nocompatible
+set showmode
+set showcmd
+set ruler
+set number
+set cursorline
+set expandtab
+set noshiftround
+set lazyredraw
+set magic
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set encoding=utf-8
+set modelines=0
+set formatoptions=tqn1
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set cmdheight=1
+set laststatus=2
+set matchpairs+=<:>
+set scrolloff=8
