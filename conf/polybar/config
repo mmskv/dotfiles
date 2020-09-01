@@ -69,7 +69,7 @@ format-padding = 2
 [module/btkeyboard]
 type = custom/script
 exec = "bash $HOME/.config/polybar/magic-kb_status.sh"
-click-left = "bash /usr/bin/local/kb-reconnect.sh"
+click-left = "bash /usr/local/bin/kb-reconnect.sh"
 format = <label>
 interval = 5.0
 format-foreground =  ${colors.fg}
