@@ -11,12 +11,14 @@
 # -------------------------- execs -------------------------- 
 
 exec wal -R
+exec xrdb ~/.Xresources
 exec bash /home/overaid/.screenlayout/first.sh
-exec_always --no-startup-id setxkbmap -layout us,ru -option grp:alt_space_toggle
+exec_always --no-startup-id setxkbmap -layout us,ru -option grp:alt_space_toggle -option caps:escape
 exec_always --no-startup-id /home/overaid/usr/launch-polybar.sh
 exec_always --no-startup-id /home/overaid/usr/launch-compton.sh
-exec redshift -b 1:0.7 -t 6500:5000
-#exec_always --no-startup-id xsetwacom set "Wacom One by Wacom M Pen stylus" MapToOutput HEAD-0
+exec redshift -b 1:0.8 -t 6500:5000 -c ~/.config/redshift/redshift.conf
+exec feh --bg-fill /warehouse/Wallpapers/purpledull.jpg                                    
+exec_always --no-startup-id xsetwacom set "Wacom One by Wacom M Pen stylus" MapToOutput HEAD-0 
 
 #  -------------------------- media keys keybinds -------------------------- 
 
@@ -33,23 +35,20 @@ bindsym $mod+r mode "resize"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+Shift+r restart
 bindsym $mod+Return exec termite
-bindsym $mod+b exec firefox
+bindsym $mod+b exec chromium 
+
 bindsym $mod+q kill
-bindsym $mod+space exec rofi -no-lazy-grab -show drun -theme themes/launcher.rasi
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
-bindsym $mod+h split h 
+bindsym $mod+space exec dmenu_run
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up 
+bindsym $mod+Shift+l  move right
 bindsym $mod+v split v 
+bindsym $mod+Shift+v split h 
 bindsym $mod+f fullscreen toggle
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
@@ -102,16 +101,18 @@ mode "resize" {
 #  -------------------------- configs -------------------------- 
 
 set $mod Mod4
-gaps inner 26
-gaps outer 26
+gaps inner 0
+gaps outer 0
+gaps top 0
 #smart_borders on
 #smart_gaps on
-new_window pixel 0 
+new_window pixel 1
 new_float normal
 hide_edge_borders none
 floating_modifier $mod
-font pango:terminus 9
+font pango:SF-Pro-Text 9
 for_window [class="Yad"] floating enable
+for_window [class="Tk"] floating enable
 
 #  -------------------------- colors from Xresources -------------------------- 
 
@@ -138,10 +139,10 @@ bindsym $mod+s exec i3-msg "[class=Spotify] focus" || spotify
 
 #  -------------------------- macos-like screenshot shotrcuts -------------------------- 
 
-bindsym $mod+ctrl+shift+4 exec "maim -s --format=png | xclip -selection clipboard -t image/png"
-bindsym $mod+ctrl+shift+3 exec "maim --format=png | xclip -selection clipboard -t image/png"
-bindsym $mod+ctrl+4 exec "maim -s --format=png ~/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png"
-bindsym $mod+ctrl+3 exec "maim --format=png ~/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png"
+bindsym $mod+ctrl+shift+4 --release  exec "maim -s --format=png | xclip -selection clipboard -t image/png"
+#bindsym $mod+ctrl+shift+3 --release  exec "maim --format=png | xclip -selection clipboard -t image/png"
+bindsym $mod+ctrl+3 --release  exec "maim -s --format=png ~/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png"
+#bindsym $mod+ctrl+3 --release  exec "maim --format=png ~/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png"
 
 #  -------------------------- workspaces assignment -------------------------- 
 

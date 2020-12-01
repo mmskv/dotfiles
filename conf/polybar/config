@@ -9,53 +9,70 @@
 ;                                                                             - 2020
 
 [colors]
-background = #B2000000
-foreground = ${xrdb:foreground}
-foreground-alt= #528BFF
-black = #000000
-bg = #ffffff
-fg = #0d0d0d
+fg-one = #FFFFFF
+bg-one = #000000
+red = #FF0000
 
 [settings]
 screenchange-reload = true
 
 [global/wm]
-margin-top = 3
-margin-bottom = 0
+margin-top = 0
+margin-bottom = 5
 
 [bar/top]
-width = 98%
-height = 22
-offset-y = 1%
-offset-x = 1%
+width = 100%
+height = 20
+offset-y = 0.0%
+offset-x = 0%
 monitor = ${env:MONITOR:DP-1}
-override-redirect = true
 wm-restack = i3
 
-font-0 = Terminus:pixelsize=12;2
-font-1 = MaterialIcons:pixelsize=11;3
-font-2 = Wuncon Siji:pixelsize=11;2
-font-3 = "Fantasque Sans Mono:pixelsize=11;3"
-font-4 = "Iosevka Nerd Font:pixelsize=11;3"
+;font-0 = SF Pro Text:pixelsize=10;2
+font-0 = Terminus:style=Regular:pixelsize=13;2
+font-1 = Iosevka Nerd Font:pixelsize=11;3
 
-padding-left = 2
-padding-right = 2
-background = #EEFFFFFF
-foreground = ${colors.foreground}
-modules-left = date xkeyboard
-modules-center = i3stock
-modules-right = toggl  btkeyboard light volume clock
-border-top-size = 2
-border-color = #1b401d
+padding-left = 0
+padding-right = 0
+background = #000000
+;foreground = ${colors.foreground}
+modules-left = i3stock 
+modules-center = 
+modules-right =  xkeyboard volume date clock
+
+
+[bar/expanded]
+inherit = bar/top
+
+font-0 = Terminus:style=Regular:pixelsize=13;2
+font-1 = Iosevka Nerd Font:pixelsize=11;3
+
+modules-right = options_close volume date date date date 
+
+[module/options_open]
+type = custom/text
+content-foreground = ${colors.fg-one}
+content-background = ${colors.bg-one}
+content-padding = 3
+content = ""
+click-left = usr/polybar_expand 
+
+[module/options_close]
+type = custom/text
+content-foreground = ${colors.fg-one}
+content-background = ${colors.bg-one}
+content-padding = 3
+content = ""
+click-left = usr/polybar_expand
 
 [module/light]
 type = custom/script
-exec = "echo ﱧ"
-click-left = "sh $HOME/Downloads/yeelight-shell-scripts/yeelight-toggle.sh 0"
-format = ﱧ
-format-foreground =  ${colors.fg}
-format-background = #FFCA28
-format-padding = 2
+exec = "echo ﱧ "
+click-left = "sh $HOME/github/yeelight-shell-scripts/yeelight-toggle.sh 0"
+format = "ﱧ"
+format-foreground =  ${colors.fg-one}
+format-background = ${colors.bg-one}
+format-padding = 3
 
 [module/toggl]
 type = custom/script
@@ -63,7 +80,7 @@ exec = "python3 $HOME/.config/polybar/toggl.py"
 click-left = "xdg-open https://toggl.com/app/timer"
 format = <label> 
 interval = 20.0
-format-foreground =  ${colors.fg}
+format-foreground =  ${colors.fg-one}
 format-padding = 2
 
 [module/btkeyboard]
@@ -72,23 +89,23 @@ exec = "bash $HOME/.config/polybar/magic-kb_status.sh"
 click-left = "bash /usr/local/bin/kb-reconnect.sh"
 format = <label>
 interval = 5.0
-format-foreground =  ${colors.fg}
-format-background = #FFCA28
-format-padding = 2
-c
+format-foreground = ${colors.fg-one}
+format-background =  ${colors.bg-one}
+format-padding = 3
+
 [module/volume]
 type = internal/pulseaudio
 format-volume = <ramp-volume> <label-volume>
-format-volume-padding = 2
-format-volume-foreground = #000000
-format-volume-background = #FFCA28
+format-volume-padding = 3
+format-volume-foreground = ${colors.fg-one}
+format-volume-background = ${colors.bg-one}
 label-volume = %percentage%%
 label-muted = "婢"
-label-muted-foreground = #ff0000
-lable-muted-background = #FFCA28
-label-muted-padding = 2
+label-muted-foreground = ${colors.red}
+lable-muted-background = ${colors.bg-one}
+label-muted-padding = 3
 interval = 5
-use-ui-max = true
+use-ui-max = false
 ramp-volume-0 = 奄
 ramp-volume-1 = 奄
 ramp-volume-2 = 奔
@@ -102,23 +119,25 @@ type = internal/xkeyboard
 blacklist-0 = num lock
 blacklist-1 = scroll lock
 label-layout = %layout%
-label-layout-padding = 2
-label-layout-foreground = ${colors.fg}
+label-layout-padding = 3
+label-layout-foreground = ${colors.fg-one}
+label-layout-background = ${colors.bg-one}
 label-indicator = %name%
 layout-icon-default = some-icon
-layout-icon-0 = ch;C
+layout-icon-0 = ru;R
 layout-icon-1 = us;U
 format = <label-layout> 
-format-spacing = 2
-format-foreground = #FFFFFF
+format-spacing = 3
+format-foreground = ${colors.fg-one}
 
 [module/clock]
 type = custom/script
-exec = "sh $HOME/.config/polybar/time.sh"
+exec = "date +%R"
 format = <label>
 interval = 1.0
-format-foreground =  ${colors.fg}
-format-padding = 2
+format-foreground =  ${colors.fg-one}
+format-background =  ${colors.bg-one}
+format-padding = 3
 
 [module/date]
 type = custom/script
@@ -126,7 +145,8 @@ exec = ~/.config/polybar/popup-calendar.sh
 click-left = ~/.config/polybar/popup-calendar.sh --popup &
 format = <label>
 format-padding = 2
-format-foreground =  ${colors.fg}
+format-foreground =  ${colors.fg-one}
+format-background =  ${colors.bg-one}
 
 [module/i3stock]
 type = internal/i3
@@ -138,20 +158,25 @@ format = <label-state> <label-mode>
 
 label-mode = "•"
 label-mode-padding = 4
-label-mode-background = ${colors.bg}
+label-mode-foreground =  ${colors.fg-one}
+label-mode-background = ${colors.bg-one}
 
 label-focused = "×"
 label-focused-padding = 4
-label-focused-foreground =  ${colors.fg}
+label-focused-foreground =  ${colors.fg-one}
+label-focused-background = ${colors.bg-one}
 
 label-unfocused = "•"
 label-unfocused-padding = 4
-label-unfocused-foreground = ${colors.fg}
+label-unfocused-foreground = ${colors.fg-one}
+label-unfocused-background = ${colors.bg-one}
 
 label-visible = "×"
 label-visible-padding = 4
-label-visible-foreground =  ${colors.fg}
+label-visible-foreground =  ${colors.fg-one}
+label-visible-background = ${colors.bg-one}
 
 label-urgent = "!"
-label-urgent-foreground = ${colors.fg}
+label-urgent-foreground = ${colors.fg-one}
+label-urgent-background = ${colors.bg-one}
 label-urgent-padding = 4
