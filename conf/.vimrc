@@ -15,8 +15,10 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'vim-syntastic/syntastic'
+Plugin 'sheerun/vim-polyglot'
 Plugin 'nvie/vim-flake8'
 Plugin 'jnurmine/Zenburn'
+Plugin 'lervag/vimtex'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'Valloric/YouCompleteMe'
 
@@ -33,6 +35,11 @@ set clipboard=unnamed
 set foldmethod=indent
 set foldlevel=99
 let python_highlight_all=1
+let g:tex_flavor = 'latex'
+
+hi Visual  ctermfg=White ctermbg=LightMagenta gui=none
+
+
 syntax on
 nnoremap <space> za
 
@@ -55,9 +62,7 @@ set t_Co=16
 set nocompatible
 set showmode
 set showcmd
-set ruler
-set number
-set cursorline
+set relativenumber
 set expandtab
 set noshiftround
 set lazyredraw
@@ -76,3 +81,4 @@ set cmdheight=1
 set laststatus=2
 set matchpairs+=<:>
 set scrolloff=8
+
