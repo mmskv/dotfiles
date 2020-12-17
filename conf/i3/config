@@ -10,21 +10,23 @@
 
 # -------------------------- execs -------------------------- 
 
-exec wal -R
+exec ~/.local/bin/wal -R
 exec xrdb ~/.Xresources
+exec_always unclutter -grab -idle 3
 exec bash /home/overaid/.screenlayout/first.sh
 exec_always --no-startup-id setxkbmap -layout us,ru -option grp:alt_space_toggle -option caps:escape
 exec_always --no-startup-id /home/overaid/usr/launch-polybar.sh
-exec_always --no-startup-id /home/overaid/usr/launch-compton.sh
-exec redshift -b 1:0.8 -t 6500:5000 -c ~/.config/redshift/redshift.conf
-exec feh --bg-fill /warehouse/Wallpapers/purpledull.jpg                                    
-exec_always --no-startup-id xsetwacom set "Wacom One by Wacom M Pen stylus" MapToOutput HEAD-0 
+exec_always /home/overaid/usr/launch-compton.sh
+exec_always --no-startup-id xset r rate 380 35
+exec redshift -b 1:0.8 -t 6500:5000 -c ~/.config/redshift.conf
+exec feh --bg-fill /home/overaid/github/dotfiles/wallpapers/nyanners-black.png
+#exec_always --no-startup-id xsetwacom set "Wacom One by Wacom M Pen stylus" MapToOutput HEAD-0 
 
 #  -------------------------- media keys keybinds -------------------------- 
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%; exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ 0
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%; exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ 0
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer sset 'Master' 5%+
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer sset 'Master' 5%-
+bindsym XF86AudioMute exec --no-startup-id amixer sset 'Master' toggle
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 bindsym XF86AudioNext exec --no-startup-id playerctl next
 bindsym XF86AudioPrev exec --no-startup-id playerctl previous
