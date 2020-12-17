@@ -1,4 +1,4 @@
-cat ~/.cache/wal/sequences &
+#cat ~/.cache/wal/sequences > /dev/null &
 fish_vi_key_bindings &
 
 # Start X at login
