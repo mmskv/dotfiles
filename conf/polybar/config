@@ -10,7 +10,7 @@
 
 [colors]
 fg-one = #FFFFFF
-bg-one = #000000
+bg-one = #0f0f0f
 red = #FF0000
 
 [settings]
@@ -22,97 +22,23 @@ margin-bottom = 5
 
 [bar/top]
 width = 100%
-height = 20
+height = 19
 offset-y = 0.0%
-offset-x = 0%
+offset-x = 10%
+
 monitor = ${env:MONITOR:DP-1}
 wm-restack = i3
 
-;font-0 = SF Pro Text:pixelsize=10;2
-font-0 = Terminus:style=Regular:pixelsize=13;2
-font-1 = Iosevka Nerd Font:pixelsize=11;3
+font-0 = Fira Code:style=Bold:pixelsize=9;2
+font-1 = Kochi Mincho:style=Regular:pixelsize=9
 
 padding-left = 0
 padding-right = 0
-background = #000000
+background = #0F0F0F
 ;foreground = ${colors.foreground}
-modules-left = i3stock 
-modules-center = 
-modules-right =  xkeyboard volume date clock
-
-
-[bar/expanded]
-inherit = bar/top
-
-font-0 = Terminus:style=Regular:pixelsize=13;2
-font-1 = Iosevka Nerd Font:pixelsize=11;3
-
-modules-right = options_close volume date date date date 
-
-[module/options_open]
-type = custom/text
-content-foreground = ${colors.fg-one}
-content-background = ${colors.bg-one}
-content-padding = 3
-content = ""
-click-left = usr/polybar_expand 
-
-[module/options_close]
-type = custom/text
-content-foreground = ${colors.fg-one}
-content-background = ${colors.bg-one}
-content-padding = 3
-content = ""
-click-left = usr/polybar_expand
-
-[module/light]
-type = custom/script
-exec = "echo ﱧ "
-click-left = "sh $HOME/github/yeelight-shell-scripts/yeelight-toggle.sh 0"
-format = "ﱧ"
-format-foreground =  ${colors.fg-one}
-format-background = ${colors.bg-one}
-format-padding = 3
-
-[module/toggl]
-type = custom/script
-exec = "python3 $HOME/.config/polybar/toggl.py"
-click-left = "xdg-open https://toggl.com/app/timer"
-format = <label> 
-interval = 20.0
-format-foreground =  ${colors.fg-one}
-format-padding = 2
-
-[module/btkeyboard]
-type = custom/script
-exec = "bash $HOME/.config/polybar/magic-kb_status.sh"
-click-left = "bash /usr/local/bin/kb-reconnect.sh"
-format = <label>
-interval = 5.0
-format-foreground = ${colors.fg-one}
-format-background =  ${colors.bg-one}
-format-padding = 3
-
-[module/volume]
-type = internal/pulseaudio
-format-volume = <ramp-volume> <label-volume>
-format-volume-padding = 3
-format-volume-foreground = ${colors.fg-one}
-format-volume-background = ${colors.bg-one}
-label-volume = %percentage%%
-label-muted = "婢"
-label-muted-foreground = ${colors.red}
-lable-muted-background = ${colors.bg-one}
-label-muted-padding = 3
-interval = 5
-use-ui-max = false
-ramp-volume-0 = 奄
-ramp-volume-1 = 奄
-ramp-volume-2 = 奔
-ramp-volume-3 = 奔
-ramp-volume-4 = 墳
-ramp-volume-5 = 墳
-ramp-volume-6 = 墳
+modules-left = i3 
+modules-center = clock
+modules-right = xkeyboard 
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -132,51 +58,37 @@ format-foreground = ${colors.fg-one}
 
 [module/clock]
 type = custom/script
-exec = "date +%R"
+exec = "date +'%a, %e %b at %R'"
 format = <label>
 interval = 1.0
 format-foreground =  ${colors.fg-one}
 format-background =  ${colors.bg-one}
 format-padding = 3
 
-[module/date]
-type = custom/script
-exec = ~/.config/polybar/popup-calendar.sh
-click-left = ~/.config/polybar/popup-calendar.sh --popup &
-format = <label>
-format-padding = 2
-format-foreground =  ${colors.fg-one}
-format-background =  ${colors.bg-one}
-
-[module/i3stock]
+[module/i3]
 type = internal/i3
+format = <label-state> <label-mode>
+label-mode = %mode%
 pin-workspaces = true
 strip-wsnumbers = true
-wrapping-scroll = false
+index-sort = true
 reverse-scroll = false
-format = <label-state> <label-mode>
 
-label-mode = "•"
-label-mode-padding = 4
-label-mode-foreground =  ${colors.fg-one}
-label-mode-background = ${colors.bg-one}
-
-label-focused = "×"
+label-focused-foreground = #cccccc
+label-focused-background = #222222
+label-focused-underline = #fea63c
 label-focused-padding = 4
-label-focused-foreground =  ${colors.fg-one}
-label-focused-background = ${colors.bg-one}
 
-label-unfocused = "•"
 label-unfocused-padding = 4
-label-unfocused-foreground = ${colors.fg-one}
-label-unfocused-background = ${colors.bg-one}
 
-label-visible = "×"
+label-visible-underline = #666666
 label-visible-padding = 4
-label-visible-foreground =  ${colors.fg-one}
-label-visible-background = ${colors.bg-one}
 
-label-urgent = "!"
-label-urgent-foreground = ${colors.fg-one}
-label-urgent-background = ${colors.bg-one}
+label-urgent-foreground = #000000
+label-urgent-background = #e84f4f
 label-urgent-padding = 4
+
+label-separator = |
+label-separator-padding = 2
+label-separator-foreground = #fea63c
+
