@@ -1,27 +1,34 @@
-# My dotfiles
+# My gentoo dotfiles
 
-![](https://github.com/maksmeshkov/dotfiles/blob/master/screenshots/Screenshot%202020-08-31%20at%2003:21:22.png)
-![](https://github.com/maksmeshkov/dotfiles/blob/master/screenshots/Screenshot%202020-08-31%20at%2003:19:48.png)
+![](https://github.com/maksmeshkov/dotfiles/blob/master/screenshots/stacked_gentoo.png)
 
 ----
 ## Apps list
 - zathura - pdf/ebooks
-- yay - aur packet manager
-- pywal - colorscheme generator
-- nerd fonts complete - every font in one place (and icons!)
+- vim - text editor
+- Fira Mono patched for Powerline - font for urxvt
+- kochi - japanese font
 - arc - icon theme
-- bluetoothctl - manage bluetooth devices
-- thunar (and plugins) - GUI file manager
-- termite - terminal
+- chromium - web browser <!-- TODO fix dbus error -->
+- bluez - manage bluetooth devices
+- urxvt - terminal
+- ranger - curses filemanager (install w3m image preview. flags are in package.use)
 - redshift - ease bluelight strain on your eyes
 - moc - terminal music player
-- linux zen - kernel (don't forget to install dkms hooks for nvidia)
-- lxappearance - set gkt theme
 - fish - cool shell
-- arandr - GUI for xrandr
 - maim - screenshooter
+- doas - alternative to sudo without bloat
 - wacom-utility - to manage wacom tablet (uncomment exec line in i3/conf)
-- rofi - app launcher (pick any nice theme from github and don't use stock)
+- dmenu - minimalistic app launcher
 - qbittorrent - torrent client
 - picom - compositor
 - nvtop - htop for Nvidia GPU
+- [gentoo-lto](https://github.com/InBetweenNames/gentooLTO) - use to optimize compiled programs 
+
+- yay - aur packet manager
+- arandr - GUI for xrandr
+- lxappearance - set gkt theme
+- linux zen - kernel (don't forget to install dkms hooks for nvidia)
+- thunar (and plugins) - GUI file manager
+- pywal - colorscheme setter
+- nerd fonts complete - every font in one place (and icons!)
