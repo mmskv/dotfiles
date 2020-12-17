@@ -36,11 +36,10 @@ bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 bindsym $mod+r mode "resize"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+Shift+r restart
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec urxvt
 bindsym $mod+b exec chromium 
-
 bindsym $mod+q kill
-bindsym $mod+space exec dmenu_run
+bindsym $mod+space exec ~/usr/dmenu
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
@@ -58,13 +57,13 @@ bindsym $mod+Shift+space floating toggle
 
 # -------------------------- workspaces -------------------------- 
 
-set $ws1 "1"
+set $ws1 "主要"
 set $ws2 "2"
-set $ws3 "3"
+set $ws3 "付帯"
 set $ws4 "4"
-set $ws5 "5"
+set $ws5 "備蓄"
 set $ws6 "6"
-set $ws7 "7"
+set $ws7 "セブン"
 set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
@@ -89,12 +88,14 @@ bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
 
 mode "resize" {
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
         bindsym Return mode "default"
         bindsym Escape mode "default"
         bindsym $mod+r mode "default"
@@ -108,16 +109,15 @@ gaps outer 0
 gaps top 0
 #smart_borders on
 #smart_gaps on
-new_window pixel 1
+new_window pixel 2
 new_float normal
 hide_edge_borders none
 floating_modifier $mod
-font pango:SF-Pro-Text 9
+font pango:Monospace 9
 for_window [class="Yad"] floating enable
 for_window [class="Tk"] floating enable
 
 #  -------------------------- colors from Xresources -------------------------- 
-
 set_from_resource $fg i3wm.color15 #f0f0f0
 set_from_resource $bg i3wm.color14 #f0f0f0
 set_from_resource $fg i3wm.color15 #f0f0f0
@@ -126,11 +126,12 @@ set_from_resource $dk i3wm.color11 #f0f0f0
 set_from_resource $dd i3wm.color1  #f0f0f0
 set_from_resource $blk i3wm.color0  #f0f0f0
 
-client.focused          $bg     $blk   #00000  $bg       $bg
-client.focused_inactive $bg     $bg    #00000  $bg       $bg
-client.unfocused        $bg     $bg    #00000  $dk       $dk
-client.urgent           $bg     $blk    #00000 $bg       $bg
-client.placeholder      $bg     $blk    #00000 $bg       $bg
+# class                 border  bground  text    indicator child_border
+client.focused          $dk     $dk      #222222 $dk       $dk
+client.focused_inactive $blk    $blk     #cccccc $bg       $bg
+client.unfocused        $blk    $blk     #cccccc $bg       $bg
+client.urgent           $dd     $dd      #222222 $dd       $dd
+client.placeholder      $bg     $blk     #222222 $bg       $bg
 client.background       $bg
 
 
