@@ -69,6 +69,7 @@ set undodir=~/.vim/undo
 set undolevels=10000
 set undoreload=10000
 
+set spelllang=en_us,ru
 
 set nocompatible
 set showmode
