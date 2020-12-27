@@ -1,1 +1,74 @@
-/home/overaid/.Xresources
+Xcursor*.size:   24
+Xcursor*.theme:  gentoo-silver
+
+URxvt*font: xft:Fira Mono for Powerline:size=11,xft:Fira Mono for Powerline:style=Bold:size=11,xft:Fira Mono for Powerline:style=Bold:size=11
+!URxvt*.italicFont: xft:Fira Mono for Powerline:style=Bold:size=11
+!URxvt*.boldItalicFont: xft:Fira Mono for Powerline:style=Bold:size=11
+URxvt*.scrollBar: false
+URxvt*letterSpace: 0
+URxvt.internalBorder: 20
+URxvt.saveLines: 200000
+*foreground:        #cccccc
+*background:        #111111
+*.foreground:       #cccccc
+*.background:       #111111
+emacs*foreground:   #cccccc
+emacs*background:   #111111
+URxvt*foreground:   #cccccc
+XTerm*foreground:   #cccccc
+UXTerm*foreground:  #cccccc
+URxvt*background:   [100]#111111
+XTerm*background:   #111111
+UXTerm*background:  #111111
+URxvt*cursorColor:  #d23d3d
+XTerm*cursorColor:  #d23d3d
+UXTerm*cursorColor: #d23d3d
+URxvt*borderColor:  [100]#111111
+
+!-*- Perl extensions -*-
+URxvt.perl-ext-common: default,selection-to-clipboard,pasta,matcher,keyboard-select
+URxvt.keysym.M-u:     perl:url-select:select_next
+URxvt.url-launcher:   /usr/bin/chromium
+URxvt.underlineURLs:  True
+URxvt.matcher.button: 1
+URxvt.keysym.M-Escape:perl:keyboard-select:activate
+URxvt.clipboard.autocopy: true
+
+! Colors 0-15.
+*.color0: #222222
+*color0:  #222222
+*.color1: #e84f4f
+*color1:  #e84f4f
+*.color2: #b7ce42
+*color2:  #b7ce42
+*.color3: #fea63c
+*color3:  #fea63c
+*.color4: #66a9b9
+*color4:  #66a9b9
+*.color5: #b7416e
+*color5:  #b7416e
+*.color6: #6d878d
+*color6:  #6d878d
+*.color7: #cccccc
+*color7:  #cccccc
+*.color8: #666666
+*color8:  #666666
+*.color9: #e84f4f
+*color9:  #e84f4f
+*.color10: #b7ce42
+*color10:  #b7ce42
+*.color11: #fea63c
+*color11:  #fea63c
+*.color12: #66a9b9
+*color12:  #66a9b9
+*.color13: #b7416e
+*color13:  #b7416e
+*.color14: #6d878d
+*color14:  #6d878d
+*.color15: #cccccc
+*color15:  #cccccc
+
+! Black color that will not be affected by bold highlighting.
+*.color66: #222222
+*color66:  #222222
+
