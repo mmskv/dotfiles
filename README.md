@@ -1,6 +1,7 @@
 # My gentoo dotfiles
 
-![](https://github.com/maksmeshkov/dotfiles/blob/dracula/screenshots/gray-stable.png)
+![](https://github.com/maksmeshkov/dotfiles/blob/gray-stable/screenshots/gray-stable-neofetch.png)
+![](https://github.com/maksmeshkov/dotfiles/blob/gray-stable/screenshots/gray-stable-workflow.png)
 
 ---
 
