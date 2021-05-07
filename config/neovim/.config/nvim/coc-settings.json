@@ -1,0 +1,20 @@
+{
+"coc.preferences.formatOnSaveFiletypes": ["javascript", "markdown", "c++"],
+"tsserver.maxTsServerMemory": 10000,
+"eslint.autoFixOnSave":true,
+"eslint.format.enable":true,
+"eslint.lintTask.options":["src/*"],
+"eslint.alwaysShowStatus":true,
+"prettier.tabWidth":4,
+"prettier.singleQuote": true,
+"prettier.printWidth": 120,
+"clangd.path": "/home/overaid/.config/coc/extensions/coc-clangd-data/install/11.0.0/clangd_11.0.0/bin/clangd",
+"clangd.arguments": ["--clang-tidy"],
+"python.pythonPath": "python3.8",
+"python.linting.enabled": true,
+"python.linting.pylintEnabled": true,
+"python.linting.pylintPath": ".venv/bin/pylint",
+"python.venvPath": ".venv",
+"python.formatting.provider": "yapf",
+"[python]": { "editor.formatOnSave": true }
+}

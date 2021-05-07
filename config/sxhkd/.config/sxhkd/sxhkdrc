@@ -1,0 +1,117 @@
+#
+# wm independent hotkeys
+#
+# terminal emulator
+super + Return
+	termite
+# program launcher
+super + space
+	/home/overaid/usr/dmenu
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
+super + s
+    spotify
+super + b
+    vivaldi --force-dark-mode
+
+# Audio controls
+
+XF86AudioRaiseVolume 
+	/home/overaid/usr/change-volume.sh up
+XF86AudioLowerVolume 
+	/home/overaid/usr/change-volume.sh down 
+XF86AudioMute 
+	/home/overaid/usr/change-volume.sh mute 
+XF86AudioPlay 
+	playerctl play-pause
+XF86AudioNext 
+	playerctl next
+XF86AudioPrev 
+	playerctl previous
+
+# Screenshot
+
+XF86LaunchA
+    maim -s --format=png | xclip -selection clipboard -t image/png
+XF86LaunchB
+    maim -s --format=png ~/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png
+
+# bspwm hotkeys
+#
+# quit/restart bspwm
+super + shift +r
+	bspc wm -r
+super + ctrl + shift + e
+    bspc quit
+# close and kill
+super + q
+	bspc node -{c,k}
+# alternate between the tiled and monocle layout
+super + m
+	bspc desktop -l next
+# send the newest marked node to the newest preselected node
+super + y
+	bspc node newest.marked.local -n newest.!automatic.local
+# swap the current node and the biggest window
+super + g
+	bspc node -s biggest.window
+#
+# state/flags
+#
+# set the window state
+super + {t,shift + t,f}
+	bspc node -t {tiled,pseudo_tiled,fullscreen}
+super + shift + space
+    bspc node -t floating
+# set the node flags
+super + ctrl + {m,x,y,z}
+	bspc node -g {hidden,locked,sticky,private}
+# Unhide window
+super + ctrl + shift + m
+    bspc node (bspc query -N -n .hidden | tail -n1) -g hidden=off
+#
+# focus/swap
+#
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+# focus the node for the given path jump
+super + {p,b,comma,period}
+	bspc node -f @{parent,brother,first,second}
+# focus the next/previous window in the current desktop
+super + {_,shift + }c
+	bspc node -f {next,prev}.local.!hidden.window
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+	bspc desktop -f {prev,next}.local
+# focus the last node/desktop
+super + {grave,Tab}
+	bspc {node,desktop} -f last
+# focus the older or newer node in the focus history
+super + {o,i}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+# focus or send to the given desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+#
+# preselect
+#
+# preselect the direction
+super + ctrl + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+# preselect the ratio
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+# cancel the preselection for the focused node
+super + ctrl + space
+	bspc node -p cancel
+# cancel the preselection for the focused desktop
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+# rotate
+super + r
+    bspc node @/ -R 90
