@@ -6,13 +6,6 @@ function fish_prompt --description 'Screen Savvy prompt'
     end
 end
 
-## Right Prompt
-function fish_right_prompt
-    set_color white
-    echo -n (date +"%H:%M")
-    set_color normal
-end
-
 ## Aliases
 alias l "ls -lh --group-directories-first --color=always"
 alias la "ls -a --color=always"
@@ -21,10 +14,18 @@ alias grep "grep --color=auto -i"
 alias clone "git clone --depth 1"
 alias ra "ranger"
 
+alias euses "equery uses"
+alias cp "cp -iv"
+alias mv "mv -iv"
+alias rm "rm -v"
+
+alias librespot "/home/overaid/github/librespot/target/release/librespot -n Ono-Sendai"
+alias 'commit'='set -x GPG_TTY (tty); git commit -S'
+alias gitlog "git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+
 ## Keybinding
 set fish_key_bindings fish_vi_key_bindings
 
 ## Locale
 set -x LC_ALL en_US.utf8
-set -x EDITOR /usr/bin/vim
-set -x PAGER /usr/bin/vimpager
+set -x EDITOR /usr/bin/nvim
