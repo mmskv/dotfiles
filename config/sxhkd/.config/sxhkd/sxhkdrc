@@ -3,7 +3,7 @@
 #
 # terminal emulator
 super + Return
-	termite
+	alacritty
 # program launcher
 super + space
 	/home/overaid/usr/dmenu
@@ -12,6 +12,8 @@ super + Escape
 	pkill -USR1 -x sxhkd
 super + s
     spotify
+super + i
+    telegram-desktop
 super + b
     vivaldi --force-dark-mode
 
@@ -89,7 +91,7 @@ super + bracket{left,right}
 super + {grave,Tab}
 	bspc {node,desktop} -f last
 # focus the older or newer node in the focus history
-super + {o,i}
+super + {o,n}
 	bspc wm -h off; \
 	bspc node {older,newer} -f; \
 	bspc wm -h on
