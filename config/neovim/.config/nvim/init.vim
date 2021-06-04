@@ -2,10 +2,12 @@ call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'w0ng/vim-hybrid',
+Plug 'sbdchd/neoformat',
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'lervag/vimtex'
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'tpope/vim-obsession'
 Plug 'chrisbra/colorizer'
@@ -71,6 +73,7 @@ xmap <leader>x  <Plug>(coc-convert-snippet)
 
 autocmd Filetype ts setlocal ts=2 sw=2 expandtab
 autocmd Filetype js setlocal ts=2 sw=2 expandtab
+autocmd Filetype cpp setlocal ts=2 sw=2 expandtab
 
 let g:coc_snippet_next = '<tab>'
 

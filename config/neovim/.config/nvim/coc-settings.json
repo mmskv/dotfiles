@@ -1,5 +1,5 @@
 {
-"coc.preferences.formatOnSaveFiletypes": ["javascript", "markdown", "c++"],
+"coc.preferences.formatOnSaveFiletypes": ["javascript", "markdown", "c++", "cpp", "hpp", "python"],
 "tsserver.maxTsServerMemory": 10000,
 "eslint.autoFixOnSave":true,
 "eslint.format.enable":true,
@@ -8,13 +8,15 @@
 "prettier.tabWidth":4,
 "prettier.singleQuote": true,
 "prettier.printWidth": 120,
-"clangd.path": "/home/overaid/.config/coc/extensions/coc-clangd-data/install/11.0.0/clangd_11.0.0/bin/clangd",
+"clangd.path": "/home/nekohacker/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd",
+"clangd.semanticHighlighting": true,
 "clangd.arguments": ["--clang-tidy"],
-"python.pythonPath": "python3.8",
+"python.pythonPath": "venv/bin/python",
 "python.linting.enabled": true,
 "python.linting.pylintEnabled": true,
 "python.linting.pylintPath": ".venv/bin/pylint",
 "python.venvPath": ".venv",
 "python.formatting.provider": "yapf",
-"[python]": { "editor.formatOnSave": true }
+"python.formatting.yapfPath": "/home/nekohacker/.local/bin/yapf",
+"git.enableGutters": true
 }
