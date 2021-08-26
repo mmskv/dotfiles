@@ -1,3 +1,4 @@
+Xft.dpi: 144
 Xcursor.size: 16
 ! Hybrid Terminal Colours. Uses the palette from Tomorrow-Night:
 ! https://github.com/chriskempson/tomorrow-theme/blob/master/vim/colors/Tomorrow-Night.vim
