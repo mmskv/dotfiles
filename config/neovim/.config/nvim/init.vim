@@ -21,7 +21,6 @@ call plug#end()
 " =============== Hybrid ===============
 
 autocmd vimenter * ++nested colorscheme hybrid
-color hybrid
 set termguicolors
 let g:hybrid_italic = 1
 let g:hybrid_custom_term_colors = 1
