@@ -75,13 +75,8 @@ font:
     family: Fira Mono for Powerline
     style: Bold
 
-  # The italic font face
-  italic:
-    family: Fira Mono for Powerline
-    style: Italic
-
   # Point size of the font
-  size: 9.5
+  size: 10.5
 
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
@@ -115,7 +110,7 @@ colors:
       cursor: '0x8ABEB7'
 
   # Normal colors
-  normal:
+  dim:
     black:   '0x282A2E'
     red:     '0xA54242'
     green:   '0x8C9440'
