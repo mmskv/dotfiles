@@ -6,7 +6,7 @@ super + Return
 	alacritty
 # program launcher
 super + space
-	/home/overaid/usr/dmenu
+	$HOME/dotfiles/scripts/dmenu.sh
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -USR1 -x sxhkd
@@ -15,16 +15,16 @@ super + s
 super + i
     telegram-desktop
 super + b
-    vivaldi --force-dark-mode
+    qutebrowser
 
 # Audio controls
 
 XF86AudioRaiseVolume 
-	/home/overaid/usr/change-volume.sh up
+	$HOME/dotfiles/scripts/change-volume.sh up
 XF86AudioLowerVolume 
-	/home/overaid/usr/change-volume.sh down 
+	$HOME/dotfiles/scripts/change-volume.sh down 
 XF86AudioMute 
-	/home/overaid/usr/change-volume.sh mute 
+	$HOME/dotfiles/scripts/change-volume.sh mute 
 XF86AudioPlay 
 	playerctl play-pause
 XF86AudioNext 
@@ -32,12 +32,19 @@ XF86AudioNext
 XF86AudioPrev 
 	playerctl previous
 
+# Brightness
+
+XF86MonBrightnessUp
+	$HOME/dotfiles/scripts/brightnessctl.sh up
+XF86MonBrightnessDown
+	$HOME/dotfiles/scripts/brightnessctl.sh down 
+
 # Screenshot
 
 XF86LaunchA
     maim -s --format=png | xclip -selection clipboard -t image/png
 XF86LaunchB
-    maim -s --format=png ~/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png
+    maim -s --format=png $HOME/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png
 
 # bspwm hotkeys
 #
