@@ -1,0 +1,12 @@
+Use control + space to switch languages (like macos)
+--- /usr/share/X11/xkb/symbols/group	2021-08-19 20:21:45.703362757 +0300
++++ /usr/share/X11/xkb/symbols/group.new	2021-08-19 20:20:16.303354562 +0300
+@@ -429,7 +429,7 @@
+ partial modifier_keys
+ xkb_symbols "alt_space_toggle" {
+     key <SPCE> {
+-        type[Group1]="PC_ALT_LEVEL2",
++        type[Group1]="PC_CONTROL_LEVEL2",
+         symbols[Group1] = [ space, ISO_Next_Group ]
+     };
+ };
