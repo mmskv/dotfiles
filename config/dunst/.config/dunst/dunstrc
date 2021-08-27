@@ -1,11 +1,15 @@
 [global]
     monitor = 0
-    geometry = "400x5-13+63"
+;   y = gap + polybar border + polybar height + polybar border + gap
+;   y = 13 + 2 + 30 + 2 + 13 = 60
+;   widht x height - x + y
+    geometry = "400x5-13+60"
     indicate_hidden = yes
     shrink = no
     transparency = 0
     notification_height = 0
-    separator_height = 2
+    separator_height = 3
+    corner_radius = 15 
     padding = 15
     horizontal_padding = 25
     frame_width = 2
@@ -38,7 +42,6 @@
     class = Dunst
     startup_notification = false
     verbosity = mesg
-    corner_radius = 15 
     ignore_dbusclose = false
     force_xinerama = false
     mouse_left_click = close_current
@@ -55,13 +58,13 @@
     context = ctrl+shift+period
 
 [urgency_low]
-; Highlight configures progress bar color
+;   Highlight configures progress bar color
     highlight = "#C5C8C6"
     frame_color = "#373B41"
     background = "#0D0E00"
     foreground = "#C5C8C6"
     timeout = 2 
-    
+
 [urgency_normal]
     highlight = "#F0C674"
     frame_color = "#373B41"
@@ -76,4 +79,4 @@
     foreground = "#C5C8C6"
     timeout = 0
 
-# vim: ft=dosini
+; vim: ft=dosini
