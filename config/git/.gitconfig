@@ -1,0 +1,7 @@
+[user]
+	email = max.mishuk2014@gmail.com
+	name = mmskv
+
+[alias]
+    s = status
+    c = commit -v
