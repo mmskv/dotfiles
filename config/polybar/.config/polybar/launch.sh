@@ -9,5 +9,4 @@ killall -q polybar
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
 # Launch primary and secondary bars
-polybar -c ~/.config/polybar/config-primary.ini primary &
-# polybar -c ~/.config/polybar/config-primary.ini systray &
+polybar -c ~/.config/polybar/config.ini primary &
