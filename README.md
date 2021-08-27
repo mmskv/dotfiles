@@ -1,7 +1,6 @@
 # My gentoo dotfiles
 
-![](https://github.com/maksmeshkov/dotfiles/blob/gray-stable/screenshots/gray-stable-neofetch.png)
-![](https://github.com/maksmeshkov/dotfiles/blob/gray-stable/screenshots/gray-stable-workflow.png)
+![](https://github.com/maksmeshkov/dotfiles/blob/laptop/screenshots/laptop-neofetch.png)
 
 ---
 
@@ -57,9 +56,6 @@
 
 ## Notes
 
--   To use dbus for spotify, chromium, playerctl and whatever, launch WM
-    session with dbus, so that all WM children will be children of dbus. Put
-    `exec dbus-launch --exit-with-session bspwm` in your `.xinitrc`
 -   Install all coc extensions in one line
 
         :CocInstall coc-snippets coc-prettier coc-git coc-eslint coc-vimtex coc-tsserver coc-sh coc-pyright coc-json coc-css coc-cmake coc-clangd
