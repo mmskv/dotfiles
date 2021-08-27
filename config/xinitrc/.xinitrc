@@ -1,1 +1,2 @@
-exec dbus-launch --exit-with-session bspwm 2>~/.bspwm.err > ~/.bspwm.out
+systemctl --user import-environment DISPLAY
+exec /home/nekohacker/github/bspwm/bspwm
