@@ -11,12 +11,12 @@
 "clangd.path": "/home/nekohacker/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd",
 "clangd.semanticHighlighting": true,
 "clangd.arguments": ["--clang-tidy"],
+"clangd.fallbackFlags": ["-std=c++20"],
 "python.pythonPath": "venv/bin/python",
 "python.linting.enabled": true,
 "python.linting.pylintEnabled": true,
 "python.linting.pylintPath": ".venv/bin/pylint",
 "python.venvPath": ".venv",
 "python.formatting.provider": "yapf",
-"python.formatting.yapfPath": "/home/nekohacker/.local/bin/yapf",
-"git.enableGutters": true
+"python.formatting.yapfPath": "/home/nekohacker/.local/bin/yapf"
 }

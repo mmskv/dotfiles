@@ -21,13 +21,13 @@ call plug#end()
 " =============== Hybrid ===============
 
 autocmd vimenter * ++nested colorscheme hybrid
-color hybrid
 set termguicolors
 let g:hybrid_italic = 1
 let g:hybrid_custom_term_colors = 1
 
 " =============== AirLine ===============
 
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'hybrid'
 
@@ -79,6 +79,8 @@ let g:coc_snippet_next = '<tab>'
 
 let mapleader=","
 
+:difftoolcommand W w " I often mistype this
+
 set keymap=russian-jcukenwin
 set iminsert=0
 set imsearch=0
@@ -111,7 +113,10 @@ set matchpairs+=<:>
 set scrolloff=8
 set clipboard=unnamedplus
 
+set synmaxcol=2048 " optimize syntax hightlight for long files
+
 " ================ UNDOFILE ================
+
 set undofile
 set undodir=~/.vim/undo
 set undolevels=10000
