@@ -1,17 +1,14 @@
 [global]
     monitor = 0
-;   y = gap + polybar border + polybar height + polybar border + gap
-;   y = 13 + 2 + 30 + 2 + 13 = 60
-;   widht x height - x + y
-    geometry = "400x5-13+60"
+    width = 300
+    origin = top-right
+    offset = 13x20
     indicate_hidden = yes
     shrink = no
     transparency = 0
-    notification_height = 0
     separator_height = 3
-    corner_radius = 15 
-    padding = 15
-    horizontal_padding = 25
+    padding = 10
+    horizontal_padding = 10
     frame_width = 2
     separator_color = frame
     sort = yes
@@ -36,26 +33,17 @@
     sticky_history = yes
     history_length = 20
     dmenu = /usr/bin/dmenu -p dunst:
-    browser = /usr/bin/chromium 
+    browser = /usr/bin/firefox
     always_run_script = true
     title = Dunst
     class = Dunst
-    startup_notification = false
-    verbosity = mesg
     ignore_dbusclose = false
     force_xinerama = false
-    mouse_left_click = close_current
-    mouse_middle_click = do_action, close_current
+    mouse_left_click = close_current mouse_middle_click = do_action, close_current
     mouse_right_click = close_all
     force_xwayland = false
     progress_bar = true
-    progress_bar_max_width = 400
-
-[shortcuts]
-    close = ctrl+space
-    close_all = ctrl+shift+space
-    history = ctrl+grave
-    context = ctrl+shift+period
+    progress_bar_max_width = 300
 
 [urgency_low]
 ;   Highlight configures progress bar color
