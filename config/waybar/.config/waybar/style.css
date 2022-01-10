@@ -1,0 +1,69 @@
+* {
+    border-radius: 0;
+    font-family: 'Fira Mono';
+    font-weight: 500;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: #0D0E0F; 
+}
+
+#tags {
+    margin-top: 0px;
+    margin-left: 5px;
+    padding: 0px 5px 0px 5px;
+    border-bottom: 2px solid #dc322f;
+}
+
+#tags button {
+    margin: 0px;
+    padding: 0px;
+    color: #4e4d42;
+}
+
+#tags button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    background: #0D0E0F;
+}
+
+#tags button.focused {
+    color: #dc322f;
+}
+
+#tags button.occupied {
+    color: #dee3e7;
+}
+
+#tags button.urgent {
+    border: 2px solid #dc322f;
+}
+
+#tags button.focused.occupied {
+    color: #dc322f; 
+    /* border-bottom: 2px solid #dc322f; */
+}
+
+#clock {
+    padding: 0px 10px 0px 10px;
+    color: #dee3e7; /*base1*/
+    border-bottom: 2px solid #dc322f;
+}
+
+#battery,
+#keyboard-state,
+#pulseaudio,
+#network {
+    padding: 0px 10px 0px 10px;
+    margin-top: 0px;
+    margin-left: 0px;
+    color: #6e6d62; /*base1*/
+    border-left: 2px solid #7c322f;
+}
+
+
+#clock {
+    margin-left: 0px;
+    margin-right: 0px;
+}
