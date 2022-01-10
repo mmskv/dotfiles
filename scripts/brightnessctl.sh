@@ -22,11 +22,11 @@ function send_notification {
 
 case $1 in
   up)
-    brightnessctl set +10%
+    brightnessctl --exponent=3 set +10%
     send_notification
     ;;
   down)
-    brightnessctl set 10%-
+    brightnessctl --exponent=3 set 10%-
     send_notification
     ;;
 esac
