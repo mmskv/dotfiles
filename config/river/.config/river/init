@@ -22,7 +22,7 @@ riverctl input "1452:640:bcm5974" tap enabled
 riverctl map normal $mod Return spawn alacritty
 riverctl map normal $mod B spawn firefox
 riverctl map normal $mod I spawn telegram-desktop
-riverctl map normal $mod Space spawn /home/nekohacker/dotfiles/scripts/dmenu.sh
+riverctl map normal $mod Space spawn ~/dotfiles/scripts/dmenu.sh
 
 
 # Mod+Q to close the focused view
@@ -136,8 +136,8 @@ riverctl csd-filter-add app-id "gedit"
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
 
-kanshi -c /home/nekohacker/.config/kanshi.conf &
-swaybg -m fill -i /home/nekohacker/Downloads/wallpapers/spin.jpg &
+kanshi -c ~/.config/kanshi.conf &
+swaybg -m fill -i ~/dotfiles/wallpapers/spin.jpg &
 gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark' &
 waybar &
 swayidle -w \
