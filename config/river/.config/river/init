@@ -114,7 +114,7 @@ do
 
     # Screenshot
     riverctl map $mode None XF86LaunchA spawn 'killall slurp; grim -g "$(slurp)" - | wl-copy'
-    riverctl map $mode None XF86LaunchB spawn 'killall slurp; grim -g "$(slurp)" "~/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png"'
+    riverctl map $mode None XF86LaunchB spawn 'killall slurp; grim -g "$(slurp)" "~/Downloads/screenshots/Screenshot $(date +%F) at $(date +%T).png"'
 done
 
 # Set background and border color
@@ -138,12 +138,12 @@ riverctl default-layout rivertile
 
 kanshi -c /home/nekohacker/.config/kanshi.conf &
 swaybg -m fill -i /home/nekohacker/Downloads/wallpapers/spin.jpg &
-systemctl --user import-environment DISPLAY & # Fixes dunst
-systemctl --user restart dunst.service & # Fixes dunst
-exec waybar &
-exec swayidle -w \
-     timeout 15 'swaylock -f -c 000000 & brightnessctl -s & brightnessctl set 5%' \ 
+gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark' &
+waybar &
+swayidle -w \
+     timeout 100 'brightnessctl -s & brightnessctl set 5%' \
          resume 'brightnessctl -r' \
+     timeout 150 'swaylock -f -c 000000' \
      timeout 600 'wlopm --off eDP-1' resume 'wlopm --on eDP-1' \
      before-sleep 'swaylock -f -c 000000' &
 exec rivertile -view-padding 6 -outer-padding 6
