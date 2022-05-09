@@ -1,0 +1,12 @@
+--- /usr/lib/initcpio/hooks/encrypt	2022-05-09 22:40:57.417792852 +0300
++++ /usr/lib/initcpio/hooks/encrypt.new	2022-05-09 22:40:50.781108035 +0300
+@@ -94,6 +94,9 @@
+                 echo ""
+                 echo "A password is required to access the ${cryptname} volume:"
+ 
++                #set poweroff timeout
++                (sleep 15 && poweroff -f) &
++
+                 #loop until we get a real password
+                 while ! eval cryptsetup open --type luks ${resolved} ${cryptname} ${cryptargs} ${CSQUIET}; do
+                     sleep 2;

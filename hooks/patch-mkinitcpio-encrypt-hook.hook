@@ -1,0 +1,10 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = cryptsetup
+
+[Action]
+Description = Patching initcpio encrypt hook
+When = PostTransaction
+Exec = /usr/bin/patch /usr/lib/initcpio/hooks/encrypt /usr/share/libalpm/encrypt.patch
