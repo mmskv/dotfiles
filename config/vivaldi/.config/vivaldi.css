@@ -1,7 +1,0 @@
-/* remove the menu bar (still accessible with Alt button) */
-#header { display:none; }
-
-/* fixes annoying white screen flashes on new tab load */
-#webview-container {
-	background: black;
-}
