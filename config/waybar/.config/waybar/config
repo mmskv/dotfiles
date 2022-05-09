@@ -30,7 +30,7 @@
         "format": "snd: {volume}%",
         "format-muted": "snd: Muted",
         "scroll-step": 1,
-        "on-click": "pavucontrol"
+        "on-click": "pavucontrol",
         "tooltip": false
     }
 }
