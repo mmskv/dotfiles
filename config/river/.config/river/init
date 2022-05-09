@@ -140,6 +140,7 @@ kanshi -c ~/.config/kanshi.conf &
 swaybg -m fill -i ~/dotfiles/wallpapers/spin.jpg &
 gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark' &
 waybar &
+~/dotfiles/scripts/ambient-adjust.sh &
 swayidle -w \
      timeout 100 'brightnessctl -s & brightnessctl set 5%' \
          resume 'brightnessctl -r' \
