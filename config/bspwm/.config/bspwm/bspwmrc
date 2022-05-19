@@ -2,7 +2,7 @@
 # github.com/mmskv
 # 2021
 
-DP=$(xrandr --listactivemonitors | tail -n2 | awk '{ print $4}' | grep DP);
+DP=$(xrandr --listactivemonitors | awk '{ print $4}' | grep DP);
 
 bspc monitor $DP -d 主要 付帯 備蓄 セブン  #Dev Dev Browse Browse Game Game Net Net Misc
 bspc config border_width            2
