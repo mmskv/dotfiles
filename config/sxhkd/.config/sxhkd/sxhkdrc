@@ -15,7 +15,7 @@ super + s
 super + i
     telegram-desktop
 super + b
-    qutebrowser
+    firefox --force-dark-mode
 
 # Audio controls
 
