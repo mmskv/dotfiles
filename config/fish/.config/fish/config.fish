@@ -1,8 +1,3 @@
-## Fix for curses applications where terminal would not update 
-## $COLUMNS and $LINES
-set --unexport COLUMNS
-set --unexport LINES
-
 ## Bold colors
 set fish_color_command ccccc --bold
 set fish_color_error e84f4f
@@ -17,11 +12,14 @@ alias ll "ls -alh --color=always"
 alias grep "grep --color=auto -i"
 alias clone "git clone --depth 1"
 alias ra "ranger"
+alias wgp "wgetpaste -X"
+alias dvim "doas nvim"
 
 alias euses "equery uses"
 alias cp "cp -iv"
 alias mv "mv -iv"
 alias rm "rm -v"
+alias ip "ip -c"
 
 alias librespot "/home/overaid/github/librespot/target/release/librespot -n Ono-Sendai"
 alias 'commit'='set -x GPG_TTY (tty); git commit -Sv'
@@ -32,8 +30,8 @@ set fish_key_bindings fish_vi_key_bindings
 
 ## Locale
 set -x LC_ALL en_US.utf8
+set -x LANGUAGE en_US.utf8
 set -x EDITOR /usr/bin/nvim
-set -x PAGER /usr/bin/nvimpager
 set -x BROWSER /usr/bin/qutebrowser
 
 ## Start X at login
