@@ -15,19 +15,8 @@ Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'itchyny/calendar.vim'
 
 call plug#end()
-
-" ============== Calendar ===============
-
-let g:calendar_google_calendar = 1
-let g:calendar_google_task = 1
-let g:calendar_first_day = 'monday'
-let g:calendar_date_endian = 'little'
-let g:calendar_date_full_month_name = 1
-let g:calendar_task = 1
-source ~/.cache/calendar.vim/credentials.vim
 
 " =============== Hybrid ===============
 
