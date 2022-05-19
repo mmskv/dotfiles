@@ -60,7 +60,7 @@ scrolling:
 
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
-  multiplier: 3
+  multiplier: 4
 
 # Font configuration (changes require restart)
 font:
@@ -168,9 +168,6 @@ bell:
   animation: EaseOutExpo
   color: '0xffffff'
   duration: 0
-
-# Background opacity
-background_opacity: 1.0
 
 # Key bindings
 #
