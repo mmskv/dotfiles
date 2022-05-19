@@ -1,0 +1,166 @@
+{
+  "files.insertFinalNewline": true,
+  "vim.foldfix": false,
+  "vim.camelCaseMotion.enable": true,
+  "vim.neovimPath": "/usr/bin/nvim",
+  "vim.neovimUseConfigFile": true,
+  "vim.easymotion": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.leader": ",",
+  "vim.smartRelativeLine": true,
+  "vim.sneakUseIgnorecaseAndSmartcase": true,
+  "vim.surround": false,
+  "vim.visualstar": true,
+  "vim.enableNeovim": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["space", "c"],
+      "commands": ["workbench.action.showCommands"]
+    },
+    {
+      "before": ["<leader>", "r", "n"],
+      "commands": ["editor.action.rename"]
+    },
+    {
+      "before": ["<leader>", "g", "r"],
+      "commands": ["editor.action.goToReferences"]
+    },
+    {
+      "before": ["<leader>", "g", "i"],
+      "commands": ["editor.action.goToImplementation"]
+    },
+    // Move
+    {
+      "before": ["<leader>", "m", "v", "d"],
+      "commands": ["workbench.action.moveEditorToBelowGroup"]
+    },
+    {
+      "before": ["<leader>", "m", "v", "u"],
+      "commands": ["workbench.action.moveEditorToAboveGroup"]
+    },
+    {
+      "before": ["<leader>", "m", "v", "r"],
+      "commands": ["workbench.action.moveEditorToLeftGroup"]
+    },
+    {
+      "before": ["<leader>", "m", "v", "l"],
+      "commands": ["workbench.action.moveEditorToRightGroup"]
+    },
+    // Split
+    {
+      "before": ["<leader>", "s", "p", "d"],
+      "commands": ["workbench.action.splitEditorDown"]
+    },
+    {
+      "before": ["<leader>", "s", "p", "u"],
+      "commands": ["workbench.action.splitEditorUp"]
+    },
+    {
+      "before": ["<leader>", "s", "p", "l"],
+      "commands": ["workbench.action.splitEditorLeft"]
+    },
+    {
+      "before": ["<leader>", "s", "p", "r"],
+      "commands": ["workbench.action.splitEditorRight"]
+    },
+    {
+      "before": ["<leader>", "q", "f"],
+      "commands": ["editor.action.quickFix"]
+    },
+    {
+      "before": ["<leader>", "e"],
+      "commands": ["notebook.cell.execute"]
+    },
+    {
+      "before": ["<leader>", "q", "q"],
+      "commands": ["workbench.action.closeWindow"]
+    },
+    {
+      "before": ["K"],
+      "commands": ["editor.action.showHover"]
+    }
+  ],
+  // Colors
+  "workbench.colorTheme": "Hybrid",
+  "workbench.colorCustomizations": {
+    "editor.background": "#0D0E0F",
+    "editor.foreground": "#C5C8C6",
+    "activityBar.border": "#8C9440",
+    "editorCursor.foreground": "#7b91a5",
+    "editorCursor.background": "#000000",
+    "tab.activeBackground": "#8C9440",
+    "tab.inactiveBackground": "#282A2E",
+    "tab.activeBorder": "#8c9440",
+    "tab.unfocusedActiveBorder": "#8c9440",
+    "editorGroupHeader.tabsBorder": "#0d0e0f",
+    "editorGroupHeader.tabsBackground": "#0D0E0F",
+    "sideBar.background": "#0d0e0f",
+    "sideBar.foreground": "#c5c8c6",
+    "sideBarSectionHeader.background": "#373B41",
+    "sideBarSectionHeader.foreground": "#c5c8c6",
+    "statusBar.background": "#373b41",
+    "sideBar.border": "#373b41",
+    "statusBar.noFolderBackground": "#005f5f",
+    "statusBar.debuggingBackground": "#005f5f"
+  },
+  // Editor
+  "editor.autoClosingQuotes": "never",
+  "editor.autoClosingOvertype": "always",
+  "editor.autoClosingDelete": "never",
+  "editor.lineNumbers": "relative",
+  "editor.suggestSelection": "first",
+  "editor.autoClosingBrackets": "never",
+  "editor.scrollbar.horizontal": "hidden",
+  "editor.scrollbar.vertical": "hidden",
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.formatOnSave": true,
+  "diffEditor.codeLens": true,
+  "javascript.autoClosingTags": false,
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  // Visual
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.splitInGroupLayout": "vertical",
+  "explorer.sortOrder": "type",
+  "explorer.confirmDelete": false,
+  // Formatting
+  "prettier.printWidth": 120,
+  "prettier.quoteProps": "consistent",
+  // "prettier.proseWrap": "always",
+  "prettier.singleQuote": true,
+  "python.linting.flake8Args": ["--max-line-length=120"],
+  "python.formatting.blackArgs": ["--line-length", "120"],
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [
+    "--disable",
+    "missing-function-docstring,missing-module-docstring,missing-class-docstring,invalid-name,line-too-long"
+  ],
+  "docker.host": "ssh://root@172.18.130.175",
+  // Disable Telemetry and auto updates
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "none",
+  "explorer.confirmDragAndDrop": false,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "cSpell.language": "en,ru",
+  "workbench.editor.untitled.hint": "hidden",
+  "window.menuBarVisibility": "toggle",
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.activityBar.visible": false,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "redhat.telemetry.enabled": false
+}
