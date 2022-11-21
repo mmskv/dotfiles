@@ -18,13 +18,15 @@ Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
-" =============== Hybrid ===============
+" =============== Colorscheme ===============
 
 autocmd vimenter * ++nested colorscheme hybrid
 set termguicolors
 let g:hybrid_italic = 1
 let g:hybrid_custom_term_colors = 1
-autocmd VimEnter,ColorScheme * hi PmenuSel guibg=#000000 gui=NONE
+autocmd VimEnter,ColorScheme * 
+            \ hi PmenuSel guibg=#000000 gui=NONE |
+            \ hi CocHintSign guibg=Red guifg=Grey
 
 " =============== AirLine ===============
 
@@ -75,6 +77,7 @@ xmap <leader>x  <Plug>(coc-convert-snippet)
 autocmd Filetype ts setlocal ts=2 sw=2 expandtab
 autocmd Filetype js setlocal ts=2 sw=2 expandtab
 autocmd Filetype cpp setlocal ts=2 sw=2 expandtab
+autocmd Filetype c setlocal ts=2 sw=2 expandtab
 
 let g:coc_snippet_next = '<tab>'
 
@@ -116,6 +119,8 @@ set scrolloff=8
 set clipboard=unnamedplus
 
 set synmaxcol=2048 " optimize syntax hightlight for long files
+set mouse=
+
 
 " ================ UNDOFILE ================
 
