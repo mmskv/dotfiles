@@ -1,0 +1,23 @@
+def_key "j"
+    scroll_down
+def_key "k"
+    scroll_up
+def_key "l"
+  enter_directory
+def_key "h"
+  jump_to_parent_directory
+def_key "a"
+  clear_main_playlist
+  add_item_to_playlist
+  show_playlist
+  play
+def_key "s"
+  push_characters "30"
+  push_character "enter"
+  set_volume
+def_key "S"
+  push_characters "80"
+  push_character "enter"
+  set_volume
+def_key "L"
+  show_lyrics

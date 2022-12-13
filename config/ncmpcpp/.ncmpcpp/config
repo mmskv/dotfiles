@@ -1,0 +1,16 @@
+ncmpcpp_directory =             ~/.ncmpcpp
+mpd_host =                      127.0.0.1
+mpd_port =                      6600
+mpd_music_dir =	                /var/lib/mpd/music/
+execute_on_song_change =        ~/.ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh
+playlist_separate_albums =      no
+display_bitrate =               yes
+playlist_display_mode =         columns
+browser_display_mode =          columns
+autocenter_mode =               yes
+user_interface =                alternative
+connected_message_on_startup =  no
+ask_before_clearing_playlists = no
+song_columns_list_format =      (15)[yellow]{a} (6f)[green]{NrE} (50)[white]{t|f:Title} (25)[cyan]{b} (7f)[magenta]{l}
+browser_sort_mode =             type
+main_window_color =             white
