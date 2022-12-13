@@ -22,6 +22,8 @@
     helper = "cache --timeout 5000"
 [core]
 	excludesFile = ~/.gitignore
+[push]
+    autoSetupRemote = true
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
