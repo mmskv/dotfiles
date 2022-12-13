@@ -42,7 +42,7 @@ XF86MonBrightnessDown
 # Screenshot
 
 XF86LaunchA
-    maim -s --format=png | xclip -selection clipboard -t image/png
+    pkill picom && maim -s --format=png | xclip -selection clipboard -t image/png ; picom --config $HOME/.config/picom.config & 
 XF86LaunchB
     maim -s --format=png $HOME/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png
 
