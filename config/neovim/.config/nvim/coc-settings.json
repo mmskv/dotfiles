@@ -1,5 +1,5 @@
 {
-    "coc.preferences.formatOnSaveFiletypes": ["javascript", "markdown", "c++", "cpp", "hpp", "python"],
+    "coc.preferences.formatOnSaveFiletypes": ["javascript", "markdown", "c++", "cpp", "hpp", "python", "c", "h"],
     "tsserver.maxTsServerMemory": 10000,
     "eslint.autoFixOnSave":true,
     "eslint.format.enable":true,
@@ -8,12 +8,13 @@
     "prettier.tabWidth":4,
     "prettier.singleQuote": true,
     "prettier.printWidth": 120,
-    "clangd.path": "/home/nekohacker/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd",
-    "clangd.arguments": ["--clang-tidy"],
-    "clangd.fallbackFlags": ["-std=c++20"],
     "python.pythonPath": ".venv/bin/python",
     "python.venvPath": ".venv",
     "python.formatting.provider": "yapf",
     "python.formatting.yapfPath": "/home/nekohacker/.local/bin/yapf",
-    "python.formatting.yapfArgs": ["--style", "/home/nekohacker/.config/yapf/sytle"]
+    "python.formatting.yapfArgs": [
+      "--style",
+      "/home/nekohacker/.config/yapf/sytle"
+    ],
+    "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/15.0.3/clangd_15.0.3/bin/clangd",
 }
