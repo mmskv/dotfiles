@@ -121,6 +121,7 @@ set clipboard=unnamedplus
 set synmaxcol=2048 " optimize syntax hightlight for long files
 set mouse=
 
+autocmd VimLeave * call system("xsel -ib", getreg('+'))
 
 " ================ UNDOFILE ================
 
