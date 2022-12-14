@@ -1,8 +1,31 @@
 [user]
-	email = max.mishuk2014@gmail.com
-	name = mmskv
-
+    email = max.mishuk2014@gmail.com
+    name = mmskv
 [alias]
     s = status
-    c = commit -v
+    co = checkout
+    cob = checkout -b
+    br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
     l = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+    c = commit -v
+[difftool]
+    prompt = true
+[diff]
+    tool = nvimdiff
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[merge]
+    tool = nvimdiff
+[mergetool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[credential]
+    helper = "cache --timeout 5000"
+[core]
+    excludesFile = ~/.gitignore
+[push]
+    autoSetupRemote = true
+[filter "lfs"]
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
