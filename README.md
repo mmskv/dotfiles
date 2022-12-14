@@ -1,5 +1,8 @@
 # My arch macbook air dotfiles
 
+> See my desktop dotfiles at
+> [https://github.com/maksmeshkov/dotfiles/tree/desktop](https://github.com/maksmeshkov/dotfiles/tree/desktop)
+
 ![](https://github.com/maksmeshkov/dotfiles/blob/laptop/screenshots/screenshot.png)
 
 ---
