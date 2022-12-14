@@ -38,6 +38,8 @@ XF86MonBrightnessUp
 	$HOME/dotfiles/scripts/brightnessctl.sh up
 XF86MonBrightnessDown
 	$HOME/dotfiles/scripts/brightnessctl.sh down 
+XF86Eject
+    $HOME/dotfiles/scripts/mpd-volume-toggle.sh
 
 # Screenshot
 
