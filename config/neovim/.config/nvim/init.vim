@@ -15,6 +15,7 @@ Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'pearofducks/ansible-vim', { 'do': './UltiSnips/generate.sh' }
 
 call plug#end()
 
@@ -78,6 +79,10 @@ autocmd Filetype ts setlocal ts=2 sw=2 expandtab
 autocmd Filetype js setlocal ts=2 sw=2 expandtab
 autocmd Filetype cpp setlocal ts=2 sw=2 expandtab
 autocmd Filetype c setlocal ts=2 sw=2 expandtab
+
+let g:coc_filetype_map = {
+  \ 'yaml.ansible': 'ansible',
+  \ }
 
 let g:coc_snippet_next = '<tab>'
 
