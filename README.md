@@ -55,4 +55,4 @@
 
 -   Install all coc extensions in one line
 
-        :CocInstall coc-snippets coc-prettier coc-git coc-eslint coc-vimtex coc-tsserver coc-sh coc-pyright coc-json coc-css coc-cmake coc-clangd
+        CocInstall coc-snippets coc-prettier coc-yaml @yaegassy/coc-ansible coc-git coc-eslint coc-vimtex coc-tsserver coc-sh coc-pyright coc-json coc-css coc-cmake coc-clangd
