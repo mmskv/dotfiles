@@ -44,7 +44,7 @@ XF86Eject
 # Screenshot
 
 XF86LaunchA
-    pkill picom && maim -s --format=png | xclip -selection clipboard -t image/png ; picom --config $HOME/.config/picom.config & 
+    maim -s --format=png | xclip -selection clipboard -t image/png
 XF86LaunchB
     maim -s --format=png $HOME/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png
 
