@@ -4,7 +4,7 @@
 
 DP=$(xrandr --listactivemonitors | awk '{ print $4}' | grep DP);
 
-bspc monitor $DP -d 主要 付帯 備蓄 セブン  #Dev Dev Browse Browse Game Game Net Net Misc
+bspc monitor $DP -d 1 2 3 4 5
 bspc config border_width            2
 bspc config border_radius           15
 bspc config window_gap              10
@@ -23,7 +23,7 @@ bspc config automatic_scheme        spiral
 
 bspc rule -a Gimp desktop='^4' state=floating follow=on
 
-$HOME/.screenlayout/first.sh ;
+$HOME/.screenlayout ;
 killall sxhkd;
 sxhkd  &
 killall unclutter; 
@@ -43,6 +43,6 @@ xcape -e 'Caps_Lock=Escape'  &
 # Bind Wacom Tablet to main display
 xsetwacom set "Wacom One by Wacom M Pen stylus" MapToOutput HEAD-0   &
 xrdb -merge $HOME/.Xresources  &
-killall redshift -9 && redshift -x && redshift -c $HOME/.config/redshift.conf || redshift -c $HOME/.config/redshift.conf &
+pgrep redshift || redshift -c $HOME/.config/redshift.conf &
 xbindkeys  &
 gpg-agent --daemon &
