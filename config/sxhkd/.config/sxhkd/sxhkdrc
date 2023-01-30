@@ -15,7 +15,7 @@ super + s
 super + i
     telegram-desktop
 super + b
-    firefox --force-dark-mode
+    firefox-bin --force-dark-mode
 
 # Audio controls
 
