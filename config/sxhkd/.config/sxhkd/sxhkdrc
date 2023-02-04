@@ -44,9 +44,9 @@ XF86Eject
 # Screenshot
 
 XF86LaunchA
-    maim -s --format=png | xclip -selection clipboard -t image/png
+    maim -u -s --format=png | xclip -selection clipboard -t image/png
 XF86LaunchB
-    maim -s --format=png $HOME/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png
+    maim -u -s --format=png $HOME/Downloads/screenshots/Screenshot\ (date +%F)\ at\ (date +%T).png
 
 # bspwm hotkeys
 #
