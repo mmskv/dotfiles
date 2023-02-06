@@ -11,10 +11,10 @@
     "python.pythonPath": ".venv/bin/python",
     "python.venvPath": ".venv",
     "python.formatting.provider": "yapf",
-    "python.formatting.yapfPath": "/home/nekohacker/.local/bin/yapf",
+    "python.formatting.yapfPath": "/home/suck/.local/bin/yapf",
     "python.formatting.yapfArgs": [
       "--style",
-      "/home/nekohacker/.config/yapf/sytle"
+      "/home/suck/.config/yapf/sytle"
     ],
     "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/15.0.6/clangd_15.0.6/bin/clangd",
     "snippets.ultisnips.pythonPrompt": false,
