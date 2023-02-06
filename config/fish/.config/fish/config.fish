@@ -13,17 +13,13 @@ alias grep "grep --color=auto -i"
 alias clone "git clone --depth 1"
 alias ra "ranger"
 alias wgp "wgetpaste -X"
-alias dvim "doas nvim"
+alias sudo "doas"
 
 alias euses "equery uses"
 alias cp "cp -iv"
 alias mv "mv -iv"
 alias rm "rm -v"
 alias ip "ip -c"
-
-alias librespot "/home/overaid/github/librespot/target/release/librespot -n Ono-Sendai"
-alias 'commit'='set -x GPG_TTY (tty); git commit -Sv'
-alias gitlog "PAGER=less git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
 
 ## Keybinding
 set fish_key_bindings fish_vi_key_bindings
@@ -32,11 +28,11 @@ set fish_key_bindings fish_vi_key_bindings
 set -x LC_ALL en_US.utf8
 set -x LANGUAGE en_US.utf8
 set -x EDITOR /usr/bin/nvim
-set -x BROWSER /usr/bin/qutebrowser
+set -x BROWSER /usr/bin/firefox-bin
 
 ## Start X at login
 if status --is-login
-  if test -z "$DISPLAY" -a $XDG_VTNR = 1
-    exec startx
+  if test (tty) = /dev/tty1
+    exec startx -- -maxbigreqsize 127
   end
 end
