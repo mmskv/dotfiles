@@ -1,4 +1,5 @@
 Xcursor.size: 16
+Xcursor.theme: adwaita
 ! Hybrid Terminal Colours. Uses the palette from Tomorrow-Night:
 ! https://github.com/chriskempson/tomorrow-theme/blob/master/vim/colors/Tomorrow-Night.vim
 ! vim: ft=xdefaults
