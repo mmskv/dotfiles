@@ -23,9 +23,7 @@ bspc config automatic_scheme        spiral
 
 bspc rule -a Gimp desktop='^4' state=floating follow=on
 
-$HOME/.screenlayout ;
-killall sxhkd;
-sxhkd  &
+killall sxhkd; sxhkd  &
 killall unclutter; 
 unclutter -grab -idle 3  &
 pgrep bspswallow || bspswallow  &
@@ -38,11 +36,9 @@ xset r rate 380 35  & # Set button repeat speed
 $HOME/.fehbg  &
 # Bind Shift_R and Shift_L to matching parenthesis
 killall xcape -9;
-xcape -e 'Shift_L=parenleft;Shift_R=parenright'  &
-xcape -e 'Caps_Lock=Escape'  &
+xcape -e 'Shift_L=parenleft;Shift_R=parenright;Caps_Lock=Escape'  &
 # Bind Wacom Tablet to main display
 xsetwacom set "Wacom One by Wacom M Pen stylus" MapToOutput HEAD-0   &
 xrdb -merge $HOME/.Xresources  &
-pgrep redshift || redshift -c $HOME/.config/redshift.conf &
+pgrep redshift || redshift -c $HOME/.config/redshift.conf  &
 xbindkeys  &
-gpg-agent --daemon &
