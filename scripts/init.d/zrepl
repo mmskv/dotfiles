@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+command=/usr/local/bin/zrepl
+command_args="--config /etc/zrepl/zrepl.yml daemon"
+start_stop_daemon_args="-b"
+pidfile=/var/run/zrepl.pid
+name="zrepl"
+
+description="zrepl daemon"
+
+depend() {
+    use net
+    after logger
+}
+
+start_pre() {
+    checkpath --directory --owner root:root --mode 0700 /var/run/zrepl/ /var/run/zrepl/stdinserver
+    /usr/local/bin/zrepl --config /etc/zrepl/zrepl.yml configcheck
+}
