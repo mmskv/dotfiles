@@ -19,7 +19,7 @@ POLLING_PER=3
 # Values read by the ALS for which the screen should be dimmest or brightest
 # Default: 1000 and 900000
 MIN_LUX=1000
-MAX_LUX=500000
+MAX_LUX=100000
 
 # Amount that ambient brightness must change before we change the screen brightness
 # Default: 0.1
