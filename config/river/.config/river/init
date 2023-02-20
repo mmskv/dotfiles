@@ -23,7 +23,7 @@ riverctl map normal $mod Return spawn alacritty
 riverctl map normal $mod B spawn firefox
 riverctl map normal $mod I spawn telegram-desktop
 riverctl map normal $mod Space spawn ~/dotfiles/scripts/dmenu.sh
-
+        
 
 # Mod+Q to close the focused view
 riverctl map normal $mod Q close
@@ -114,7 +114,7 @@ do
 
     # Screenshot
     riverctl map $mode None XF86LaunchA spawn 'killall slurp; grim -g "$(slurp)" - | wl-copy'
-    riverctl map $mode None XF86LaunchB spawn 'killall slurp; grim -g "$(slurp)" "~/Downloads/screenshots/Screenshot $(date +%F) at $(date +%T).png"'
+    riverctl map $mode None XF86LaunchB spawn 'killall slurp; grim -g "$(slurp)" "~/Downloads/screenshots/Screenshot.png"'
 done
 
 # Set background and border color
@@ -142,9 +142,13 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark' &
 waybar &
 ~/dotfiles/scripts/ambient-adjust.sh &
 swayidle -w \
-     timeout 100 'brightnessctl -s & brightnessctl set 5%' \
-         resume 'brightnessctl -r' \
+     timeout 100 'killall ambient-adjust.sh & brightnessctl -s & brightnessctl set 5%' \
+         resume 'brightnessctl -r & ~/dotfiles/scripts/ambient-adjust.sh &' \
      timeout 150 'swaylock -f -c 000000' \
      timeout 600 'wlopm --off eDP-1' resume 'wlopm --on eDP-1' \
      before-sleep 'swaylock -f -c 000000' &
-exec rivertile -view-padding 6 -outer-padding 6
+exec rivertile -view-padding 6 -outer-padding 6 &
+source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+# see https://wiki.archlinux.org/title/GNOME/Keyring#xinitrc
+eval $(/usr/bin/gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
