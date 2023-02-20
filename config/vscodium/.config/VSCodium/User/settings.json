@@ -1,4 +1,5 @@
 {
+  "keyboard.dispatch": "keyCode",
   "files.insertFinalNewline": true,
   "vim.foldfix": false,
   "vim.camelCaseMotion.enable": true,
@@ -17,70 +18,170 @@
   "vim.enableNeovim": true,
   "vim.normalModeKeyBindingsNonRecursive": [
     {
-      "before": ["space", "c"],
-      "commands": ["workbench.action.showCommands"]
+      "before": [
+        "space",
+        "c"
+      ],
+      "commands": [
+        "workbench.action.showCommands"
+      ]
     },
     {
-      "before": ["<leader>", "r", "n"],
-      "commands": ["editor.action.rename"]
+      "before": [
+        "<leader>",
+        "r",
+        "n"
+      ],
+      "commands": [
+        "editor.action.rename"
+      ]
     },
     {
-      "before": ["<leader>", "g", "r"],
-      "commands": ["editor.action.goToReferences"]
+      "before": [
+        "<leader>",
+        "g",
+        "r"
+      ],
+      "commands": [
+        "editor.action.goToReferences"
+      ]
     },
     {
-      "before": ["<leader>", "g", "i"],
-      "commands": ["editor.action.goToImplementation"]
+      "before": [
+        "<leader>",
+        "g",
+        "i"
+      ],
+      "commands": [
+        "editor.action.goToImplementation"
+      ]
     },
     // Move
     {
-      "before": ["<leader>", "m", "v", "d"],
-      "commands": ["workbench.action.moveEditorToBelowGroup"]
+      "before": [
+        "<leader>",
+        "m",
+        "v",
+        "d"
+      ],
+      "commands": [
+        "workbench.action.moveEditorToBelowGroup"
+      ]
     },
     {
-      "before": ["<leader>", "m", "v", "u"],
-      "commands": ["workbench.action.moveEditorToAboveGroup"]
+      "before": [
+        "<leader>",
+        "m",
+        "v",
+        "u"
+      ],
+      "commands": [
+        "workbench.action.moveEditorToAboveGroup"
+      ]
     },
     {
-      "before": ["<leader>", "m", "v", "r"],
-      "commands": ["workbench.action.moveEditorToLeftGroup"]
+      "before": [
+        "<leader>",
+        "m",
+        "v",
+        "r"
+      ],
+      "commands": [
+        "workbench.action.moveEditorToLeftGroup"
+      ]
     },
     {
-      "before": ["<leader>", "m", "v", "l"],
-      "commands": ["workbench.action.moveEditorToRightGroup"]
+      "before": [
+        "<leader>",
+        "m",
+        "v",
+        "l"
+      ],
+      "commands": [
+        "workbench.action.moveEditorToRightGroup"
+      ]
     },
     // Split
     {
-      "before": ["<leader>", "s", "p", "d"],
-      "commands": ["workbench.action.splitEditorDown"]
+      "before": [
+        "<leader>",
+        "s",
+        "p",
+        "d"
+      ],
+      "commands": [
+        "workbench.action.splitEditorDown"
+      ]
     },
     {
-      "before": ["<leader>", "s", "p", "u"],
-      "commands": ["workbench.action.splitEditorUp"]
+      "before": [
+        "<leader>",
+        "s",
+        "p",
+        "u"
+      ],
+      "commands": [
+        "workbench.action.splitEditorUp"
+      ]
     },
     {
-      "before": ["<leader>", "s", "p", "l"],
-      "commands": ["workbench.action.splitEditorLeft"]
+      "before": [
+        "<leader>",
+        "s",
+        "p",
+        "l"
+      ],
+      "commands": [
+        "workbench.action.splitEditorLeft"
+      ]
     },
     {
-      "before": ["<leader>", "s", "p", "r"],
-      "commands": ["workbench.action.splitEditorRight"]
+      "before": [
+        "<leader>",
+        "s",
+        "p",
+        "r"
+      ],
+      "commands": [
+        "workbench.action.splitEditorRight"
+      ]
     },
     {
-      "before": ["<leader>", "q", "f"],
-      "commands": ["editor.action.quickFix"]
+      "before": [
+        "<leader>",
+        "q",
+        "f"
+      ],
+      "commands": [
+        "editor.action.quickFix"
+      ]
     },
     {
-      "before": ["<leader>", "e"],
-      "commands": ["notebook.cell.execute"]
+      "before": [
+        "<leader>",
+        "e"
+      ],
+      "commands": [
+        "notebook.cell.execute"
+      ]
     },
     {
-      "before": ["<leader>", "q", "q"],
-      "commands": ["workbench.action.closeWindow"]
+      "before": [
+        "<leader>",
+        "q",
+        "q"
+      ],
+      "commands": [
+        "workbench.action.closeWindow"
+      ]
     },
     {
-      "before": ["K"],
-      "commands": ["editor.action.showHover"]
+      "before": [
+        "K"
+      ],
+      "commands": [
+        "editor.action.showHover"
+      ]
     }
   ],
   // Colors
@@ -130,8 +231,13 @@
   "prettier.quoteProps": "consistent",
   // "prettier.proseWrap": "always",
   "prettier.singleQuote": true,
-  "python.linting.flake8Args": ["--max-line-length=120"],
-  "python.formatting.blackArgs": ["--line-length", "120"],
+  "python.linting.flake8Args": [
+    "--max-line-length=120"
+  ],
+  "python.formatting.blackArgs": [
+    "--line-length",
+    "120"
+  ],
   "python.linting.pylintEnabled": true,
   "python.linting.pylintArgs": [
     "--disable",
@@ -162,13 +268,21 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "redhat.telemetry.enabled": false,
-  "window.zoomLevel": 1,
-  "gitlens.mode.active": "review",
-  "workbench.activityBar.visible": false,
   "latex-workshop.latex.external.build.args": [
     "-lualatex"
   ],
-  "latex-workshop.latex.clean.command": "lualatexmk",
+  "latex-workshop.latex.magic.args": [
+    "-synctex=1",
+    "-interaction=nonstopmode",
+    "-file-line-error",
+    "%DOC%",
+    "-lualatex "
+  ],
+  "latex-workshop.latex.clean.args": [
+    "-c",
+    "%TEX%",
+    "-lualatex"
+  ],
   "latex-workshop.latex.tools": [
     {
       "name": "latexmk",
@@ -178,8 +292,8 @@
         "-interaction=nonstopmode",
         "-file-line-error",
         "-pdf",
-        "-lualatex",
         "-outdir=%OUTDIR%",
+        "-lualatex",
         "%DOC%"
       ],
       "env": {}
