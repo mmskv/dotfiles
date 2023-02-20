@@ -15,9 +15,7 @@ mod="Mod4"
 riverctl input "pointer-1452-640-bcm5974" disable-while-typing enabled
 riverctl input "pointer-1452-640-bcm5974" pointer-accel 0.1
 riverctl input "pointer-1452-640-bcm5974" accel-profile adaptive
-#riverctl input "pointer-1452-640-bcm5974" click-method clickfinger
 riverctl input "pointer-1452-640-bcm5974" natural-scroll enabled
-#riverctl input "pointer-1452-640-bcm5974" tap enabled
 
 riverctl map normal $mod Return spawn alacritty
 riverctl map normal $mod B spawn firefox
