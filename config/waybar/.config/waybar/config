@@ -3,7 +3,7 @@
     "modules-center": ["clock"],
     "modules-right": ["network", "battery", "pulseaudio"],
     "clock": {
-        "format": "{:%a, %-d %b at %R}",
+        "format": "{:%a, %Od %b at %R}",
         "interval": 1,
         "tooltip": false
     },
