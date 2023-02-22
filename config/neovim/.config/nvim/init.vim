@@ -84,6 +84,9 @@ let g:coc_filetype_map = {
   \ 'yaml.ansible': 'ansible',
   \ }
 
+au BufRead,BufNewFile */ansible/*.y?ml set filetype=yaml.ansible
+au BufRead,BufNewFile inventory        set filetype=ansible_hosts
+
 let g:coc_snippet_next = '<tab>'
 
 let mapleader=","
@@ -123,7 +126,7 @@ set matchpairs+=<:>
 set scrolloff=8
 set clipboard=unnamedplus
 
-set synmaxcol=2048 " optimize syntax hightlight for long files
+set synmaxcol=8192 " optimize syntax hightlight for long files
 set mouse=
 
 autocmd VimLeave * call system("xsel -ib", getreg('+'))
