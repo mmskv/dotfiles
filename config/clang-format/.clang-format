@@ -1,4 +1,4 @@
 BasedOnStyle: GNU
 Language: Cpp
-ColumnLimit: 80
+ColumnLimit: 140
 IndentWidth: 2
