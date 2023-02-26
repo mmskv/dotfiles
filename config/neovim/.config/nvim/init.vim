@@ -119,7 +119,7 @@ set scrolloff=8
 set clipboard=unnamedplus
 
 set synmaxcol=2048 " optimize syntax hightlight for long files
-set mouse=
+set mouse=a
 
 autocmd VimLeave * call system("xsel -ib", getreg('+'))
 
