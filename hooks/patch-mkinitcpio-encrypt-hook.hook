@@ -7,4 +7,4 @@ Target = cryptsetup
 [Action]
 Description = Patching initcpio encrypt hook
 When = PostTransaction
-Exec = /usr/bin/patch /usr/lib/initcpio/hooks/encrypt /usr/share/libalpm/encrypt.patch
+Exec = /bin/sh -c "/usr/bin/patch /usr/lib/initcpio/hooks/encrypt /usr/share/libalpm/encrypt.patch && /usr/bin/mkinitcpio -P"
