@@ -23,6 +23,7 @@
 
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
+      FLAKE = "/home/suck/dotfiles";
     };
 
     pointerCursor = {
@@ -102,6 +103,7 @@
     file
     fd
     dogdns
+    nh
 
     # lang
     python3
