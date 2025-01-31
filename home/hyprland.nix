@@ -171,7 +171,7 @@ in {
       ];
 
       workspace = [
-        "s[true], on-created-empty:hyprctl dispatch -- exec [workspace special] alacritty --class alacritty-float -o window.opacity=0.5" # todo add tmux
+        "s[true], on-created-empty:hyprctl dispatch -- exec [workspace special] alacritty --class alacritty-float -o window.opacity=0.5 -e tmux new-session -A -s special"
       ];
 
       # windowrule
