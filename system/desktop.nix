@@ -96,6 +96,7 @@
     builtins.elem (lib.getName pkg) [
       "google-chrome"
       "obsidian"
+      "anydesk"
       "corefonts"
       "cursor"
     ];

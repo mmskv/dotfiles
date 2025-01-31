@@ -81,7 +81,6 @@
     hunspell
     hunspellDicts.en_US
     hunspellDicts.ru_RU
-    xournalpp
     code-cursor
     playerctl
     pamixer
