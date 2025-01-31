@@ -143,7 +143,6 @@ in {
     ];
     style = ''
       @define-color active #EA803F;
-      @define-color urgent #204D15;
       @define-color bg #141414;
       @define-color fg #C5C8C6;
       @define-color border #212121;
@@ -173,7 +172,7 @@ in {
       }
 
       #workspaces button.urgent {
-        color: @urgent;
+        color: @active;
       }
 
       window#waybar.fullscreen #workspaces button.active {

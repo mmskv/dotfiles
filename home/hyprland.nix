@@ -12,7 +12,10 @@ in {
     ];
 
     settings = {
-      exec-once = [ "hyprctl setcursor phinger-cursors-dark 24" ];
+      exec-once = [
+        "hyprctl setcursor phinger-cursors-dark 24"
+        "wl-clip-persist --clipboard both"
+      ];
 
       input = {
         kb_layout = "us,ru";
@@ -27,10 +30,14 @@ in {
         layout = "master";
         gaps_in = 0;
         gaps_out = 0;
-        "col.active_border" = "rgb(204d15) rgb(9c7446) 45deg";
+        "col.active_border" = "rgb(4b5366) rgb(9c7446) 45deg";
         "col.inactive_border" = "0xff212121";
         border_part_of_window = false;
         no_border_on_floating = false;
+      };
+
+      master = {
+        orientation = "right";
       };
 
       misc = {
@@ -265,6 +272,8 @@ in {
     backgroundColor = "#141414ff";
     textColor = "#C5C8C6ff";
     borderColor = "#EA803Fff";
+    borderSize = 1;
+    borderRadius = 3;
   };
 
   home.packages = with pkgs; [
