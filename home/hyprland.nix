@@ -1,16 +1,14 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   screenshot_name = ''$HOME"/screenshots/Screenshot $(date +%F) at $(date +%T).png"'';
-in
-{
+in {
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
 
-    plugins = [
-      pkgs.hyprlandPlugins.hyprsplit
-      pkgs.hyprlandPlugins.hyprexpo
+    plugins = with pkgs.hyprlandPlugins; [
+      hyprsplit
+      hyprexpo
     ];
 
     settings = {
@@ -256,8 +254,8 @@ in
     enable = true;
     settings = {
       ipc = false;
-      preload = [ "${../wallpaper.jpg}" ];
-      wallpaper = [ ",${../wallpaper.jpg}" ];
+      preload = ["${../wallpaper.jpg}"];
+      wallpaper = [",${../wallpaper.jpg}"];
     };
   };
 

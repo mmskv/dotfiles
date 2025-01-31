@@ -1,5 +1,8 @@
-{ pkgs, pkgs-unstable, ... }:
 {
+  pkgs,
+  pkgs-unstable,
+  ...
+}: {
   imports = [
     ./hyprland.nix
     ./waybar.nix
@@ -34,17 +37,17 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "application/pdf" = [ "zathura.desktop" ];
-      "application/epub" = [ "zathura.desktop" ];
-      "x-scheme-handler/http" = [ "firefox.desktop" ];
-      "x-scheme-handler/https" = [ "firefox.desktop" ];
-      "x-scheme-handler/chrome" = [ "firefox.desktop" ];
-      "text/html" = [ "firefox.desktop" ];
-      "image/png" = [ "imv-dir.desktop" ];
-      "image/jpeg" = [ "imv-dir.desktop" ];
-      "image/gif" = [ "imv-dir.desktop" ];
-      "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop" ];
-      "x-scheme-handler/tonsite" = [ "org.telegram.desktop.desktop" ];
+      "application/pdf" = ["org.pwmt.zathura.desktop"];
+      "application/epub" = ["org.pwmt.zathura.desktop"];
+      "x-scheme-handler/http" = ["firefox.desktop"];
+      "x-scheme-handler/https" = ["firefox.desktop"];
+      "x-scheme-handler/chrome" = ["firefox.desktop"];
+      "text/html" = ["firefox.desktop"];
+      "image/png" = ["imv-dir.desktop"];
+      "image/jpeg" = ["imv-dir.desktop"];
+      "image/gif" = ["imv-dir.desktop"];
+      "x-scheme-handler/tg" = ["org.telegram.desktop.desktop"];
+      "x-scheme-handler/tonsite" = ["org.telegram.desktop.desktop"];
     };
   };
 
@@ -94,7 +97,7 @@
 
     # dev
     kubectl
-    nixfmt-rfc-style
+    alejandra
     exiftool
     file
     fd

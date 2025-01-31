@@ -3,9 +3,8 @@
   pkgs,
   sec,
   ...
-}:
-{
-  imports = [ ./hyprland.nix ];
+}: {
+  imports = [./hyprland.nix];
 
   inherit (sec) networking;
 
@@ -72,7 +71,7 @@
       enable = true;
       extraRules = [
         {
-          users = [ "suck" ];
+          users = ["suck"];
           keepEnv = true;
           noPass = true;
         }
@@ -93,8 +92,7 @@
     (pkgs.writeShellScriptBin "sudo" "exec doas $@")
   ];
 
-  nixpkgs.config.allowUnfreePredicate =
-    pkg:
+  nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       "google-chrome"
       "obsidian"

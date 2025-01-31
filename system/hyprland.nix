@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   programs = {
     uwsm = {
       enable = true;

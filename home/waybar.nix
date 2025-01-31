@@ -1,5 +1,8 @@
-{ pkgs, sec, ... }:
-let
+{
+  pkgs,
+  sec,
+  ...
+}: let
   modules-left = [
     "hyprland/workspaces"
     "hyprland/window"
@@ -33,8 +36,7 @@ let
     format = "";
     separate-outputs = true;
   };
-in
-{
+in {
   programs.waybar = {
     enable = true;
     systemd.enable = true;

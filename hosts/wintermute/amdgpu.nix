@@ -1,8 +1,7 @@
-{ ... }:
-{
+{...}: {
   boot = {
-    kernelModules = [ "kvm-amd" ];
-    kernelParams = [ "amdgpu.ppfeaturemask=0xfffd7fff" ];
+    kernelModules = ["kvm-amd"];
+    kernelParams = ["amdgpu.ppfeaturemask=0xfffd7fff"];
   };
 
   systemd.services.amdgpu-fix = {
@@ -16,7 +15,7 @@
       "sleep.target"
       "multi-user.target"
     ];
-    wants = [ "modprobe@amdgpu.service" ];
+    wants = ["modprobe@amdgpu.service"];
     script = ''
       echo 'high' > /sys/devices/pci0000:00/0000:00:08.1/0000:0b:00.0/drm/card1/device/power_dpm_force_performance_level
     '';

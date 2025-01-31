@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   home.packages = with pkgs; [
     typescript-language-server
     lua-language-server
@@ -13,5 +12,5 @@
     black
   ];
 
-  programs.neovim.extraPackages = with pkgs; [ gcc ];
+  programs.neovim.extraPackages = with pkgs; [gcc];
 }

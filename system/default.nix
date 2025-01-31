@@ -1,6 +1,9 @@
-{ pkgs, sec, ... }:
 {
-  imports = [ ./desktop.nix ];
+  pkgs,
+  sec,
+  ...
+}: {
+  imports = [./desktop.nix];
 
   hardware.enableRedistributableFirmware = true;
   nix.settings.experimental-features = [
