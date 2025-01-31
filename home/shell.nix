@@ -58,10 +58,6 @@
       bind -M insert \cn down-or-search
       bind -M insert \cY accept-autosuggestion
       bind -M visual \x20y fish_clipboard_copy # leader yank like vim
-
-      function prompt_newline --on-event fish_postexec
-        echo
-      end
     '';
   };
 
@@ -103,7 +99,6 @@
         character.success_symbol = "[❯](bright-white)";
         character.vimcmd_symbol = "[❯](bright-white)";
         directory.style = "blue";
-        add_newline = false;
 
         package.disabled = true;
         jobs.disabled = true;
