@@ -89,7 +89,6 @@
 
     # fonts
     fira
-    fira-mono
     nerdfonts
     noto-fonts-emoji
 

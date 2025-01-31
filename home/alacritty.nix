@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   programs.alacritty = {
     enable = true;
 
@@ -15,11 +14,11 @@
           y = 0;
         };
         bold = {
-          family = "Fira Mono";
+          family = "FiraMono Nerd Font";
           style = "Bold";
         };
         normal = {
-          family = "Fira Mono";
+          family = "FiraMono Nerd Font";
           style = "Regular";
         };
       };
