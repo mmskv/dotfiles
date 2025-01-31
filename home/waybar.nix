@@ -52,6 +52,7 @@ in {
           "privacy#screenshare"
           "privacy#audio"
           "custom/vpn"
+          "hyprland/language"
           "pulseaudio/slider"
           "clock"
         ];
@@ -84,6 +85,11 @@ in {
               tooltip-icon-size = 24;
             }
           ];
+        };
+
+        "hyprland/language" = {
+          format-en = "E";
+          format-ru = "R";
         };
 
         "custom/vpn" = {
@@ -231,6 +237,11 @@ in {
 
       #privacy-item {
         padding: 8px 8px;
+      }
+
+      #language {
+        padding: 0px 0px 7px 0px;
+        font-weight: bold;
       }
 
       #custom-vpn {
