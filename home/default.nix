@@ -11,7 +11,7 @@
     ./zathura.nix
     ./fuzzel.nix
     ./alacritty.nix
-    ./fish.nix
+    ./shell.nix
     ./git.nix
   ];
 

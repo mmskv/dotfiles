@@ -35,5 +35,6 @@
     tcpdump
     bind
     git-crypt
+    zoxide
   ];
 }
