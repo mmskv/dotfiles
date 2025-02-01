@@ -13,6 +13,7 @@
     ./alacritty.nix
     ./shell.nix
     ./git.nix
+    ./telegram.nix
   ];
 
   programs.home-manager.enable = true;

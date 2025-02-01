@@ -202,6 +202,7 @@ in {
         "float,class:^(error)$"
         "float,class:^(confirmreset)$"
         "float,title:^(Open File)$"
+        "float,title:^(Choose Files)$"
         "float,title:^(File Upload)$"
         "float,title:^(branchdialog)$"
         "float,title:^(Confirm to replace files)$"
