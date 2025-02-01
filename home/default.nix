@@ -88,6 +88,7 @@
     imv
     tauon
     mpv
+    xdragon
 
     # fonts
     fira

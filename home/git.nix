@@ -4,6 +4,8 @@
 
     inherit (sec.user) userName userEmail;
 
+    extraConfig."url \"ssh://git@github.com/\"".insteadOf = "https://github.com/";
+
     aliases = {
       s = "status";
       co = "checkout";

@@ -41,10 +41,7 @@
   programs = {
     fish.enable = true;
     firefox.enable = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
+    ssh.startAgent = true;
   };
 
   programs.bash.interactiveShellInit = ''
@@ -66,6 +63,7 @@
   };
 
   security = {
+    rtkit.enable = true;
     sudo.enable = false;
     doas = {
       enable = true;
