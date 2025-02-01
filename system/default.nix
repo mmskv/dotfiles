@@ -3,7 +3,7 @@
   sec,
   ...
 }: {
-  imports = [./desktop.nix];
+  imports = [./desktop.nix ./hardening.nix];
 
   hardware.enableRedistributableFirmware = true;
   nix.settings.experimental-features = [
