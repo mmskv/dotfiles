@@ -69,8 +69,6 @@
 
   home.packages = with pkgs; [
     # user
-    telegram-desktop
-    google-chrome
     alacritty
     obsidian
     xfce.thunar

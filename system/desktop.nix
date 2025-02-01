@@ -4,7 +4,7 @@
   sec,
   ...
 }: {
-  imports = [./hyprland.nix];
+  imports = [./hyprland.nix ./firejail.nix];
 
   inherit (sec) networking;
 
@@ -84,6 +84,9 @@
   environment.systemPackages = with pkgs; [
     jq
     grc
+
+    telegram-desktop
+    google-chrome
 
     pkgs.man-pages
     pkgs.man-pages-posix
