@@ -11,47 +11,50 @@
     };
 
     ucodenix.url = "github:e-tho/ucodenix";
+
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-unstable,
-      home-manager,
-      ucodenix,
-    }:
-    let
-      sec = import ./secrets.nix;
+  outputs = {
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    home-manager,
+    ucodenix,
+    nix-index-database,
+  }: let
+    sec = import ./secrets.nix;
 
-      mkSystem =
-        hostConfig: system:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit sec; };
-          modules = [
-            hostConfig
-            ucodenix.nixosModules.default
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                users.suck = import ./home;
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                extraSpecialArgs = {
-                  inherit sec;
-                  pkgs-unstable = import nixpkgs-unstable {
-                    inherit system;
-                  };
+    mkSystem = hostConfig: system:
+      nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {inherit sec;};
+        modules = [
+          hostConfig
+          ucodenix.nixosModules.default
+          nix-index-database.hmModules.nix-index
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              users.suck = import ./home;
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = {
+                inherit sec;
+                pkgs-unstable = import nixpkgs-unstable {
+                  inherit system;
                 };
               };
-            }
-          ];
-        };
-    in
-    {
-      nixosConfigurations = {
-        Wintermute = mkSystem ./hosts/wintermute "x86_64-linux";
+            };
+          }
+        ];
       };
+  in {
+    nixosConfigurations = {
+      Wintermute = mkSystem ./hosts/wintermute "x86_64-linux";
     };
+  };
 }
