@@ -147,119 +147,121 @@ in {
         inherit "hyprland/workspaces";
       }
     ];
-    style = ''
-      @define-color active #EA803F;
-      @define-color bg #141414;
-      @define-color fg #C5C8C6;
-      @define-color border #212121;
+    style =
+      # css
+      ''
+        @define-color active #EA803F;
+        @define-color bg #141414;
+        @define-color fg #C5C8C6;
+        @define-color border #212121;
 
-      * {
-        font-size: 14px;
-        font-family: "Fira Mono";
-      }
+        * {
+          font-size: 14px;
+          font-family: "Fira Mono";
+        }
 
-      window#waybar {
-        background: @bg;
-        border-left: 1px solid @border;
-      }
+        window#waybar {
+          background: @bg;
+          border-left: 1px solid @border;
+        }
 
-      #workspaces {
-        margin: 4px 0px;
-      }
+        #workspaces {
+          margin: 4px 0px;
+        }
 
-      #workspaces button {
-        transition-property: background-color;
-        transition-duration: 0;
-        box-shadow: inherit;
-        text-shadow: inherit;
-        color: inherit;
-        padding: 0px 2px 0px 4px;
-        border-radius: 0;
-      }
+        #workspaces button {
+          transition-property: background-color;
+          transition-duration: 0;
+          box-shadow: inherit;
+          text-shadow: inherit;
+          color: inherit;
+          padding: 0px 2px 0px 4px;
+          border-radius: 0;
+        }
 
-      #workspaces button.urgent {
-        color: @active;
-      }
+        #workspaces button.urgent {
+          color: @active;
+        }
 
-      window#waybar.fullscreen #workspaces button.active {
-        background: linear-gradient(to right, @active 50%, transparent 50%);
-        background-size: 200% 100%;
-        background-position: left bottom;
-        transition: background-position 0.3s cubic-bezier(0.33, 1, 0.68, 1);
-      }
+        window#waybar.fullscreen #workspaces button.active {
+          background: linear-gradient(to right, @active 50%, transparent 50%);
+          background-size: 200% 100%;
+          background-position: left bottom;
+          transition: background-position 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+        }
 
-      #workspaces button.active {
-        padding-left: 2px;
-        border-left: 2px solid @active;
-      }
+        #workspaces button.active {
+          padding-left: 2px;
+          border-left: 2px solid @active;
+        }
 
-      #workspaces button.empty {
-        color: @border;
-      }
+        #workspaces button.empty {
+          color: @border;
+        }
 
-      .other#workspaces button.active {
-        padding-left: 0px;
-        padding-right: 2px;
-        border-right: 2px solid @active;
-      }
+        .other#workspaces button.active {
+          padding-left: 0px;
+          padding-right: 2px;
+          border-right: 2px solid @active;
+        }
 
-      #clock {
-        font-weight: bolder;
-        font-size: 16px;
-        padding: 16px 5px 3px 5px;
-      }
+        #clock {
+          font-weight: bolder;
+          font-size: 16px;
+          padding: 16px 5px 3px 5px;
+        }
 
-      #pulseaudio-slider {
-        padding: 10px 0px 8px 0px;
-      }
+        #pulseaudio-slider {
+          padding: 10px 0px 8px 0px;
+        }
 
-      #pulseaudio-slider slider {
-        background: none;
-        min-height: 0px;
-        min-width: 0px;
-        opacity: 0;
-        background-image: none;
-        border: none;
-        box-shadow: none;
-      }
+        #pulseaudio-slider slider {
+          background: none;
+          min-height: 0px;
+          min-width: 0px;
+          opacity: 0;
+          background-image: none;
+          border: none;
+          box-shadow: none;
+        }
 
-      #pulseaudio-slider trough {
-        min-height: 80px;
-        min-width: 4px;
-        border-radius: 5px;
-        background: black;
-      }
+        #pulseaudio-slider trough {
+          min-height: 80px;
+          min-width: 4px;
+          border-radius: 5px;
+          background: black;
+        }
 
-      #pulseaudio-slider highlight {
-        border-radius: 5px;
-        background: @active;
-      }
+        #pulseaudio-slider highlight {
+          border-radius: 5px;
+          background: @active;
+        }
 
-      #privacy-item {
-        padding: 8px 8px;
-      }
+        #privacy-item {
+          padding: 8px 8px;
+        }
 
-      #language {
-        padding: 0px 0px 7px 0px;
-        font-weight: bold;
-      }
+        #language {
+          padding: 0px 0px 7px 0px;
+          font-weight: bold;
+        }
 
-      #custom-vpn {
-        padding: 7px 0px;
-        font-weight: bold;
-      }
+        #custom-vpn {
+          padding: 7px 0px;
+          font-weight: bold;
+        }
 
-      #custom-vpn.on {
-        color: @active;
-      }
+        #custom-vpn.on {
+          color: @active;
+        }
 
-      #custom-vpn.off {
-        color: @border;
-      }
+        #custom-vpn.off {
+          color: @border;
+        }
 
-      #custom-vpn.error {
-        color: @fg;
-      }
-    '';
+        #custom-vpn.error {
+          color: @fg;
+        }
+      '';
   };
 }
