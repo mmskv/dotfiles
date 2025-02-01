@@ -35,7 +35,8 @@
         modules = [
           hostConfig
           ucodenix.nixosModules.default
-          nix-index-database.hmModules.nix-index
+          nix-index-database.nixosModules.nix-index
+          {programs.nix-index-database.comma.enable = true;}
           home-manager.nixosModules.home-manager
           {
             home-manager = {
