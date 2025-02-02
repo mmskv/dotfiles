@@ -16,6 +16,8 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    agenix.url = "github:ryantm/agenix";
   };
 
   outputs = {
@@ -25,6 +27,7 @@
     home-manager,
     ucodenix,
     nix-index-database,
+    agenix,
   }: let
     sec = import ./secrets.nix;
 
@@ -37,6 +40,12 @@
           ucodenix.nixosModules.default
           nix-index-database.nixosModules.nix-index
           {programs.nix-index-database.comma.enable = true;}
+          agenix.nixosModules.default
+          {
+            age.secrets."zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
+            age.secrets."zrepl/Wintermute.crt".file = ./secrets/zrepl/Wintermute.crt.age;
+            age.secrets."zrepl/Wintermute.key".file = ./secrets/zrepl/Wintermute.key.age;
+          }
           home-manager.nixosModules.home-manager
           {
             home-manager = {

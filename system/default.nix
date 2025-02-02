@@ -19,6 +19,15 @@
   };
 
   services.ucodenix.enable = true;
+  services.openssh = {
+    allowSFTP = false;
+    openFirewall = false;
+    enable = true;
+    settings = {
+      AllowUsers = ["suck"];
+      PasswordAuthentication = false;
+    };
+  };
 
   programs.neovim = {
     enable = true;

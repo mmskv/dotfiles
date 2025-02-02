@@ -22,6 +22,7 @@ in {
         kb_options = "grp:ctrl_space_toggle,caps:escape";
         repeat_delay = 380;
         repeat_rate = 35;
+        resolve_binds_by_sym = 1;
       };
 
       cursor.inactive_timeout = 3;

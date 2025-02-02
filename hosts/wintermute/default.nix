@@ -1,6 +1,7 @@
 {sec, ...}: {
   imports = [
     ./amdgpu.nix
+    ./zrepl.nix
     ../../system
   ];
 
