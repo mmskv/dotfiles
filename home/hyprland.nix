@@ -14,7 +14,7 @@ in {
     settings = {
       exec-once = [
         "hyprctl setcursor phinger-cursors-dark 24"
-        "wl-clip-persist --clipboard both"
+        "uwsm app -- wl-clip-persist --clipboard both"
       ];
 
       input = {
@@ -22,7 +22,6 @@ in {
         kb_options = "grp:ctrl_space_toggle,caps:escape";
         repeat_delay = 380;
         repeat_rate = 35;
-        resolve_binds_by_sym = 1;
       };
 
       cursor.inactive_timeout = 3;
@@ -92,18 +91,14 @@ in {
 
       bind = [
         # keybindings
-        "SUPER, Return, exec, alacritty"
-        "SUPER, I, exec, telegram-desktop && hyprctl dispatch focuswindow org.telegram.desktop"
-        "SUPER, B, exec, firefox"
-        "SUPER SHIFT, B, exec, google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
+        "SUPER, Return, exec, uwsm app -- alacritty"
+        "SUPER, I, exec, uwsm app -- telegram-desktop && hyprctl dispatch focuswindow org.telegram.desktop"
+        "SUPER, B, exec, uwsm app -- firefox"
+        "SUPER SHIFT, B, exec, uwsm app -- google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
         "SUPER, Q, killactive,"
         "SUPER, F, fullscreen, 1"
         "SUPER, Space, togglefloating"
-        "SUPER, P, exec, fuzzel"
-
-        ",Print, exec, screenshot --copy"
-        "SUPER, Print, exec, screenshot --save"
-        "SUPER SHIFT, Print, exec, screenshot --swappy"
+        "SUPER, P, exec, uwsm app -- fuzzel"
 
         "SUPER, H, splitratio, +0.1"
         "SUPER, J, layoutmsg, cyclenext"
@@ -123,11 +118,11 @@ in {
         "SUPER, mouse_left, focusmonitor, -1"
         "SUPER, mouse_right, focusmonitor, +1"
 
-        ",XF86LaunchA, exec, grimblast copy active"
-        ",XF86LaunchB, exec, grimblast save active ${screenshot_name}"
+        ",XF86LaunchA, exec, uwsm app -- grimblast copy active"
+        ",XF86LaunchB, exec, uwsm app -- grimblast save active ${screenshot_name}"
 
-        "SHIFT ,XF86LaunchA, exec, grimblast copy area"
-        "SHIFT ,XF86LaunchB, exec, grimblast save area ${screenshot_name}"
+        "SHIFT ,XF86LaunchA, exec, uwsm app -- grimblast copy area"
+        "SHIFT ,XF86LaunchB, exec, uwsm app -- grimblast save area ${screenshot_name}"
 
         "SUPER, apostrophe, togglespecialworkspace"
 
@@ -172,7 +167,7 @@ in {
       ];
 
       workspace = [
-        "s[true], on-created-empty:hyprctl dispatch -- exec [workspace special] alacritty --class alacritty-float -o window.opacity=0.5 -e tmux new-session -A -s special"
+        "s[true], on-created-empty:hyprctl dispatch -- exec [workspace special] \"uwsm app -- alacritty --class alacritty-float -o window.opacity=0.5 -e tmux new-session -A -s special\""
       ];
 
       # windowrule

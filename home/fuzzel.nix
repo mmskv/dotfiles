@@ -12,7 +12,9 @@
         hide-before-typing = "yes";
         horizontal-pad = 8;
         vertical-pad = 8;
+        launch-prefix = "uwsm app -- ";
       };
+
       colors = {
         background = "141414AA";
         text = "C5C8C6FF";
@@ -23,6 +25,7 @@
         prompt = "8C9440FF";
         input = "8C9440FF";
       };
+
       border = {
         radius = 0;
       };
