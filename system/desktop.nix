@@ -4,16 +4,9 @@
   sec,
   ...
 }: {
-  imports = [./hyprland.nix ./firejail.nix];
+  imports = [./hyprland.nix ./firejail.nix ./podman.nix];
 
   inherit (sec) networking;
-
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = false;
-    storageDriver = "zfs";
-    autoPrune.enable = true;
-  };
 
   systemd.targets = {
     sleep.enable = false;
@@ -57,7 +50,7 @@
     home = "/home/suck";
     extraGroups = [
       "wheel"
-      "docker"
+      "podman"
     ];
     shell = pkgs.fish;
   };

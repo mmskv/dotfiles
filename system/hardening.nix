@@ -343,7 +343,6 @@
       install omfs ${pkgs.coreutils}/bin/true
       install squashfs ${pkgs.coreutils}/bin/true
       install memstick ${pkgs.coreutils}/bin/true
-      install llc ${pkgs.coreutils}/bin/true
       install nfc ${pkgs.coreutils}/bin/true
       install soundwire-bus ${pkgs.coreutils}/bin/true
       install minix ${pkgs.coreutils}/bin/true
