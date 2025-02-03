@@ -62,11 +62,6 @@
         fsType = "vfat";
         options = ["umask=0077"];
       };
-
-      "/var/lib/containers/storage" = {
-        device = "rpool/containers";
-        fsType = "zfs";
-      };
     }
     // sec.wintermute.extraMounts;
 

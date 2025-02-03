@@ -1,11 +1,10 @@
 {
   lib,
   pkgs,
-  config,
   sec,
   ...
 }: {
-  imports = [./hyprland.nix ./firejail.nix ./podman.nix];
+  imports = [./hyprland.nix ./firejail.nix];
 
   inherit (sec) networking;
 
@@ -31,6 +30,13 @@
     enable = true;
     powerOnBoot = true;
   };
+
+  virtualisation.podman = {
+    enable = true;
+    autoPrune.enable = true;
+    dockerCompat = true;
+  };
+  systemd.services.podman.wantedBy = []; # disable start on boot
 
   programs = {
     fish.enable = true;
