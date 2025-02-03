@@ -2,6 +2,7 @@
   imports = [
     ./amdgpu.nix
     ./zrepl.nix
+    ./impermanence.nix
     ../../system
   ];
 
@@ -41,8 +42,9 @@
   fileSystems =
     {
       "/" = {
-        device = "rpool/ROOT/nixos";
-        fsType = "zfs";
+        device = "none";
+        fsType = "tmpfs";
+        options = ["defaults" "size=25%" "mode=755"];
       };
 
       "/nix" = {
@@ -59,6 +61,11 @@
         device = "/dev/disk/by-id/${sec.disks.wintermute.main}-part1";
         fsType = "vfat";
         options = ["umask=0077"];
+      };
+
+      "/var/lib/containers/storage" = {
+        device = "rpool/containers";
+        fsType = "zfs";
       };
     }
     // sec.wintermute.extraMounts;
