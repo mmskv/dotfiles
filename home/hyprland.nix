@@ -18,7 +18,7 @@ in {
       ];
 
       input = {
-        kb_layout = "us,ru";
+        kb_layout = "uscustom,rucustom";
         kb_options = "grp:ctrl_space_toggle,caps:escape";
         repeat_delay = 380;
         repeat_rate = 35;
@@ -111,18 +111,24 @@ in {
         "SUPER SHIFT, comma, movewindow, mon:+1"
 
         "SUPER, X, split:swapactiveworkspaces, current +1"
-        "SUPER, SUPER_R, hyprexpo:expo, toggle"
+        "SUPER, Tab, hyprexpo:expo, toggle"
 
         "SUPER, mouse_down, workspace, -1"
         "SUPER, mouse_up, workspace, +1"
         "SUPER, mouse_left, focusmonitor, -1"
         "SUPER, mouse_right, focusmonitor, +1"
 
+        # mac keyboard binds
         ",XF86LaunchA, exec, uwsm app -- grimblast copy active"
         ",XF86LaunchB, exec, uwsm app -- grimblast save active ${screenshot_name}"
-
         "SHIFT ,XF86LaunchA, exec, uwsm app -- grimblast copy area"
         "SHIFT ,XF86LaunchB, exec, uwsm app -- grimblast save area ${screenshot_name}"
+
+        # hillside binds
+        ",Print, exec, uwsm app -- grimblast copy active"
+        ",XF86Screensaver, exec, uwsm app -- grimblast save active ${screenshot_name}"
+        "SHIFT ,Print, exec, uwsm app -- grimblast copy area"
+        "SHIFT ,XF86Screensaver, exec, uwsm app -- grimblast save area ${screenshot_name}"
 
         "SUPER, apostrophe, togglespecialworkspace"
 
@@ -136,6 +142,9 @@ in {
         "SUPER, 7, split:workspace, 7"
         "SUPER, 8, split:workspace, 8"
         "SUPER, 9, split:workspace, 9"
+
+        "SUPER, d, split:workspace, +1"
+        "SUPER, s, split:workspace, -1"
 
         # same as above, but switch to the workspace
         "SUPER SHIFT, 1, split:movetoworkspacesilent, 1"
@@ -269,6 +278,7 @@ in {
     backgroundColor = "#141414ff";
     textColor = "#C5C8C6ff";
     borderColor = "#EA803Fff";
+    defaultTimeout = 10000;
     borderSize = 1;
     borderRadius = 3;
   };
