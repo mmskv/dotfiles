@@ -90,7 +90,6 @@
           "$git_commit"
           "$git_state"
           "$git_status"
-          "$docker_context"
           "$direnv"
           "$cmd_duration"
           "$line_break"
@@ -101,6 +100,7 @@
         character.success_symbol = "[❯](bright-white)";
         character.vimcmd_symbol = "[❯](bright-white)";
         directory.style = "blue";
+        follow_symlinks = false;
 
         package.disabled = true;
         jobs.disabled = true;
