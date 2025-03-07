@@ -42,6 +42,9 @@
     fish.enable = true;
     firefox.enable = true;
     ssh.startAgent = true;
+    nix-index.enable = true;
+    nix-index.enableFishIntegration = false;
+    command-not-found.enable = false;
   };
 
   programs.bash.interactiveShellInit = ''
