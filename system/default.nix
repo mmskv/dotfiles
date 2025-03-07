@@ -21,7 +21,7 @@
   services.ucodenix.enable = true;
   services.openssh = {
     allowSFTP = false;
-    openFirewall = false;
+    openFirewall = true;
     enable = true;
     settings = {
       AllowUsers = ["suck"];
