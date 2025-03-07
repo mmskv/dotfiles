@@ -10,7 +10,7 @@
     yamlfmt
     isort
     black
+    markdownlint-cli
+    nodejs_23
   ];
-
-  programs.neovim.extraPackages = with pkgs; [gcc];
 }
