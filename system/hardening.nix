@@ -82,7 +82,7 @@
     "kernel.randomize_va_space" = 2;
     "kernel.sysrq" = 0;
     "kernel.unprivileged_bpf_disabled" = 1;
-    "kernel.yama.ptrace_scope" = 2;
+    "kernel.yama.ptrace_scope" = 1;
     "module.sig_enforce" = 1;
     "net.core.bpf_jit_enable" = false;
     "net.ipv4.tcp_timestamps" = 1;
