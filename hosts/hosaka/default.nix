@@ -1,21 +1,34 @@
-{sec, ...}: {
+{
+  sec,
+  pkgs,
+  ...
+}: {
   imports = [
-    ./amdgpu.nix
-    ./zrepl.nix
+    # ./zrepl.nix
     ./impermanence.nix
   ];
 
-  common.desktop.enable = true;
+  users = {
+    mutableUsers = false;
+
+    users.root = {
+      hashedPassword = sec.root.passwd;
+
+      shell = pkgs.fish;
+    };
+  };
+
+  hardware.cpu.intel.updateMicrocode = true;
 
   networking = {
-    hostName = "Wintermute";
-    hostId = sec.net.Wintermute.hostId;
+    hostName = "Hosaka";
+    hostId = sec.net.Hosaka.hostId;
     useDHCP = false;
     networkmanager.enable = false;
 
     interfaces.eno1.ipv4.addresses = [
       {
-        address = sec.net.Wintermute.ip;
+        address = sec.net.Hosaka.ip;
         prefixLength = 24;
       }
     ];
@@ -36,7 +49,6 @@
       efi.canTouchEfiVariables = true;
     };
 
-    initrd.availableKernelModules = ["nvme"];
     tmp.useTmpfs = true;
   };
 
@@ -49,24 +61,24 @@
       };
 
       "/nix" = {
-        device = "rpool/nix";
+        device = "wrpool/nix";
         fsType = "zfs";
       };
 
-      "/home" = {
-        device = "rpool/home";
+      "/root" = {
+        device = "wrpool/home/root";
         fsType = "zfs";
       };
 
       "/boot" = {
-        device = "/dev/disk/by-id/${sec.disks.wintermute.main}-part1";
+        device = "/dev/disk/by-id/${sec.disks.hosaka.main}-part1";
         fsType = "vfat";
         options = ["umask=0077"];
       };
     }
-    // sec.wintermute.extraMounts;
+    // sec.hosaka.extraMounts;
 
-  swapDevices = [{device = "/dev/disk/by-id/${sec.disks.wintermute.main}-part3";}];
+  swapDevices = [{device = "/dev/disk/by-id/${sec.disks.hosaka.main}-part3";}];
 
   system.stateVersion = "24.11";
 }

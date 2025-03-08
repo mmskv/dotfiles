@@ -4,6 +4,7 @@
   ];
 
   programs.home-manager.enable = true;
+  common.desktop.enable = true;
 
   home = {
     username = "suck";

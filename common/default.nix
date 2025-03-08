@@ -1,6 +1,8 @@
 {
+  lib,
   pkgs,
   sec,
+  config,
   ...
 }: {
   imports = [
@@ -42,14 +44,18 @@
     hybrid-sleep.enable = false;
   };
 
-  services.ucodenix.enable = true;
-  services.openssh = {
-    allowSFTP = false;
-    openFirewall = true;
-    enable = true;
-    settings = {
-      AllowUsers = ["suck"];
-      PasswordAuthentication = false;
+  services = {
+    zfs.trim.enable = true;
+    zfs.autoScrub.enable = true;
+    ucodenix.enable = true;
+    openssh = {
+      allowSFTP = false;
+      openFirewall = true;
+      enable = true;
+      settings = {
+        AllowUsers = ["suck"] ++ lib.optionals (!config.common.desktop.enable) ["root"];
+        PasswordAuthentication = false;
+      };
     };
   };
 

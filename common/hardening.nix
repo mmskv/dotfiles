@@ -1,10 +1,13 @@
 {
+  lib,
   pkgs,
   config,
   ...
 }: {
   # https://github.com/Kicksecure/security-misc
   # https://github.com/cynicsketch/nix-mineral
+
+  services.openssh.settings.PermitRootLogin = lib.mkIf config.common.desktop.enable "no";
 
   services.chrony = {
     enable = true;
@@ -16,8 +19,6 @@
     '';
     extraFlags = ["-F 1"];
   };
-
-  services.openssh.settings.PermitRootLogin = "no";
 
   systemd.tmpfiles.settings = {
     "restricthome"."/home/*".Z.mode = "~0700";

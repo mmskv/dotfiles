@@ -37,6 +37,7 @@
     mkSystem = {
       hostConfig,
       users,
+      agenixSecrets,
     }:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -46,14 +47,12 @@
           hostConfig
           impermanence.nixosModules.impermanence
           ucodenix.nixosModules.default
+
           nix-index-database.nixosModules.nix-index
-          {programs.nix-index-database.comma.enable = true;}
-          agenix.nixosModules.default
           {
-            age.secrets."zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
-            age.secrets."zrepl/Wintermute.crt".file = ./secrets/zrepl/Wintermute.crt.age;
-            age.secrets."zrepl/Wintermute.key".file = ./secrets/zrepl/Wintermute.key.age;
+            programs.nix-index-database.comma.enable = true;
           }
+
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -68,6 +67,9 @@
               };
             };
           }
+
+          agenix.nixosModules.default
+          agenixSecrets
         ];
       };
   in {
@@ -75,10 +77,18 @@
       Wintermute = mkSystem {
         hostConfig = ./hosts/wintermute;
         users.suck = import ./home/desktop.nix;
+        agenixSecrets = {
+          age.secrets."zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
+          age.secrets."zrepl/Wintermute.crt".file = ./secrets/zrepl/Wintermute.crt.age;
+          age.secrets."zrepl/Wintermute.key".file = ./secrets/zrepl/Wintermute.key.age;
+        };
       };
       Hosaka = mkSystem {
-        hostConfig = ./hosts/wintermute;
+        hostConfig = ./hosts/hosaka;
         users.root = import ./home/minimal.nix;
+        agenixSecrets = {
+          age.secrets."zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
+        };
       };
     };
   };

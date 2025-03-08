@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: {
   programs.bash.enable = true;
@@ -19,7 +20,7 @@
       ip = "ip -c";
     };
 
-    loginShellInit = ''
+    loginShellInit = lib.mkIf config.common.desktop.enable ''
       if test (tty) = /dev/tty1 && uwsm check may-start
         exec uwsm start hyprland-uwsm.desktop
       end
@@ -92,7 +93,7 @@
           "$direnv"
           "$cmd_duration"
           "$line_break"
-          ##"$python"
+          #"$python" util https://github.com/starship/starship/issues/5740 is fixed
           "$nix_shell"
           "$character"
         ];
@@ -169,7 +170,10 @@
   };
 
   home.packages = with pkgs; [
-    fishPlugins.done
+    (lib.mkIf
+      config.common.desktop.enable
+      fishPlugins.done)
+
     fishPlugins.fzf-fish
     fishPlugins.hydro
     fishPlugins.grc

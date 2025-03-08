@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
+    tree-sitter
     typescript-language-server
     lua-language-server
     nixd
