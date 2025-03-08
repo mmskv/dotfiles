@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }: {
   programs.bash.enable = true;
@@ -20,7 +19,7 @@
       ip = "ip -c";
     };
 
-    loginShellInit = lib.mkIf config.common.desktop.enable ''
+    loginShellInit = ''
       if test (tty) = /dev/tty1 && uwsm check may-start
         exec uwsm start hyprland-uwsm.desktop
       end
@@ -93,7 +92,7 @@
           "$direnv"
           "$cmd_duration"
           "$line_break"
-          "$python"
+          ##"$python"
           "$nix_shell"
           "$character"
         ];
@@ -170,10 +169,7 @@
   };
 
   home.packages = with pkgs; [
-    (lib.mkIf
-      config.common.desktop.enable
-      fishPlugins.done)
-
+    fishPlugins.done
     fishPlugins.fzf-fish
     fishPlugins.hydro
     fishPlugins.grc

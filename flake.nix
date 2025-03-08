@@ -34,11 +34,15 @@
   }: let
     sec = import ./secrets.nix;
 
-    mkSystem = hostConfig: system:
+    mkSystem = {
+      hostConfig,
+      users,
+    }:
       nixpkgs.lib.nixosSystem {
-        inherit system;
+        system = "x86_64-linux";
         specialArgs = {inherit sec;};
         modules = [
+          ./common
           hostConfig
           impermanence.nixosModules.impermanence
           ucodenix.nixosModules.default
@@ -53,13 +57,13 @@
           home-manager.nixosModules.home-manager
           {
             home-manager = {
-              users.suck = import ./home;
+              inherit users;
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = {
                 inherit sec;
                 pkgs-unstable = import nixpkgs-unstable {
-                  inherit system;
+                  system = "x86_64-linux";
                 };
               };
             };
@@ -68,7 +72,14 @@
       };
   in {
     nixosConfigurations = {
-      Wintermute = mkSystem ./hosts/wintermute "x86_64-linux";
+      Wintermute = mkSystem {
+        hostConfig = ./hosts/wintermute;
+        users.suck = import ./home/desktop.nix;
+      };
+      Hosaka = mkSystem {
+        hostConfig = ./hosts/wintermute;
+        users.root = import ./home/minimal.nix;
+      };
     };
   };
 }

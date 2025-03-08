@@ -3,18 +3,19 @@
     ./amdgpu.nix
     ./zrepl.nix
     ./impermanence.nix
-    ../../system
   ];
+
+  common.desktop.enable = true;
 
   networking = {
     hostName = "Wintermute";
-    hostId = sec.net.hostId;
+    hostId = sec.net.Wintermute.hostId;
     useDHCP = false;
     networkmanager.enable = false;
 
     interfaces.eno1.ipv4.addresses = [
       {
-        address = sec.net.Wintermute;
+        address = sec.net.Wintermute.ip;
         prefixLength = 24;
       }
     ];

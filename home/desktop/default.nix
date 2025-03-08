@@ -4,24 +4,17 @@
   ...
 }: {
   imports = [
+    ../minimal
+
     ./hyprland.nix
     ./waybar.nix
-    ./neovim.nix
-    ./htop.nix
     ./zathura.nix
     ./fuzzel.nix
     ./alacritty.nix
-    ./shell.nix
-    ./git.nix
     ./telegram.nix
   ];
 
-  programs.home-manager.enable = true;
-
   home = {
-    username = "suck";
-    homeDirectory = "/home/suck";
-
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
       FLAKE = "/home/suck/dotfiles";
@@ -89,29 +82,15 @@
     tauon
     mpv
     xdragon
+    telegram-desktop
+    google-chrome
 
     # fonts
     fira
     nerdfonts
     noto-fonts-emoji
 
-    # dev
-    kubectl
-    alejandra
-    exiftool
-    file
-    fd
-    dogdns
-    nh
-
-    # lang
-    python3
-    rustc
-    rustup
-
     # unstable
     pkgs-unstable.darktable
   ];
-
-  home.stateVersion = "24.11";
 }

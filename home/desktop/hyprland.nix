@@ -267,8 +267,8 @@ in {
     enable = true;
     settings = {
       ipc = false;
-      preload = ["${../wallpaper.jpg}"];
-      wallpaper = [",${../wallpaper.jpg}"];
+      preload = ["${../../wallpaper.jpg}"];
+      wallpaper = [",${../../wallpaper.jpg}"];
     };
   };
 
