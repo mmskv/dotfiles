@@ -39,7 +39,7 @@
     };
 
     nameservers = [sec.net.ns];
-    firewall.enable = false;
+    firewall.enable = true;
   };
 
   boot = {

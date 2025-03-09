@@ -10,6 +10,8 @@
     key = config.age.secrets."zrepl/Hosaka.key".path;
   };
 in {
+  networking.firewall.allowedTCPPorts = [sec.zrepl.Hosaka.port];
+
   services.zrepl = {
     enable = true;
 
