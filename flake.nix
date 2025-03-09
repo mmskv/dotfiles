@@ -88,6 +88,8 @@
         users.root = import ./home/minimal.nix;
         agenixSecrets = {
           age.secrets."zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
+          age.secrets."zrepl/Hosaka.crt".file = ./secrets/zrepl/Hosaka.crt.age;
+          age.secrets."zrepl/Hosaka.key".file = ./secrets/zrepl/Hosaka.key.age;
         };
       };
     };

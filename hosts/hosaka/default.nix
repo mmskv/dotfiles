@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    # ./zrepl.nix
+    ./zrepl.nix
     ./impermanence.nix
   ];
 
@@ -39,7 +39,7 @@
     };
 
     nameservers = [sec.net.ns];
-    firewall.enable = true;
+    firewall.enable = false;
   };
 
   boot = {
