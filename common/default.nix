@@ -81,6 +81,7 @@
     fd
     dogdns
     nh
+    btop
 
     # lang
     python3
