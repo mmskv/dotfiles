@@ -6,6 +6,7 @@
   imports = [
     ./zrepl.nix
     ./impermanence.nix
+    ./k3s.nix
   ];
 
   users = {
