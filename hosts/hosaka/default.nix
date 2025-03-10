@@ -7,6 +7,7 @@
     ./zrepl.nix
     ./impermanence.nix
     ./k3s.nix
+    ./nfs.nix
   ];
 
   users = {

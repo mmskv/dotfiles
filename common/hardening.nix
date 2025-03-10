@@ -171,10 +171,8 @@
       ##
       ## Network File System (NFS):
       ##
-      install nfs_acl ${pkgs.coreutils}/bin/true
       install nfs_layout_nfsv41_files ${pkgs.coreutils}/bin/true
       install nfs_layout_flexfiles ${pkgs.coreutils}/bin/true
-      install nfsd ${pkgs.coreutils}/bin/true
       install nfsv2 ${pkgs.coreutils}/bin/true
       install nfsv3 ${pkgs.coreutils}/bin/true
 
