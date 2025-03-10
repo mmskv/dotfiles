@@ -32,7 +32,6 @@
           };
 
           filesystems."rpool/home" = true;
-          filesystems."rpool/persist" = true;
 
           snapshotting = {
             type = "periodic";
