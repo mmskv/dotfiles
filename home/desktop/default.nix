@@ -12,6 +12,7 @@
     ./fuzzel.nix
     ./alacritty.nix
     ./telegram.nix
+    ./xdg-open-in-vim.nix
   ];
 
   home = {
@@ -84,6 +85,9 @@
     xdragon
     telegram-desktop
     google-chrome
+    element-desktop
+    gh
+    gh-copilot
 
     # fonts
     fira
