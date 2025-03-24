@@ -35,6 +35,10 @@
       enable = true;
       defaultEditor = true;
     };
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
   };
 
   systemd.targets = {

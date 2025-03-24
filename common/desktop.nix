@@ -81,6 +81,7 @@ in {
         "anydesk"
         "corefonts"
         "cursor"
+        "gh-copilot"
       ];
   };
 }
