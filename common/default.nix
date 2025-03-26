@@ -13,6 +13,9 @@
     ./hardening.nix
   ];
 
+  # agenix loads before impermanence
+  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
+
   hardware.enableRedistributableFirmware = true;
   nix.settings.experimental-features = [
     "nix-command"
