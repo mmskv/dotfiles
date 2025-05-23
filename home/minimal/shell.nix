@@ -10,9 +10,10 @@
     enable = true;
 
     shellAliases = {
-      l = "ls -lh --group-directories-first --color=always";
-      la = "ls -a --color=always";
-      ll = "ls -alh --color=always";
+      l = "ls -l --group-directories-first";
+      la = "ls -a";
+      ll = "ls -al";
+      lg = "ls -al --git";
       grep = "grep --color=auto -i";
       cp = "cp -iv";
       mv = "mv -iv";
@@ -60,6 +61,8 @@
         bind -M insert \cn down-or-search
         bind -M insert \cY accept-autosuggestion
         bind -M visual \x20y fish_clipboard_copy # leader yank like vim
+
+        functions -e ls # erasing the ls function provided by grc
       '';
   };
 
@@ -167,6 +170,18 @@
         setw -g window-status-format ' #I #[fg=white]#W #[fg=yellow]#F '
         setw -g window-status-bell-style 'fg=yellow bg=red bold'
       '';
+  };
+
+  programs.eza = {
+    enable = true;
+    colors = "auto";
+    enableFishIntegration = true;
+  };
+
+  # Using this until the programs.eza.theme option is stable
+  home.file.".config/eza/theme.yml".source = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/eza-community/eza-themes/refs/heads/main/themes/rose-pine-moon.yml";
+    sha256 = "sha256-F96YJctnXUXpvSwwf0cjlXcKzVumFH06BoC26sosGXY=";
   };
 
   home.packages = with pkgs; [
