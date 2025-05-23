@@ -34,12 +34,9 @@ in {
       powerOnBoot = true;
     };
 
-    virtualisation.podman = {
+    virtualisation.docker = {
       enable = true;
-      autoPrune.enable = true;
-      dockerCompat = true;
     };
-    systemd.services.podman.wantedBy = []; # disable start on boot
 
     programs.firefox.enable = true;
 
@@ -53,7 +50,7 @@ in {
         home = "/home/suck";
         extraGroups = [
           "wheel"
-          "podman"
+          "docker"
         ];
         shell = pkgs.fish;
       };
