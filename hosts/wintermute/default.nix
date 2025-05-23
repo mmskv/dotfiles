@@ -31,6 +31,7 @@
 
   boot = {
     zfs.devNodes = "/dev/disk/by-id";
+    kernelParams = ["microcode.amd_sha_check=off"];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;

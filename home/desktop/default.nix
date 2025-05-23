@@ -74,7 +74,6 @@
     hunspell
     hunspellDicts.en_US
     hunspellDicts.ru_RU
-    code-cursor
     playerctl
     pamixer
     neofetch

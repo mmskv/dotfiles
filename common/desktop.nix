@@ -80,7 +80,6 @@ in {
         "obsidian"
         "anydesk"
         "corefonts"
-        "cursor"
         "gh-copilot"
       ];
   };

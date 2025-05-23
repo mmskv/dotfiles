@@ -15,6 +15,7 @@
         "text/x-c++src"
         "text/x-c++hdr"
         "text/x-tex"
+        "application/x-zerosize"
         "application/x-shellscript"
         "application/x-python"
         "application/x-yaml"
