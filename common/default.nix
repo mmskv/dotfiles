@@ -103,8 +103,6 @@
 
     # oxidizing
     eza
-    (pkgs.writeShellScriptBin "ls" "exec eza $@")
     bat
-    (pkgs.writeShellScriptBin "cat" "exec bat $@")
   ];
 }

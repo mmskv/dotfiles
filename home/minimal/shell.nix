@@ -10,10 +10,12 @@
     enable = true;
 
     shellAliases = {
-      l = "ls -l --group-directories-first";
-      la = "ls -a";
-      ll = "ls -al";
-      lg = "ls -al --git";
+      l = "eza -l --group-directories-first";
+      ls = "eza";
+      la = "eza -a";
+      ll = "eza -al";
+      lg = "eza -al --git";
+      cat = "bat";
       grep = "grep --color=auto -i";
       cp = "cp -iv";
       mv = "mv -iv";
@@ -62,7 +64,9 @@
         bind -M insert \cY accept-autosuggestion
         bind -M visual \x20y fish_clipboard_copy # leader yank like vim
 
-        functions -e ls # erasing the ls function provided by grc
+        # no override for aliases
+        set -U grc_plugin_ignore_execs ls
+        set -U grc_plugin_ignore_execs cat
       '';
   };
 
