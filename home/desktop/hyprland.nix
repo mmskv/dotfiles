@@ -304,5 +304,6 @@ in {
     wl-clipboard
     wl-screenrec
     grimblast
+    ddcutil
   ];
 }

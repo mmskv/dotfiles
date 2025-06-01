@@ -18,6 +18,12 @@ in {
       firejail.enable = true;
     };
 
+    # DDC support for hyprland
+    boot.kernelModules = ["i2c-dev"];
+    services.udev.extraRules = ''
+      KERNEL=="i2c-[0-9]*", GROUP="wheel", MODE="0660"
+    '';
+
     services = {
       pipewire = {
         enable = true;
