@@ -3,8 +3,6 @@
     ./desktop
   ];
 
-  nixpkgs.config.allowUnfree = true;
-
   programs.home-manager.enable = true;
   common.desktop.enable = true;
 

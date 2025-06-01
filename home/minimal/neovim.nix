@@ -12,6 +12,6 @@
     isort
     black
     markdownlint-cli
-    nodejs_23
+    nodejs_24
   ];
 }

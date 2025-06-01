@@ -32,7 +32,6 @@ in {
         gaps_out = 0;
         "col.active_border" = "rgb(4b5366) rgb(9c7446) 45deg";
         "col.inactive_border" = "0xff212121";
-        border_part_of_window = false;
         no_border_on_floating = false;
       };
 
@@ -75,6 +74,8 @@ in {
       };
 
       decoration = {
+        border_part_of_window = false;
+
         blur = {
           enabled = true;
           size = 3;
@@ -181,8 +182,6 @@ in {
 
       # windowrule
       windowrule = [
-        "float,mpv"
-        "idleinhibit focus,mpv"
         "float,title:^(Volume Control)$"
         "float,title:^(Firefox — Sharing Indicator)$"
         "move 0 0,title:^(Firefox — Sharing Indicator)$"
@@ -274,13 +273,28 @@ in {
 
   services.mako = {
     enable = true;
-    font = "Fira Mono";
-    backgroundColor = "#141414ff";
-    textColor = "#C5C8C6ff";
-    borderColor = "#EA803Fff";
-    defaultTimeout = 10000;
-    borderSize = 1;
-    borderRadius = 3;
+    settings = {
+      font = "Fira Mono";
+      background-color = "#141414ff";
+      text-color = "#C5C8C6ff";
+      border-color = "#EA803Fff";
+      default-timeout = 10000;
+      border-size = 1;
+      border-radius = 3;
+    };
+  };
+
+  services.hypridle = {
+    enable = true;
+    settings = {
+      listener = [
+        {
+          timeout = 15 * 60;
+          on-timeout = "ddcutil setvcp d6 4 --display 1; hyprctl dispatch dpms off";
+          on-resume = "ddcutil setvcp d6 1 --display 1; hyprctl dispatch dpms on";
+        }
+      ];
+    };
   };
 
   home.packages = with pkgs; [

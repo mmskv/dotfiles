@@ -10,7 +10,7 @@
     homeDirectory = "/root";
 
     sessionVariables = {
-      FLAKE = "/root/dotfiles";
+      NH_FLAKE = "/root/dotfiles";
       NH_BYPASS_ROOT_CHECK = "true";
     };
   };

@@ -18,7 +18,7 @@
   home = {
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      FLAKE = "/home/suck/dotfiles";
+      NH_FLAKE = "/home/suck/dotfiles";
     };
 
     pointerCursor = {
@@ -90,10 +90,9 @@
 
     # fonts
     fira
-    nerdfonts
+    nerd-fonts.fira-mono
     noto-fonts-emoji
 
-    # unstable
-    pkgs-unstable.darktable
+    darktable
   ];
 }

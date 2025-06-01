@@ -176,12 +176,10 @@
     enable = true;
     colors = "auto";
     enableFishIntegration = true;
-  };
-
-  # Using this until the programs.eza.theme option is stable
-  home.file.".config/eza/theme.yml".source = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/eza-community/eza-themes/refs/heads/main/themes/rose-pine-moon.yml";
-    sha256 = "sha256-F96YJctnXUXpvSwwf0cjlXcKzVumFH06BoC26sosGXY=";
+    theme = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/eza-community/eza-themes/refs/heads/main/themes/rose-pine-moon.yml";
+      sha256 = "sha256-F96YJctnXUXpvSwwf0cjlXcKzVumFH06BoC26sosGXY=";
+    };
   };
 
   home.packages = with pkgs; [
