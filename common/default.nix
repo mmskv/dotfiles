@@ -93,6 +93,7 @@
     # lang
     python3
     rustc
+    cargo
     rustup
 
     pkgs.man-pages

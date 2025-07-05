@@ -87,6 +87,7 @@
     element-desktop
     gh
     gh-copilot
+    gimp3
 
     # fonts
     fira
@@ -94,5 +95,8 @@
     noto-fonts-emoji
 
     darktable
+
+    pkgs-unstable.claude-code
+    pkgs-unstable.gemini-cli
   ];
 }

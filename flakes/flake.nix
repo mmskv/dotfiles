@@ -1,0 +1,25 @@
+{
+  description = "mmksv development environments";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  };
+
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  }: let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {inherit system;};
+
+    latexEnv = import ./latex.nix {inherit pkgs;};
+    cppEnv = import ./cpp.nix {inherit pkgs;};
+  in {
+    packages.${system} = {
+      default = latexEnv;
+      latex = latexEnv;
+      cpp = cppEnv;
+    };
+  };
+}
