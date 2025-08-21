@@ -1,7 +1,8 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     tree-sitter
-    typescript-language-server
+    vtsls
+    tailwindcss-language-server
     lua-language-server
     nixd
     gcc

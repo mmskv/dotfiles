@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-unstable,
   sec,
   ...
 }: let
@@ -36,8 +37,19 @@
     format = "";
     separate-outputs = true;
   };
+  latestWaybar = pkgs-unstable.waybar.overrideAttrs (old: {
+    version = "0.13.0"; # until 0.13.1 is released
+    src = pkgs.fetchFromGitHub {
+      owner = "Alexays";
+      repo = "Waybar";
+      rev = "0776e694df56c2c849b682369148210d81324e93";
+      sha256 = "sha256-rwN74KZdAQVLdengxHpUwkyaZTdoRzFjJ3SSr6rx2/o=";
+    };
+    patches = [];
+  });
 in {
   programs.waybar = {
+    package = latestWaybar;
     enable = true;
     systemd.enable = true;
     systemd.target = "hyprland-session.target";

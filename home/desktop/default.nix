@@ -44,6 +44,7 @@
       "image/gif" = ["imv-dir.desktop"];
       "x-scheme-handler/tg" = ["org.telegram.desktop.desktop"];
       "x-scheme-handler/tonsite" = ["org.telegram.desktop.desktop"];
+      "x-scheme-handler/file" = ["org.xfce.thunar.desktop"];
     };
   };
 
@@ -89,12 +90,18 @@
     gh-copilot
     gimp3
 
+    prismlauncher
+
     # fonts
     fira
     nerd-fonts.fira-mono
+    google-fonts
+    geist-font
     noto-fonts-emoji
 
     darktable
+    steam
+    usbmuxd
 
     pkgs-unstable.claude-code
     pkgs-unstable.gemini-cli
