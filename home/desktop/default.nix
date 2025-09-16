@@ -13,6 +13,7 @@
     ./alacritty.nix
     ./telegram.nix
     ./xdg-open-in-vim.nix
+    ./syncthing.nix
   ];
 
   home = {
