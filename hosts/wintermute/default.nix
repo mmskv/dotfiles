@@ -5,6 +5,7 @@
     ./impermanence.nix
   ];
 
+  nix.settings.trusted-users = ["root" "suck"];
   common.desktop.enable = true;
 
   networking = {

@@ -8,7 +8,6 @@ in {
 
     plugins = with pkgs.hyprlandPlugins; [
       hyprsplit
-      hyprexpo
     ];
 
     settings = {
@@ -113,7 +112,6 @@ in {
         "SUPER SHIFT, comma, movewindow, mon:+1"
 
         "SUPER, X, split:swapactiveworkspaces, current +1"
-        "SUPER, Tab, hyprexpo:expo, toggle"
 
         "SUPER, mouse_down, workspace, -1"
         "SUPER, mouse_up, workspace, +1"
