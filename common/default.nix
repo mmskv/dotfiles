@@ -101,9 +101,5 @@
 
     (pkgs.writeShellScriptBin "vim" "exec nvim $@")
     (pkgs.writeShellScriptBin "sudo" "exec doas $@")
-
-    # oxidizing
-    eza
-    bat
   ];
 }

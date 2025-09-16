@@ -186,6 +186,15 @@
     };
   };
 
+  programs.bat = {
+    enable = true;
+    config = {
+      style = "plain";
+      wrap = "never";
+      paging = "never";
+    };
+  };
+
   home.packages = with pkgs; [
     (lib.mkIf
       config.common.desktop.enable
