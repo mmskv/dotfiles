@@ -188,6 +188,16 @@ in {
 
       workspace = [
         "s[true], on-created-empty:hyprctl dispatch -- exec [workspace special] \"uwsm app -- alacritty --class alacritty-float -o window.opacity=0.5 -e tmux new-session -A -s special\""
+
+        "1, layoutopt:orientation:top"
+        "2, layoutopt:orientation:top"
+        "3, layoutopt:orientation:top"
+        "4, layoutopt:orientation:top"
+        "5, layoutopt:orientation:top"
+        "6, layoutopt:orientation:top"
+        "7, layoutopt:orientation:top"
+        "8, layoutopt:orientation:top"
+        "9, layoutopt:orientation:top"
       ];
 
       # windowrule
@@ -240,7 +250,7 @@ in {
 
     extraConfig = ''
       monitor=DP-1,3440x1440@144,0x0,1
-      monitor=HDMI-A-1,1920x1080@75,3440x0,1
+      monitor=HDMI-A-1,3440x1440@99.99,3440x-720,1,transform,1
 
       xwayland {
         force_zero_scaling = true
@@ -276,8 +286,8 @@ in {
     enable = true;
     settings = {
       ipc = false;
-      preload = ["${../../wallpaper.jpg}"];
-      wallpaper = [",${../../wallpaper.jpg}"];
+      preload = ["${../../wallpaper.jpg}" "${../../wallpaper2.jpg}"];
+      wallpaper = ["DP-1,${../../wallpaper.jpg}" "HDMI-A-1,${../../wallpaper2.jpg}"];
     };
   };
 

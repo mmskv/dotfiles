@@ -151,7 +151,7 @@ in {
       {
         layer = "top";
         output = "!DP-1";
-        position = "right";
+        position = "top";
         reload_style_on_change = true;
 
         inherit modules-left;
@@ -172,12 +172,12 @@ in {
           font-family: "Fira Mono";
         }
 
-        window#waybar {
+        window#waybar.right {
           background: @bg;
           border-left: 1px solid @border;
         }
 
-        #workspaces {
+        window#waybar.right #workspaces {
           margin: 4px 0px;
         }
 
@@ -187,8 +187,11 @@ in {
           box-shadow: inherit;
           text-shadow: inherit;
           color: inherit;
-          padding: 0px 2px 0px 4px;
           border-radius: 0;
+        }
+
+        window#waybar.right button {
+          padding: 0px 2px 0px 4px;
         }
 
         #workspaces button.urgent {
@@ -202,19 +205,31 @@ in {
           transition: background-position 0.3s cubic-bezier(0.33, 1, 0.68, 1);
         }
 
-        #workspaces button.active {
+        window#waybar.right #workspaces button.active {
           padding-left: 2px;
           border-left: 2px solid @active;
         }
 
-        #workspaces button.empty {
-          color: @border;
+        window#waybar.top #workspaces button.active {
+          padding-bottom: 2px;
+          border-bottom: 2px solid @active;
         }
 
-        .other#workspaces button.active {
-          padding-left: 0px;
-          padding-right: 2px;
-          border-right: 2px solid @active;
+        window#waybar.top button {
+          padding: 2px 2px 4px 2px;
+        }
+
+        window#waybar.top #workspaces {
+          margin: 0px 4px;
+        }
+
+        window#waybar.top {
+          background: @bg;
+          border-bottom: 1px solid @border;
+        }
+
+        #workspaces button.empty {
+          color: @border;
         }
 
         #clock {
