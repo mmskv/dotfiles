@@ -13,9 +13,12 @@ in {
   config = lib.mkIf cfg.enable {
     inherit (sec) networking;
 
-    common.desktop = {
-      hyprland.enable = true;
-      firejail.enable = true;
+    common = {
+      teleport.enable = true;
+      desktop = {
+        hyprland.enable = true;
+        firejail.enable = true;
+      };
     };
 
     # DDC support for hyprland

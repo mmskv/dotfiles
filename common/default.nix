@@ -11,6 +11,7 @@
     ./hyprland.nix
 
     ./hardening.nix
+    ./work.nix
   ];
 
   # agenix loads before impermanence

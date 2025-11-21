@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    ucodenix.url = "github:e-tho/ucodenix";
+    ucodenix.url = "github:e-tho/ucodenix/98c0b8ec151ee6495711d2dd902112b4f2a30ceb";
 
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
