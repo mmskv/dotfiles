@@ -105,6 +105,8 @@
     steam
     usbmuxd
 
+    libfido2
+
     pkgs-unstable.claude-code
     pkgs-unstable.gemini-cli
   ];

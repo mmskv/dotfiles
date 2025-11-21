@@ -309,9 +309,9 @@ in {
     settings = {
       listener = [
         {
-          timeout = 15 * 60;
-          on-timeout = "ddcutil setvcp d6 4 --display 1; hyprctl dispatch dpms off";
-          on-resume = "ddcutil setvcp d6 1 --display 1; hyprctl dispatch dpms on";
+          timeout = 60 * 60;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
         }
       ];
     };

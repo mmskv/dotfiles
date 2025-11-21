@@ -70,5 +70,7 @@
 
   swapDevices = [{device = "/dev/disk/by-id/${sec.disks.wintermute.main}-part3";}];
 
+  services.openvpn.servers = sec.wintermute.ovpn.servers;
+
   system.stateVersion = "24.11";
 }

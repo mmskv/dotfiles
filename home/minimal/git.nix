@@ -30,11 +30,7 @@
       {
         condition = "gitdir:~/work/";
 
-        contents = {
-          user = {
-            inherit (sec.user.work) name email;
-          };
-        };
+        contents = sec.git.work;
       }
     ];
   };
