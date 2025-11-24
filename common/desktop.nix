@@ -31,6 +31,13 @@ in {
       pipewire = {
         enable = true;
         pulse.enable = true;
+        jack.enable = true;
+        extraConfig.pipewire.adjust-sample-rate = {
+          "context.properties" = {
+            "default.clock.rate" = 96000;
+            "defautlt.allowed-rates" = [96000 48000 44100];
+          };
+        };
       };
 
       blueman.enable = true;
