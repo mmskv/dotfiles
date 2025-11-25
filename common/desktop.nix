@@ -32,11 +32,36 @@ in {
         enable = true;
         pulse.enable = true;
         jack.enable = true;
-        extraConfig.pipewire.adjust-sample-rate = {
+        extraConfig.pipewire."99-adjust-sample-rate" = {
           "context.properties" = {
-            "default.clock.rate" = 96000;
-            "defautlt.allowed-rates" = [96000 48000 44100];
+            "default.clock.rate" = 48000;
+            "default.clock.allowed-rates" = [96000 48000 44100];
           };
+        };
+
+        wireplumber.extraConfig."51-rename-devices" = {
+          "monitor.alsa.rules" = [
+            {
+              matches = [
+                {"node.name" = "alsa_output.pci-0000_0b_00.6.pro-output-0";}
+              ];
+              actions = {
+                update-props = {
+                  "node.description" = "Headphones";
+                };
+              };
+            }
+            {
+              matches = [
+                {"node.name" = "alsa_output.pci-0000_0b_00.6.pro-output-1";}
+              ];
+              actions = {
+                update-props = {
+                  "node.description" = "Pioneer";
+                };
+              };
+            }
+          ];
         };
       };
 
