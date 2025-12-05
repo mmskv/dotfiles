@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  sec,
   ...
 }: {
   programs.bash.enable = true;
@@ -67,6 +68,39 @@
         # no override for aliases
         set -U grc_plugin_ignore_execs ls
         set -U grc_plugin_ignore_execs cat
+
+        function fish_should_add_to_history
+            string match -qr '^export\s+VAULT_TOKEN' -- $argv
+            and return 1
+
+            string match -qr '^set\s+.*VAULT_TOKEN' -- $argv
+            and return 1
+
+            return 0
+        end
+
+        function _update_vault_prompt --on-event fish_postexec --on-variable PWD --on-variable VAULT_ADDR --on-variable VAULT_TOKEN
+          if test -n "$VAULT_ADDR"
+            string match -q "$HOME/work*" "$PWD"; or begin set -e VAULT_PROMPT_STR; return; end
+
+            set -l v_label "Vault"
+            switch "$VAULT_ADDR"
+              ${lib.concatStrings (lib.mapAttrsToList (name: value: ''
+            case "*${value}*"
+              set v_label "${name}"
+          '')
+          sec.work.vault.servers)}
+            end
+
+            if test -n "$VAULT_TOKEN"
+               set -gx VAULT_PROMPT_STR "$v_label+"
+            else
+               set -gx VAULT_PROMPT_STR "$v_label-"
+            end
+          else
+            set -e VAULT_PROMPT_STR
+          end
+        end
       '';
   };
 
@@ -99,6 +133,7 @@
           "$git_status"
           "$direnv"
           "$cmd_duration"
+          "\${env_var.VAULT_PROMPT_STR}"
           "$line_break"
           #"$python" util https://github.com/starship/starship/issues/5740 is fixed
           "$nix_shell"
@@ -139,6 +174,12 @@
         cmd_duration = {
           format = "[$duration]($style) ";
           style = "purple";
+        };
+
+        env_var.VAULT_PROMPT_STR = {
+          variable = "VAULT_PROMPT_STR";
+          style = "bold purple";
+          format = "[$env_value]($style) ";
         };
       };
   };
