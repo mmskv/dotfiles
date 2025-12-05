@@ -2,28 +2,24 @@
   programs.git = {
     enable = true;
 
-    inherit (sec.user) userName userEmail;
+    settings = {
+      user = {
+        inherit (sec.user) name email;
+      };
 
-    extraConfig."url \"ssh://git@github.com/\"".insteadOf = "https://github.com/";
+      url."ssh://git@github.com/".insteadOf = "https://github.com/";
 
-    aliases = {
-      s = "status";
-      co = "checkout";
-      cob = "checkout -b";
-      br = "branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate";
-      l = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all";
-      c = "commit -v";
-    };
+      alias = {
+        s = "status";
+        co = "checkout";
+        cob = "checkout -b";
+        br = "branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate";
+        l = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all";
+        c = "commit -v";
+      };
 
-    extraConfig = {
       push.autoSetupRemote = true;
       init.defaultBranch = "master";
-    };
-
-    difftastic = {
-      enable = true;
-      background = "dark";
-      display = "side-by-side";
     };
 
     includes = [
@@ -33,5 +29,14 @@
         contents = sec.git.work;
       }
     ];
+  };
+
+  programs.difftastic = {
+    enable = true;
+    git.enable = true;
+    options = {
+      background = "dark";
+      display = "side-by-side";
+    };
   };
 }
