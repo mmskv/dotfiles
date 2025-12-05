@@ -15,11 +15,13 @@
     ./xdg-open-in-vim.nix
     ./syncthing.nix
     ./bluelight.nix
+    ./vscode.nix
   ];
 
   home = {
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
+      ELECTRON_OZONE_PLATFORM_HINT = "auto";
       NH_FLAKE = "/home/suck/dotfiles";
     };
 
@@ -84,30 +86,19 @@
     imv
     tauon
     mpv
-    xdragon
+    dragon-drop
     telegram-desktop
     google-chrome
     element-desktop
-    gh
-    gh-copilot
     gimp3
-
-    prismlauncher
 
     # fonts
     fira
     nerd-fonts.fira-mono
     google-fonts
     geist-font
-    noto-fonts-emoji
+    noto-fonts-color-emoji
 
-    darktable
-    steam
-    usbmuxd
-
-    libfido2
-
-    pkgs-unstable.claude-code
-    pkgs-unstable.gemini-cli
+    #darktable
   ];
 }

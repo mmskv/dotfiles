@@ -92,6 +92,7 @@ in {
         extraGroups = [
           "wheel"
           "docker"
+          "systemd-journal"
         ];
         shell = pkgs.fish;
       };

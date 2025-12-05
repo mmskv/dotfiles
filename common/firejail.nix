@@ -22,7 +22,7 @@ in {
       enable = true;
       wrappedBinaries = {
         telegram-desktop = {
-          executable = "${pkgs.telegram-desktop}/bin/telegram-desktop";
+          executable = "${pkgs.telegram-desktop}/bin/Telegram";
           profile = "${pkgs.firejail}/etc/firejail/telegram-desktop.profile";
         };
 

@@ -268,7 +268,7 @@ in {
           animate_workspacechange = no
           focus_animation = flash
 
-          bezier = realsmooth, 0.28,0.29,.69,1.08
+          bezier = realsmooth, 0.28,0.29,0.69,1.08
 
           flash {
             flash_opacity = 0.95
