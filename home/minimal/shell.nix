@@ -135,7 +135,7 @@
           "$cmd_duration"
           "\${env_var.VAULT_PROMPT_STR}"
           "$line_break"
-          #"$python" util https://github.com/starship/starship/issues/5740 is fixed
+          "$python"
           "$nix_shell"
           "$character"
         ];
