@@ -28,6 +28,7 @@ in {
         ]);
       userSettings = {
         "github.copilot.nextEditSuggestions.enabled" = true;
+        "chat.tools.global.autoApprove" = true;
         "chat.tools.terminal.autoApprove" = {
           "docker run" = true;
           "cp" = true;
@@ -88,6 +89,19 @@ in {
           (cmds (k "g $") ["workbench.action.lastEditorInGroup"])
           # Copy to system clipboard
           (remap (k "<leader> y") (k "\" + y"))
+
+          # Telescope-style navigation
+          (cmds (k "<leader> p p") ["workbench.action.quickOpenPreviousRecentlyUsedEditor"])
+          (cmds (k "<leader> p a") ["workbench.action.quickOpen"])
+          # <C-p> already mapped to quickOpen for git files
+          (cmds (k "<leader> p g") ["git.viewHistory"])
+          (cmds (k "<leader> p r") ["workbench.action.findInFiles"])
+          (cmds (k "<leader> p s") ["workbench.action.findInFiles"])
+
+          # Current directory variants (these will open with current folder context)
+          (cmds (k "<leader> p c a") ["workbench.action.quickOpen"])
+          (cmds (k "<leader> p c r") ["workbench.action.findInFiles"])
+          (cmds (k "<leader> p c s") ["workbench.action.findInFiles"])
         ];
 
         "vim.visualModeKeyBindingsNonRecursive" = [
