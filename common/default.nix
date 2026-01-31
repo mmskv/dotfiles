@@ -90,6 +90,8 @@
     dogdns
     nh
     btop
+    bpftrace
+    parallel
 
     # lang
     python3

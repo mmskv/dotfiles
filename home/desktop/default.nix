@@ -98,6 +98,6 @@
     geist-font
     noto-fonts-color-emoji
 
-    #darktable
+    darktable
   ];
 }

@@ -5,7 +5,9 @@
   sec,
   ...
 }: {
-  programs.bash.enable = true;
+  programs.bash = {
+    enable = true;
+  };
 
   programs.fish = {
     enable = true;
@@ -117,6 +119,7 @@
 
   programs.starship = {
     enable = true;
+    enableBashIntegration = true;
     enableFishIntegration = true;
     enableTransience = true;
 
@@ -154,7 +157,7 @@
 
         python = {
           symbol = "";
-          format = "[$virtualenv]($style) ";
+          format = "[$virtualenv]($style)";
           style = "bright-black";
         };
         git_branch = {

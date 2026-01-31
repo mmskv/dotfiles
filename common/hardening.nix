@@ -12,12 +12,9 @@
   services.chrony = {
     enable = true;
     enableNTS = true;
+    enableMemoryLocking = true;
     servers = ["time.cloudflare.com"];
-    extraConfig = ''
-      authselectmode require
-      cmdport 0
-    '';
-    extraFlags = ["-F 1"];
+    extraFlags = ["-F 2"];
   };
 
   systemd.tmpfiles.settings = {

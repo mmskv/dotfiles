@@ -31,7 +31,10 @@
             server_cn = "Hosaka";
           };
 
-          filesystems."rpool/home" = true;
+          filesystems = {
+            "rpool/home" = true;
+            "rpool/persist" = true;
+          };
 
           snapshotting = {
             type = "periodic";
