@@ -1,16 +1,16 @@
 {
   lib,
-  pkgs,
   sec,
   config,
   ...
 }: {
   imports = [
-    ./desktop.nix
-    ./firejail.nix
-    ./hyprland.nix
-
+    ./options.nix
+    ./packages.nix
     ./hardening.nix
+
+    ./desktop.nix
+    ./hyprland.nix
     ./work.nix
   ];
 
@@ -61,48 +61,11 @@
       openFirewall = true;
       enable = true;
       settings = {
-        AllowUsers = ["suck"] ++ lib.optionals (!config.common.desktop.enable) ["root"];
+        AllowUsers = ["suck"] ++ lib.optionals (!config.custom.desktop.enable) ["root"];
         PasswordAuthentication = false;
       };
     };
   };
 
   documentation.dev.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    openssh
-    ripgrep
-    wget
-    git
-    fzf
-    file
-    tcpdump
-    bind
-    git-crypt
-    zoxide
-    jq
-    grc
-    kubectl
-    alejandra
-    exiftool
-    file
-    fd
-    dogdns
-    nh
-    btop
-    bpftrace
-    parallel
-
-    # lang
-    python3
-    rustc
-    cargo
-    rustup
-
-    pkgs.man-pages
-    pkgs.man-pages-posix
-
-    (pkgs.writeShellScriptBin "vim" "exec nvim $@")
-    (pkgs.writeShellScriptBin "sudo" "exec doas $@")
-  ];
 }

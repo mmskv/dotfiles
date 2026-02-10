@@ -23,7 +23,6 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
     nixpkgs-unstable,
     impermanence,
@@ -31,20 +30,28 @@
     ucodenix,
     nix-index-database,
     agenix,
+    ...
   }: let
     sec = import ./secrets.nix;
+    specialArgs = {
+      inherit sec;
 
-    mkSystem = {
-      hostConfig,
-      users,
-      agenixSecrets,
-    }:
-      nixpkgs.lib.nixosSystem {
+      pkgs-unstable = import nixpkgs-unstable {
         system = "x86_64-linux";
-        specialArgs = {inherit sec;};
+        config.allowUnfree = true;
+      };
+    };
+    extraSpecialArgs = specialArgs;
+  in {
+    nixosConfigurations = {
+      Wintermute = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        inherit specialArgs;
+
         modules = [
           ./common
-          hostConfig
+          ./hosts/wintermute
+
           impermanence.nixosModules.impermanence
           ucodenix.nixosModules.default
 
@@ -56,42 +63,63 @@
           home-manager.nixosModules.home-manager
           {
             home-manager = {
-              inherit users;
+              users.suck = ./home/desktop.nix;
+
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = {
-                inherit sec;
-                pkgs-unstable = import nixpkgs-unstable {
-                  system = "x86_64-linux";
-                  config.allowUnfree = true;
-                };
-              };
+
+              inherit extraSpecialArgs;
             };
           }
 
           agenix.nixosModules.default
-          agenixSecrets
+          {
+            age.secrets = {
+              "zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
+              "zrepl/Wintermute.crt".file = ./secrets/zrepl/Wintermute.crt.age;
+              "zrepl/Wintermute.key".file = ./secrets/zrepl/Wintermute.key.age;
+            };
+          }
         ];
       };
-  in {
-    nixosConfigurations = {
-      Wintermute = mkSystem {
-        hostConfig = ./hosts/wintermute;
-        users.suck = import ./home/desktop.nix;
-        agenixSecrets = {
-          age.secrets."zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
-          age.secrets."zrepl/Wintermute.crt".file = ./secrets/zrepl/Wintermute.crt.age;
-          age.secrets."zrepl/Wintermute.key".file = ./secrets/zrepl/Wintermute.key.age;
-        };
-      };
-      Hosaka = mkSystem {
-        hostConfig = ./hosts/hosaka;
-        users.root = import ./home/minimal.nix;
-        agenixSecrets = {
-          age.secrets."zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
-          age.secrets."zrepl/Hosaka.crt".file = ./secrets/zrepl/Hosaka.crt.age;
-          age.secrets."zrepl/Hosaka.key".file = ./secrets/zrepl/Hosaka.key.age;
-        };
+
+      Hosaka = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        inherit specialArgs;
+
+        modules = [
+          ./common
+          ./hosts/hosaka
+
+          impermanence.nixosModules.impermanence
+          ucodenix.nixosModules.default
+
+          nix-index-database.nixosModules.nix-index
+          {
+            programs.nix-index-database.comma.enable = true;
+          }
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              users.root = ./home/minimal.nix;
+
+              useGlobalPkgs = true;
+              useUserPackages = true;
+
+              inherit extraSpecialArgs;
+            };
+          }
+
+          agenix.nixosModules.default
+          {
+            age.secrets = {
+              "zrepl/ca.crt".file = ./secrets/zrepl/ca.crt.age;
+              "zrepl/Hosaka.crt".file = ./secrets/zrepl/Hosaka.crt.age;
+              "zrepl/Hosaka.key".file = ./secrets/zrepl/Hosaka.key.age;
+            };
+          }
+        ];
       };
     };
   };

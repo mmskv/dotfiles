@@ -5,8 +5,10 @@
     ./impermanence.nix
   ];
 
+  custom.desktop.enable = true;
+  custom.work.enable = true;
+
   nix.settings.trusted-users = ["root" "suck"];
-  common.desktop.enable = true;
 
   networking = {
     hostName = "Wintermute";
@@ -40,6 +42,8 @@
 
     initrd.availableKernelModules = ["nvme"];
     tmp.useTmpfs = true;
+
+    binfmt.emulatedSystems = ["aarch64-linux"];
   };
 
   fileSystems =
@@ -69,8 +73,6 @@
     // sec.wintermute.extraMounts;
 
   swapDevices = [{device = "/dev/disk/by-id/${sec.disks.wintermute.main}-part3";}];
-
-  services.openvpn.servers = sec.wintermute.ovpn.servers;
 
   system.stateVersion = "24.11";
 }

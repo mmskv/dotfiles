@@ -7,7 +7,7 @@
   # https://github.com/Kicksecure/security-misc
   # https://github.com/cynicsketch/nix-mineral
 
-  services.openssh.settings.PermitRootLogin = lib.mkIf config.common.desktop.enable "no";
+  services.openssh.settings.PermitRootLogin = lib.mkIf config.custom.desktop.enable "no";
 
   services.chrony = {
     enable = true;

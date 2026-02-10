@@ -5,21 +5,12 @@
   config,
   ...
 }: let
-  cfg = config.common.desktop;
+  cfg = config.custom.desktop;
 in {
-  options.common.desktop.enable =
-    lib.mkEnableOption "System is a desktop";
-
   config = lib.mkIf cfg.enable {
     inherit (sec) networking;
 
-    common = {
-      teleport.enable = true;
-      desktop = {
-        hyprland.enable = true;
-        firejail.enable = true;
-      };
-    };
+    nixpkgs.config.allowUnfree = true;
 
     # DDC support for hyprland
     boot.kernelModules = ["i2c-dev"];
@@ -75,11 +66,7 @@ in {
       powerOnBoot = true;
     };
 
-    virtualisation.docker = {
-      enable = true;
-    };
-
-    programs.firefox.enable = true;
+    virtualisation.docker.enable = true;
 
     users = {
       mutableUsers = false;
@@ -112,7 +99,5 @@ in {
         ];
       };
     };
-
-    nixpkgs.config.allowUnfree = true;
   };
 }

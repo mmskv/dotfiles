@@ -17,5 +17,6 @@
     black
     markdownlint-cli
     nodejs_24
+    alejandra
   ];
 }

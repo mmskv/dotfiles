@@ -1,7 +1,7 @@
 {
   pkgs,
   lib,
-  config,
+  osConfig,
   sec,
   ...
 }: {
@@ -26,7 +26,7 @@
       ip = "ip -c";
     };
 
-    loginShellInit = lib.mkIf config.common.desktop.enable ''
+    loginShellInit = lib.mkIf osConfig.custom.desktop.enable ''
       if test (tty) = /dev/tty1 && uwsm check may-start
         exec uwsm start hyprland-uwsm.desktop
       end
@@ -241,7 +241,7 @@
 
   home.packages = with pkgs; [
     (lib.mkIf
-      config.common.desktop.enable
+      osConfig.custom.desktop.enable
       fishPlugins.done)
 
     fishPlugins.fzf-fish

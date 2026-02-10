@@ -1,26 +1,18 @@
 {
   lib,
-  pkgs,
   sec,
   config,
   ...
 }: let
-  cfg = config.common.teleport;
-
-  teleportPkgs = pkgs.callPackage ./apps/teleport {};
+  cfg = config.custom.work;
 in {
-  options.common.teleport.enable =
-    lib.mkEnableOption "Hyprland";
-
   config = lib.mkIf cfg.enable {
+    services.openvpn.servers = sec.wintermute.ovpn.servers;
+
     services.dnsmasq = {
       enable = true;
 
       settings = sec.work.dnsmasq.settings;
     };
-
-    environment.systemPackages = [
-      teleportPkgs.teleport
-    ];
   };
 }

@@ -1,13 +1,49 @@
-{pkgs, ...}: let
+{
+  lib,
+  pkgs,
+  pkgs-unstable,
+  ...
+}: let
   screenshot_name = ''$HOME"/screenshots/Screenshot $(date +%F) at $(date +%T).png"'';
+
+  clipse = pkgs.buildGoModule rec {
+    pname = "clipse";
+    version = "1.2.1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "savedra1";
+      repo = "clipse";
+      rev = "v${version}";
+      hash = "sha256-iDMHEhYuxspBYG54WivnVj2GfMxAc5dcrjNxtAMhsck=";
+    };
+
+    vendorHash = "sha256-rq+2UhT/kAcYMdla+Z/11ofNv2n4FLvpVgHZDe0HqX4=";
+
+    tags = ["wayland"];
+
+    env = {
+      CGO_ENABLED = "0";
+    };
+
+    meta = {
+      description = "Configurable TUI clipboard manager for Unix";
+      homepage = "https://github.com/savedra1/clipse";
+      license = pkgs.lib.licenses.mit;
+      mainProgram = "clipse";
+    };
+  };
 in {
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
 
-    plugins = with pkgs.hyprlandPlugins; [
+    package = null;
+    portalPackage = null;
+
+    plugins = with pkgs-unstable.hyprlandPlugins; [
       hyprsplit
+      hy3
     ];
 
     settings = {
@@ -26,22 +62,24 @@ in {
       cursor.inactive_timeout = 3;
 
       general = {
-        layout = "master";
+        layout = "hy3";
         gaps_in = 0;
         gaps_out = 0;
         "col.active_border" = "rgb(4b5366) rgb(9c7446) 45deg";
         "col.inactive_border" = "0xff212121";
-        no_border_on_floating = false;
       };
 
-      master = {
-        orientation = "right";
+      group = {
+        "col.border_active" = "rgb(4b5366)";
+        "col.border_inactive" = "0xff212121";
       };
 
       misc = {
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
         enable_anr_dialog = false;
+        size_limits_tiled = true;
+        animate_manual_resizes = true;
       };
 
       animations = {
@@ -57,19 +95,14 @@ in {
         animation = [
           # name, enable, speed, curve, style
 
-          "windowsIn,   0, 4, easeOutCubic,  popin 20%" # window open
-          "windowsOut,  0, 4, fluent_decel,  popin 80%" # window close.
-          "windowsMove, 1, 2, fluent_decel, slide" # everything in between, moving, dragging, resizing.
+          "windowsIn,   0" # window open
+          "windowsOut,  0" # window close.
+          "windowsMove, 1, 0.7, fluent_decel, slide" # everything in between: moving, dragging, resizing.
 
-          "fadeIn,      0, 3,   fade_curve" # fade in (open) -> layers and windows
-          "fadeOut,     0, 3,   fade_curve" # fade out (close) -> layers and windows
-          "fadeSwitch,  0, 1,   easeOutCirc" # fade on changing activewindow and its opacity
-          "fadeShadow,  0, 10,  easeOutCirc" # fade on changing activewindow for shadows
-          "fadeDim,     0, 4,   fluent_decel" # the easing of the dimming of inactive windows
-          "border,      0, 1.7, easeOutCirc" # for animating the border's color switch speed
+          "fade,        0"
+          "border,      1, 1.7, easeOutCirc" # for animating the border's color switch speed
           "borderangle, 1, 10,  fluent_decel, once" # for animating the border's gradient angle - styles: once (default), loop
-          "workspaces,  1, 3.5,   easeOutCubic, slidevert"
-          "specialWorkspace,  1, 2,  easeOutCirc, slidefadevert -50%"
+          "workspaces,  1, 3.5, easeOutCubic, slidevert"
         ];
       };
 
@@ -90,94 +123,75 @@ in {
 
       binds.scroll_event_delay = 2;
 
-      bind = [
-        # keybindings
-        "SUPER, Return, exec, uwsm app -- alacritty"
-        "SUPER, I, exec, uwsm app -- telegram-desktop && hyprctl dispatch focuswindow org.telegram.desktop"
-        "SUPER, B, exec, uwsm app -- firefox"
-        "SUPER SHIFT, B, exec, uwsm app -- google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
-        "SUPER, Q, killactive,"
-        "SUPER, F, fullscreen, 1"
-        "SUPER, Space, togglefloating"
-        "SUPER, P, exec, uwsm app -- fuzzel"
+      bind =
+        [
+          # keybindings
+          "SUPER, Return, exec, uwsm app -- alacritty"
+          "SUPER, B, exec, uwsm app -- firefox"
+          "SUPER SHIFT, B, exec, uwsm app -- google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
+          "SUPER, Q, killactive,"
+          "SUPER, F, fullscreen, 1"
+          "SUPER, Space, togglefloating"
+          "SUPER, P, exec, uwsm app -- fuzzel"
+          "SUPER, P, exec, uwsm app -- fuzzel"
+          "SUPER, Escape, exec, uwsm app -- alacritty --class clipse -e 'clipse'"
 
-        "SUPER, H, splitratio, +0.1"
-        "SUPER, J, layoutmsg, cyclenext"
-        "SUPER, K, layoutmsg, cycleprev"
-        "SUPER, L, splitratio, -0.1"
+          "SUPER, comma, focusmonitor, +1"
+          "SUPER SHIFT, comma, movewindow, mon:+1"
 
-        "SUPER SHIFT, Return, layoutmsg, swapwithmaster"
-        "SUPER, M, layoutmsg, orientationcycle left right center"
-        "SUPER, comma, focusmonitor, +1"
-        "SUPER SHIFT, comma, movewindow, mon:+1"
+          "SUPER, X, split:swapactiveworkspaces, current +1"
 
-        "SUPER, X, split:swapactiveworkspaces, current +1"
+          "SUPER, mouse_down, workspace, -1"
+          "SUPER, mouse_up, workspace, +1"
+          "SUPER, mouse_left, focusmonitor, -1"
+          "SUPER, mouse_right, focusmonitor, +1"
 
-        "SUPER, mouse_down, workspace, -1"
-        "SUPER, mouse_up, workspace, +1"
-        "SUPER, mouse_left, focusmonitor, -1"
-        "SUPER, mouse_right, focusmonitor, +1"
+          # hillside binds
+          ",Print, exec, uwsm app -- grimblast copy active"
+          ",XF86Screensaver, exec, uwsm app -- grimblast save active ${screenshot_name}"
+          "SHIFT ,Print, exec, uwsm app -- grimblast copy area"
+          "SHIFT ,XF86Screensaver, exec, uwsm app -- grimblast save area ${screenshot_name}"
 
-        # mac keyboard binds
-        ",XF86LaunchA, exec, uwsm app -- grimblast copy active"
-        ",XF86LaunchB, exec, uwsm app -- grimblast save active ${screenshot_name}"
-        "SHIFT ,XF86LaunchA, exec, uwsm app -- grimblast copy area"
-        "SHIFT ,XF86LaunchB, exec, uwsm app -- grimblast save area ${screenshot_name}"
+          "SUPER, Tab, changegroupactive, f"
+          "SUPER SHIFT, Tab, changegroupactive, b"
 
-        # hillside binds
-        ",Print, exec, uwsm app -- grimblast copy active"
-        ",XF86Screensaver, exec, uwsm app -- grimblast save active ${screenshot_name}"
-        "SHIFT ,Print, exec, uwsm app -- grimblast copy area"
-        "SHIFT ,XF86Screensaver, exec, uwsm app -- grimblast save area ${screenshot_name}"
+          "SUPER, I, hy3:equalize"
 
-        "SUPER, apostrophe, togglespecialworkspace"
+          "SUPER, S, hy3:changefocus, lower"
+          "SUPER, W, hy3:changefocus, raise"
 
-        # switch workspace
-        "SUPER, 1, split:workspace, 1"
-        "SUPER, 2, split:workspace, 2"
-        "SUPER, 3, split:workspace, 3"
-        "SUPER, 4, split:workspace, 4"
-        "SUPER, 5, split:workspace, 5"
-        "SUPER, 6, split:workspace, 6"
-        "SUPER, 7, split:workspace, 7"
-        "SUPER, 8, split:workspace, 8"
-        "SUPER, 6, split:workspace, 9"
+          "SUPER, V, hy3:makegroup, v, ephemeral"
+          "SUPER, C, hy3:makegroup, h, ephemeral"
 
-        # switch workspace 2
-        "SUPER CTRL, x, split:workspace, 1"
-        "SUPER CTRL, c, split:workspace, 2"
-        "SUPER CTRL, v, split:workspace, 3"
-        "SUPER CTRL, s, split:workspace, 4"
-        "SUPER CTRL, d, split:workspace, 5"
-        "SUPER CTRL, f, split:workspace, 6"
-        "SUPER CTRL, w, split:workspace, 7"
-        "SUPER CTRL, e, split:workspace, 8"
-        "SUPER CTRL, r, split:workspace, 9"
+          "SUPER, H, hy3:movefocus, l"
+          "SUPER, J, hy3:movefocus, d"
+          "SUPER, K, hy3:movefocus, u"
+          "SUPER, L, hy3:movefocus, r"
 
-        #"SUPER, d, split:workspace, +1"
-        #"SUPER, s, split:workspace, -1"
+          "SUPER SHIFT, H, hy3:movewindow, l"
+          "SUPER SHIFT, J, hy3:movewindow, d"
+          "SUPER SHIFT, K, hy3:movewindow, u"
+          "SUPER SHIFT, L, hy3:movewindow, r"
 
-        # same as above, but switch to the workspace
-        "SUPER CTRL, 1, split:movetoworkspacesilent, 1"
-        "SUPER CTRL, 2, split:movetoworkspacesilent, 2"
-        "SUPER CTRL, 3, split:movetoworkspacesilent, 3"
-        "SUPER CTRL, 4, split:movetoworkspacesilent, 4"
-        "SUPER CTRL, 5, split:movetoworkspacesilent, 5"
-        "SUPER CTRL, 6, split:movetoworkspacesilent, 6"
-        "SUPER CTRL, 7, split:movetoworkspacesilent, 7"
-        "SUPER CTRL, 8, split:movetoworkspacesilent, 8"
-        "SUPER CTRL, 9, split:movetoworkspacesilent, 9"
-
-        ",XF86AudioMute,exec, pamixer -t"
-        ",XF86AudioPlay,exec, playerctl play-pause"
-        ",XF86AudioNext,exec, playerctl next"
-        ",XF86AudioPrev,exec, playerctl previous"
-      ];
+          ",XF86AudioMute,exec, pamixer -t"
+          ",XF86AudioPlay,exec, playerctl play-pause"
+          ",XF86AudioNext,exec, playerctl next"
+          ",XF86AudioPrev,exec, playerctl previous"
+        ]
+        ++ (map (i: "SUPER, ${toString i}, split:workspace, ${toString i}") (lib.range 1 9))
+        ++ (map (i: "SUPER CTRL, ${toString i}, split:movetoworkspacesilent, ${toString i}") (lib.range 1 9))
+        # map to hillside numpad
+        ++ (lib.imap1 (i: key: "SUPER CTRL, ${key}, split:workspace, ${toString i}") ["x" "c" "v" "s" "d" "f" "w" "e" "r"]);
 
       # binds that repeat when held
       binde = [
         ",XF86AudioRaiseVolume,exec, pamixer -u -i 5"
         ",XF86AudioLowerVolume,exec, pamixer -u -d 5"
+
+        "SUPER CTRL, H, resizeactive, -150 0"
+        "SUPER CTRL, J, resizeactive, 0 -100"
+        "SUPER CTRL, K, resizeactive, 0 100"
+        "SUPER CTRL, L, resizeactive, 150 0"
       ];
 
       # mouse binding
@@ -186,66 +200,41 @@ in {
         "SUPER, mouse:273, resizewindow"
       ];
 
-      workspace = [
-        "s[true], on-created-empty:hyprctl dispatch -- exec [workspace special] \"uwsm app -- alacritty --class alacritty-float -o window.opacity=0.5 -e tmux new-session -A -s special\""
-
-        "1, layoutopt:orientation:top"
-        "2, layoutopt:orientation:top"
-        "3, layoutopt:orientation:top"
-        "4, layoutopt:orientation:top"
-        "5, layoutopt:orientation:top"
-        "6, layoutopt:orientation:top"
-        "7, layoutopt:orientation:top"
-        "8, layoutopt:orientation:top"
-        "9, layoutopt:orientation:top"
-      ];
-
-      # windowrule
-      windowrule = [
-        "float,title:^(Volume Control)$"
-        "float,title:^(Firefox — Sharing Indicator)$"
-        "move 0 0,title:^(Firefox — Sharing Indicator)$"
-        "size 700 450,title:^(Volume Control)$"
-      ];
-
       # windowrulev2
-      windowrulev2 = [
-        "noblur,floating:0"
+      windowrule =
+        [
+          "match:class ^tauonmb$, workspace 5"
+          "match:class ^org.telegram.desktop$, workspace 1"
+          "match:class ^firefox$, idle_inhibit fullscreen"
+          "match:class ^mpv$, idle_inhibit focus"
 
-        "float, title:^(Picture-in-Picture)$"
-        "opacity 1.0 override 1.0 override, title:^(Picture-in-Picture)$"
-        "pin, title:^(Picture-in-Picture)$"
-        "idleinhibit focus, class:^(mpv)$"
-        "idleinhibit fullscreen, class:^(firefox)$"
-        "float,class:^(pavucontrol)$"
-        "float,class:^(file_progress)$"
-        "float,class:^(confirm)$"
-        "float,class:^(dialog)$"
-        "float,class:^(download)$"
-        "float,class:^(notification)$"
-        "float,class:^(error)$"
-        "float,class:^(confirmreset)$"
-        "float,title:^(Open File)$"
-        "float,title:^(Choose Files)$"
-        "float,title:^(File Upload)$"
-        "float,title:^(branchdialog)$"
-        "float,title:^(Confirm to replace files)$"
-        "float,title:^(File Operation Progress)$"
-        "float,class:^(org.telegram.desktop)$,title:^(Media viewer)$"
+          "match:title ^Enter name of file to save, size 500 700"
 
-        "float,class:alacritty-float"
-        "bordersize 0,class:alacritty-float"
-        "animation slide bottom,class:alacritty-float"
-        "move onscreen 20% 0,class:alacritty-float"
-        "size 60% 30%,class:alacritty-float"
+          "match:class ^clipse$, float on, border_size 1, size 800 700, opacity 0.8, rounding 10"
 
-        "opacity 0.0 override,class:^(xwaylandvideobridge)$"
-        "noanim,class:^(xwaylandvideobridge)$"
-        "noinitialfocus,class:^(xwaylandvideobridge)$"
-        "maxsize 1 1,class:^(xwaylandvideobridge)$"
+          "match:class ^org.telegram.desktop$, match:title ^Media viewer$, fullscreen on"
 
-        "bordersize 0, floating:0, onworkspace:w[tv1]" # no border when only
-      ];
+          "match:workspace w[v1], border_size 0"
+        ]
+        ++ (map (c: "match:class ^${c}$, float on") [
+          "pavucontrol"
+          "file_progress"
+          "confirm"
+          "dialog"
+          "download"
+          "notification"
+          "error"
+          "confirmreset"
+        ])
+        ++ (map (t: "match:title ^${t}$, float on") [
+          "Open File"
+          "Choose Files"
+          "File Upload"
+          "branchdialog"
+          "Confirm to replace files"
+          "File Operation Progress"
+          "Volume Control"
+        ]);
     };
 
     extraConfig = ''
@@ -262,22 +251,24 @@ in {
           num_workspaces = 9
         }
 
-        hyprfocus {
-          enabled = yes
-          animate_floating = no
-          animate_workspacechange = no
-          focus_animation = flash
+        hy3 {
+          no_gaps_when_only = 0
+          node_collapse_policy = 0
+          group_inset = 0
+          tab_first_window = false
 
-          bezier = realsmooth, 0.28,0.29,0.69,1.08
-
-          flash {
-            flash_opacity = 0.95
-            in_bezier = realsmooth
-            in_speed = 1
-            out_bezier = realsmooth
-            out_speed = 3
+          tabs {
+            height = 0
+            padding = 0
+            render_text = false
           }
-       }
+
+          autotile {
+            enable = true
+            trigger_width = 600
+            trigger_height = 400
+          }
+        }
       }
     '';
   };
@@ -310,10 +301,24 @@ in {
       listener = [
         {
           timeout = 60 * 60;
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          on-timeout = "hyprctl --batch 'dispatch dpms off DP-1 ; dispatch dpms off HDMI-A-1'";
+          on-resume = "hyprctl --batch 'dispatch dpms on DP-1 ; dispatch dpms on HDMI-A-1'";
         }
       ];
+    };
+  };
+
+  services.clipse = {
+    enable = true;
+    package = clipse;
+    allowDuplicates = false;
+    historySize = 1000;
+    systemdTarget = "hyprland-session.target";
+    keyBindings = {
+      choose = "esc,enter";
+      down = "ctrl+d,j,d";
+      up = "ctrl+u,k,u,t";
+      remove = "D";
     };
   };
 
