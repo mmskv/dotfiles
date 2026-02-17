@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    alacritty
     obsidian
     xfce.thunar
     xfce.thunar-volman

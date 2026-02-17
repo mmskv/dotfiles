@@ -13,6 +13,7 @@
     ./syncthing.nix
     ./bluelight.nix
     ./vscode.nix
+    ./xkb.nix
 
     ./firefox
   ];
@@ -20,7 +21,6 @@
   home = {
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      NH_FLAKE = "/home/suck/dotfiles";
     };
 
     pointerCursor = {

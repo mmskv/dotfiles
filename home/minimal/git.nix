@@ -1,4 +1,9 @@
-{sec, ...}: {
+{
+  sec,
+  lib,
+  config,
+  ...
+}: {
   programs.git = {
     enable = true;
 
@@ -6,8 +11,6 @@
       user = {
         inherit (sec.user) name email;
       };
-
-      url."ssh://git@github.com/".insteadOf = "https://github.com/";
 
       alias = {
         s = "status";
@@ -20,6 +23,7 @@
 
       push.autoSetupRemote = true;
       init.defaultBranch = "master";
+      url."ssh://git@github.com/".insteadOf = "https://github.com/";
     };
 
     includes = [

@@ -20,6 +20,11 @@
     };
 
     agenix.url = "github:ryantm/agenix";
+
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -30,6 +35,7 @@
     ucodenix,
     nix-index-database,
     agenix,
+    nixgl,
     ...
   }: let
     sec = import ./secrets.nix;
@@ -121,6 +127,28 @@
           }
         ];
       };
+    };
+
+    homeConfigurations."suck@thinkpad" = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        overlays = [nixgl.overlay];
+      };
+      extraSpecialArgs = {
+        inherit sec nixgl;
+
+        pkgs-unstable = import nixpkgs-unstable {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+          overlays = [nixgl.overlay];
+        };
+      };
+      modules = [
+        nix-index-database.homeModules.nix-index
+        {programs.nix-index-database.comma.enable = true;}
+        ./home/thinkpad.nix
+      ];
     };
   };
 }

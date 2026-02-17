@@ -13,13 +13,20 @@
       user_pref('security.OCSP.require', false);
       user_pref('browser.sessionstore.resume_from_crash', false);
       user_pref('ui.systemUsesDarkTheme', 1);
-      user_pref('network.trr.uri', ${sec.net.doh});
-      user_pref('network.trr.custom_uri', ${sec.net.doh});
+      user_pref('network.trr.uri', "${sec.net.doh}");
+      user_pref('network.trr.custom_uri', "${sec.net.doh}");
 
-      user_pref('browser.translations.automaticallyPopup', false);
+      user_pref('extensions.formautofill.creditCards.enabled', false);
+
+      user_pref('browser.translations.enable', false);
       user_pref('identity.fxaccounts.enabled', false);
       user_pref('signon.showAutoCompleteFooter', false);
       user_pref('browser.urlbar.maxHistoricalSearchSuggestions', 0);
+      user_pref('browser.urlbar.maxRichResults', 0);
+      user_pref('browser.toolbars.bookmarks.visibility', "never");
+
+      user_pref('network.trr.mode', 5);
+      user_pref('security.cert_pinning.enforcement_level', 1);
     '';
 in {
   imports = [

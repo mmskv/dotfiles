@@ -1,13 +1,35 @@
 {
   pkgs,
   pkgs-unstable,
+  lib,
+  config,
   sec,
   ...
 }: let
+  isLaptop = config.custom.workLaptop.enable;
+  isDesktop = !isLaptop;
+
   modules-left = [
     "hyprland/workspaces"
-    "hyprland/window"
+    "hyprland/window" # for workspace states (fullscreen/empty)
   ];
+
+  modules-right =
+    [
+      "privacy#screenshare"
+      "privacy#audio"
+    ]
+    ++ (
+      if isLaptop
+      then ["tray" "battery"]
+      else ["custom/vpn"]
+    )
+    ++ [
+      "hyprland/language"
+      "pulseaudio/slider"
+      "clock"
+    ];
+
   "hyprland/workspaces" = {
     format = "{icon}";
     on-click = "activate";
@@ -33,10 +55,16 @@
       "18" = "9";
     };
   };
+
   "hyprland/window" = {
     format = "";
     separate-outputs = true;
   };
+
+  primaryOutput = ["eDP-1" "DP-1"];
+
+  secondaryRightOutput = "DP-3";
+  secondaryTopOutput = ["HDMI-A-1"];
 in {
   programs.waybar = {
     enable = true;
@@ -45,22 +73,16 @@ in {
 
     settings = [
       {
+        output = primaryOutput;
+
         layer = "top";
         position = "right";
-        output = "DP-1";
         reload_style_on_change = true;
-        modules-right = [
-          "privacy#screenshare"
-          "privacy#audio"
-          "custom/vpn"
-          "hyprland/language"
-          "pulseaudio/slider"
-          "clock"
-        ];
 
         inherit modules-left;
-        inherit "hyprland/window";
+        inherit modules-right;
         inherit "hyprland/workspaces";
+        inherit "hyprland/window";
 
         "privacy#audio" = {
           icon-spacing = 4;
@@ -93,21 +115,6 @@ in {
           format-ru = "R";
         };
 
-        "custom/vpn" = {
-          format = "{}";
-          return-type = "json";
-          interval = 2;
-          exec = pkgs.writeShellScript "vpn-check" ''
-            if output=$(${pkgs.dogdns}/bin/dog o-o.myaddr.l.google.com --tls @dns.google txt -1 2>/dev/null); then
-                echo "$output" | grep -q ${sec.mysubnet} && \
-                echo '{"text": "V", "class": "off"}' || echo '{"text": "V", "class": "on"}'
-            else
-                echo '{"text": "O", "class": "error"}'
-            fi'';
-          on-scroll-up = pkgs.writeShellScript "vpn-start" sec.vpn.startcmd;
-          on-scroll-down = pkgs.writeShellScript "vpn-stop" sec.vpn.stopcmd;
-        };
-
         "pulseaudio/slider" = {
           orientation = "vertical";
           on-click = "pavucontrol && hyprctl dispatch focuswindow pavucontrol";
@@ -136,16 +143,71 @@ in {
             on-scroll-down = "shift_down";
           };
         };
+
+        "custom/vpn" = {
+          format = "{}";
+          return-type = "json";
+          interval = 2;
+          exec = pkgs.writeShellScript "vpn-check" ''
+            if output=$(${pkgs.dogdns}/bin/dog o-o.myaddr.l.google.com --tls @dns.google txt -1 2>/dev/null); then
+                echo "$output" | grep -q ${sec.mysubnet} && \
+                echo '{"text": "V", "class": "off"}' || echo '{"text": "V", "class": "on"}'
+            else
+                echo '{"text": "O", "class": "error"}'
+            fi'';
+          on-scroll-up = pkgs.writeShellScript "vpn-start" sec.vpn.startcmd;
+          on-scroll-down = pkgs.writeShellScript "vpn-stop" sec.vpn.stopcmd;
+        };
+
+        battery = {
+          interval = 30;
+          format = "B";
+          format-charging = "C";
+          tooltip-format = "{capacity}% {time}";
+          states = {
+            "capacity-0" = 0;
+            "capacity-10" = 10;
+            "capacity-20" = 20;
+            "capacity-30" = 30;
+            "capacity-40" = 40;
+            "capacity-50" = 50;
+            "capacity-60" = 60;
+            "capacity-70" = 70;
+            "capacity-80" = 80;
+            "capacity-90" = 90;
+            "capacity-100" = 100;
+          };
+        };
+
+        tray = {
+          icon-size = 16;
+          spacing = 8;
+          show-passive-items = true;
+        };
       }
+
       {
         layer = "top";
-        output = "!DP-1";
         position = "top";
         reload_style_on_change = true;
 
+        output = secondaryTopOutput;
+
         inherit modules-left;
-        inherit "hyprland/window";
         inherit "hyprland/workspaces";
+        inherit "hyprland/window";
+      }
+
+      {
+        layer = "top";
+        position = "right";
+        reload_style_on_change = true;
+
+        output = secondaryRightOutput;
+
+        inherit modules-left;
+        inherit "hyprland/workspaces";
+        inherit "hyprland/window";
       }
     ];
     style =
@@ -153,38 +215,39 @@ in {
       ''
         @define-color active #EA803F;
         @define-color bg #141414;
-        @define-color fg #C5C8C6;
+        @define-color fg #DCD7BA;
         @define-color border #212121;
 
         * {
           font-size: 14px;
           font-family: "Fira Mono";
-        }
-
-        window#waybar.right {
-          background: @bg;
-          border-left: 1px solid @border;
-        }
-
-        window#waybar.right #workspaces {
-          margin: 4px 0px;
-        }
-
-        #workspaces button {
-          transition-property: background-color;
-          transition-duration: 0;
-          box-shadow: inherit;
-          text-shadow: inherit;
-          color: inherit;
+          border: 0px;
+          padding: 0px;
           border-radius: 0;
         }
 
-        window#waybar.right button {
-          padding: 0px 2px 0px 4px;
-        }
+        window { background: @bg; }
 
-        #workspaces button.urgent {
-          color: @active;
+        window#waybar.right .modules-left { padding: 2px 0px 0px 0px; }
+        window#waybar.top   .modules-left { padding: 0px 0px 0px 2px; }
+
+        window#waybar.right .modules-right > * { padding: 2px 3px 2px 3px; }
+        window#waybar.top   .modules-right > * { padding: 0px 2px 0px 2px; }
+
+        window#waybar.right { border-left: 1px solid @border; }
+        window#waybar.top { border-bottom: 1px solid @border; }
+
+        window#waybar.right button { padding: 0px 4px 0px 6px; }
+        window#waybar.top   button { padding: 2px 0px 4px 0px; }
+
+        window#waybar.right #workspaces button.active {
+          padding-left: 4px;
+          border-left: 2px solid @active;
+        }
+        window#waybar.top #workspaces button.active {
+          padding-bottom: 2px;
+          border-bottom: 2px solid @active;
+          color: @fg;
         }
 
         window#waybar.fullscreen #workspaces button.active {
@@ -194,42 +257,22 @@ in {
           transition: background-position 0.3s cubic-bezier(0.33, 1, 0.68, 1);
         }
 
-        window#waybar.right #workspaces button.active {
-          padding-left: 2px;
-          border-left: 2px solid @active;
+        #workspaces button {
+          transition-property: background-color;
+          transition-duration: 0;
+          color: @fg;
         }
-
-        window#waybar.top #workspaces button.active {
-          padding-bottom: 2px;
-          border-bottom: 2px solid @active;
-        }
-
-        window#waybar.top button {
-          padding: 2px 2px 4px 2px;
-        }
-
-        window#waybar.top #workspaces {
-          margin: 0px 4px;
-        }
-
-        window#waybar.top {
-          background: @bg;
-          border-bottom: 1px solid @border;
-        }
-
-        #workspaces button.empty {
-          color: @border;
-        }
+        #workspaces button.urgent { color: @active; }
+        #workspaces button.empty  { color: @border; }
 
         #clock {
           font-weight: bolder;
           font-size: 16px;
-          padding: 16px 5px 3px 5px;
+          padding: 3px 5px 3px 7px;
         }
 
-        #pulseaudio-slider {
-          padding: 10px 0px 8px 0px;
-        }
+
+        #pulseaudio-slider { padding: 10px 0px; }
 
         #pulseaudio-slider slider {
           background: none;
@@ -239,6 +282,7 @@ in {
           background-image: none;
           border: none;
           box-shadow: none;
+          padding: 0px;
         }
 
         #pulseaudio-slider trough {
@@ -246,38 +290,39 @@ in {
           min-width: 4px;
           border-radius: 5px;
           background: black;
+          padding: 0px;
         }
 
         #pulseaudio-slider highlight {
           border-radius: 5px;
           background: @active;
+          padding: 0px;
         }
 
-        #privacy-item {
-          padding: 8px 8px;
-        }
 
-        #language {
-          padding: 0px 0px 7px 0px;
-          font-weight: bold;
-        }
+        #language { font-weight: bold; }
 
-        #custom-vpn {
-          padding: 7px 0px;
-          font-weight: bold;
-        }
+        #custom-vpn { font-weight: bold; }
+        #custom-vpn.on { color: @active; }
+        #custom-vpn.off { color: @border; }
+        #custom-vpn.error { color: @fg; }
 
-        #custom-vpn.on {
-          color: @active;
-        }
+        #tray * { padding: 0px; }
+        #tray { padding: 4px 0px 4px 1.5px; margin: 4px 0px; }
 
-        #custom-vpn.off {
-          color: @border;
-        }
+        #battery { font-weight: bold; }
 
-        #custom-vpn.error {
-          color: @fg;
-        }
+        #battery.capacity-100 { color: #ffffff; }
+        #battery.capacity-90 { color: #fff7f7; }
+        #battery.capacity-80 { color: #ffeeee; }
+        #battery.capacity-70 { color: #ffe5e5; }
+        #battery.capacity-60 { color: #ffdada; }
+        #battery.capacity-50 { color: #ffcfcf; }
+        #battery.capacity-40 { color: #ffc1c1; }
+        #battery.capacity-30 { color: #ffb1b1; }
+        #battery.capacity-20 { color: #ff9d9d; }
+        #battery.capacity-10 { color: #ff7f7f; }
+        #battery.capacity-0 { color: #ff0000; }
       '';
   };
 }

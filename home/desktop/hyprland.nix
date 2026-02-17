@@ -2,9 +2,25 @@
   lib,
   pkgs,
   pkgs-unstable,
+  config,
+  nixgl,
   ...
 }: let
+  isLaptop = config.custom.workLaptop.enable;
+
   screenshot_name = ''$HOME"/screenshots/Screenshot $(date +%F) at $(date +%T).png"'';
+
+  brightness-script = pkgs.writeShellScriptBin "brightness-notify" ''
+    export PATH=${pkgs.lib.makeBinPath [pkgs.brightnessctl pkgs.libnotify]}:$PATH
+    brightnessctl set "$1"
+    current=$(brightnessctl get)
+    max=$(brightnessctl max)
+    percent=$(( current * 100 / max ))
+    notify-send -t 1000 \
+      -h string:x-canonical-private-synchronous:brightness \
+      -h int:value:$percent \
+      "Brightness: $percent%"
+  '';
 
   clipse = pkgs.buildGoModule rec {
     pname = "clipse";
@@ -32,13 +48,23 @@
       mainProgram = "clipse";
     };
   };
+
+  uwsm = "uwsm app -- ";
 in {
+  targets.genericLinux.nixGL = {
+    packages = nixgl.packages;
+    defaultWrapper = "mesa";
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
 
-    package = null;
+    package =
+      if isLaptop
+      then config.lib.nixGL.wrap pkgs-unstable.hyprland
+      else null;
     portalPackage = null;
 
     plugins = with pkgs-unstable.hyprlandPlugins; [
@@ -47,17 +73,30 @@ in {
     ];
 
     settings = {
-      exec-once = [
-        "hyprctl setcursor phinger-cursors-dark 24"
-        "uwsm app -- wl-clip-persist --clipboard both"
-      ];
+      exec-once =
+        [
+          "hyprctl setcursor phinger-cursors-dark 24"
+          "${uwsm} wl-clip-persist --clipboard both"
+        ]
+        ++ lib.optionals isLaptop [
+          "${uwsm} nm-applet --indicator"
+          "${uwsm} blueman-applet"
+        ];
 
-      input = {
-        kb_layout = "uscustom,rucustom";
-        kb_options = "grp:ctrl_space_toggle,caps:escape";
-        repeat_delay = 380;
-        repeat_rate = 35;
-      };
+      input =
+        {
+          kb_layout = "uscustom,rucustom";
+          kb_options = "grp:ctrl_space_toggle,caps:escape";
+          repeat_delay = 380;
+          repeat_rate = 35;
+        }
+        // lib.optionalAttrs isLaptop {
+          touchpad = {
+            natural_scroll = true;
+            disable_while_typing = true;
+            tap-to-click = true;
+          };
+        };
 
       cursor.inactive_timeout = 3;
 
@@ -92,18 +131,27 @@ in {
           "fade_curve, 0, 0.55, 0.45, 1"
         ];
 
-        animation = [
-          # name, enable, speed, curve, style
+        animation =
+          [
+            # name, enable, speed, curve, style
 
-          "windowsIn,   0" # window open
-          "windowsOut,  0" # window close.
-          "windowsMove, 1, 0.7, fluent_decel, slide" # everything in between: moving, dragging, resizing.
+            "windowsIn,   0" # window open
+            "windowsOut,  0" # window close.
+            "windowsMove, 1, 0.7, fluent_decel, slide" # everything in between: moving, dragging, resizing.
 
-          "fade,        0"
-          "border,      1, 1.7, easeOutCirc" # for animating the border's color switch speed
-          "borderangle, 1, 10,  fluent_decel, once" # for animating the border's gradient angle - styles: once (default), loop
-          "workspaces,  1, 3.5, easeOutCubic, slidevert"
-        ];
+            "fade,        0"
+            "border,      1, 1.7, easeOutCirc" # for animating the border's color switch speed
+            "borderangle, 1, 10,  fluent_decel, once" # for animating the border's gradient angle - styles: once (default), loop
+          ]
+          ++ (
+            if isLaptop
+            then [
+              "workspaces,  1, 3.5, easeOutCubic, slide"
+            ]
+            else [
+              "workspaces,  1, 3.5, easeOutCubic, slidevert"
+            ]
+          );
       };
 
       decoration = {
@@ -126,15 +174,14 @@ in {
       bind =
         [
           # keybindings
-          "SUPER, Return, exec, uwsm app -- alacritty"
-          "SUPER, B, exec, uwsm app -- firefox"
-          "SUPER SHIFT, B, exec, uwsm app -- google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
+          "SUPER, Return, exec, ${uwsm} alacritty"
+          "SUPER, B, exec, ${uwsm} firefox"
+          "SUPER SHIFT, B, exec, ${uwsm} google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
           "SUPER, Q, killactive,"
           "SUPER, F, fullscreen, 1"
           "SUPER, Space, togglefloating"
-          "SUPER, P, exec, uwsm app -- fuzzel"
-          "SUPER, P, exec, uwsm app -- fuzzel"
-          "SUPER, Escape, exec, uwsm app -- alacritty --class clipse -e 'clipse'"
+          "SUPER, P, exec, ${uwsm} fuzzel"
+          "SUPER, Escape, exec, ${uwsm} alacritty --class clipse -e 'clipse'"
 
           "SUPER, comma, focusmonitor, +1"
           "SUPER SHIFT, comma, movewindow, mon:+1"
@@ -147,10 +194,10 @@ in {
           "SUPER, mouse_right, focusmonitor, +1"
 
           # hillside binds
-          ",Print, exec, uwsm app -- grimblast copy active"
-          ",XF86Screensaver, exec, uwsm app -- grimblast save active ${screenshot_name}"
-          "SHIFT ,Print, exec, uwsm app -- grimblast copy area"
-          "SHIFT ,XF86Screensaver, exec, uwsm app -- grimblast save area ${screenshot_name}"
+          ",Print, exec, ${uwsm} grimblast copy active"
+          ",XF86Screensaver, exec, ${uwsm} grimblast save active ${screenshot_name}"
+          "SHIFT ,Print, exec, ${uwsm} grimblast copy area"
+          "SHIFT ,XF86Screensaver, exec, ${uwsm} grimblast save area ${screenshot_name}"
 
           "SUPER, Tab, changegroupactive, f"
           "SUPER SHIFT, Tab, changegroupactive, b"
@@ -174,30 +221,43 @@ in {
           "SUPER SHIFT, L, hy3:movewindow, r"
 
           ",XF86AudioMute,exec, pamixer -t"
+          ",XF86AudioMicMute,exec, pamixer --default-source -t"
           ",XF86AudioPlay,exec, playerctl play-pause"
           ",XF86AudioNext,exec, playerctl next"
           ",XF86AudioPrev,exec, playerctl previous"
         ]
         ++ (map (i: "SUPER, ${toString i}, split:workspace, ${toString i}") (lib.range 1 9))
         ++ (map (i: "SUPER CTRL, ${toString i}, split:movetoworkspacesilent, ${toString i}") (lib.range 1 9))
+        ++ (map (i: "SUPER SHIFT, ${toString i}, split:movetoworkspacesilent, ${toString i}") (lib.range 1 9))
         # map to hillside numpad
         ++ (lib.imap1 (i: key: "SUPER CTRL, ${key}, split:workspace, ${toString i}") ["x" "c" "v" "s" "d" "f" "w" "e" "r"]);
 
       # binds that repeat when held
-      binde = [
-        ",XF86AudioRaiseVolume,exec, pamixer -u -i 5"
-        ",XF86AudioLowerVolume,exec, pamixer -u -d 5"
+      binde =
+        [
+          ",XF86AudioRaiseVolume,exec, pamixer -u -i 5"
+          ",XF86AudioLowerVolume,exec, pamixer -u -d 5"
 
-        "SUPER CTRL, H, resizeactive, -150 0"
-        "SUPER CTRL, J, resizeactive, 0 -100"
-        "SUPER CTRL, K, resizeactive, 0 100"
-        "SUPER CTRL, L, resizeactive, 150 0"
-      ];
+          "SUPER CTRL, H, resizeactive, -150 0"
+          "SUPER CTRL, J, resizeactive, 0 -100"
+          "SUPER CTRL, K, resizeactive, 0 100"
+          "SUPER CTRL, L, resizeactive, 150 0"
+        ]
+        ++ lib.optionals isLaptop [
+          ",XF86MonBrightnessUp,exec, ${brightness-script}/bin/brightness-notify +5%"
+          ",XF86MonBrightnessDown,exec, ${brightness-script}/bin/brightness-notify 5%-"
+        ];
 
       # mouse binding
       bindm = [
         "SUPER, mouse:272, movewindow"
         "SUPER, mouse:273, resizewindow"
+      ];
+
+      gesture = [
+        "3, horizontal, workspace"
+        "3, up, fullscreen"
+        "3, down, fullscreen"
       ];
 
       # windowrulev2
@@ -237,48 +297,58 @@ in {
         ]);
     };
 
-    extraConfig = ''
-      monitor=DP-1,3440x1440@144,0x0,1
-      monitor=HDMI-A-1,3440x1440@99.99,3440x-720,1,transform,1
+    extraConfig =
+      (
+        if isLaptop
+        then ''
+          monitor=eDP-1,preferred,auto,2
+          monitor=,highrr,auto-center-up,1
+        ''
+        else ''
+          monitor=DP-1,3440x1440@144,0x0,1
+          monitor=HDMI-A-1,3440x1440@99.99,3440x-720,1,transform,1
+        ''
+      )
+      + ''
 
-      xwayland {
-        force_zero_scaling = true
-      }
-
-      plugin {
-        hyprsplit {
-          persistent_workspaces = true
-          num_workspaces = 9
+        xwayland {
+          force_zero_scaling = true
         }
 
-        hy3 {
-          no_gaps_when_only = 0
-          node_collapse_policy = 0
-          group_inset = 0
-          tab_first_window = false
-
-          tabs {
-            height = 0
-            padding = 0
-            render_text = false
+        plugin {
+          hyprsplit {
+            persistent_workspaces = true
+            num_workspaces = 9
           }
 
-          autotile {
-            enable = true
-            trigger_width = 600
-            trigger_height = 400
+          hy3 {
+            no_gaps_when_only = 0
+            node_collapse_policy = 0
+            group_inset = 0
+            tab_first_window = false
+
+            tabs {
+              height = 0
+              padding = 0
+              render_text = false
+            }
+
+            autotile {
+              enable = true
+              trigger_width = 600
+              trigger_height = 400
+            }
           }
         }
-      }
-    '';
+      '';
   };
 
   services.hyprpaper = {
     enable = true;
     settings = {
-      ipc = false;
+      ipc = "off";
       preload = ["${../../wallpaper.jpg}" "${../../wallpaper2.jpg}"];
-      wallpaper = ["DP-1,${../../wallpaper.jpg}" "HDMI-A-1,${../../wallpaper2.jpg}"];
+      wallpaper = [",${../../wallpaper.jpg}" "HDMI-A-1,${../../wallpaper2.jpg}"];
     };
   };
 
@@ -292,19 +362,33 @@ in {
       default-timeout = 10000;
       border-size = 1;
       border-radius = 3;
+      progress-color = "#212121ff";
     };
   };
 
   services.hypridle = {
     enable = true;
     settings = {
-      listener = [
-        {
-          timeout = 60 * 60;
-          on-timeout = "hyprctl --batch 'dispatch dpms off DP-1 ; dispatch dpms off HDMI-A-1'";
-          on-resume = "hyprctl --batch 'dispatch dpms on DP-1 ; dispatch dpms on HDMI-A-1'";
-        }
-      ];
+      listener =
+        if isLaptop
+        then [
+          {
+            timeout = 20 * 60;
+            on-timeout = "systemctl suspend";
+          }
+          {
+            timeout = 10 * 60;
+            on-timeout = "hyprctl dispatch dpms off";
+            on-resume = "hyprctl dispatch dpms on";
+          }
+        ]
+        else [
+          {
+            timeout = 60 * 60;
+            on-timeout = "hyprctl --batch 'dispatch dpms off DP-1 ; dispatch dpms off HDMI-A-1'";
+            on-resume = "hyprctl --batch 'dispatch dpms on DP-1 ; dispatch dpms on HDMI-A-1'";
+          }
+        ];
     };
   };
 
@@ -322,7 +406,35 @@ in {
     };
   };
 
+  # uwsm units live in ~/.nix-profile/share/systemd/user/ but systemd's user
+  # manager can't load template-instantiated units from that path on non-NixOS.
+  # Symlink them into ~/.config/systemd/user/ where systemd always looks.
+  xdg.configFile = let
+    uwsmUnits = [
+      "app-graphical.slice"
+      "background-graphical.slice"
+      "fumon.service"
+      "session-graphical.slice"
+      "wayland-session-bindpid@.service"
+      "wayland-session-pre@.target"
+      "wayland-session-shutdown.target"
+      "wayland-session-waitenv.service"
+      "wayland-session-xdg-autostart@.target"
+      "wayland-session@.target"
+      "wayland-wm-app-daemon.service"
+      "wayland-wm-env@.service"
+      "wayland-wm@.service"
+    ];
+  in
+    lib.mkIf isLaptop (builtins.listToAttrs (map (unit: {
+        name = "systemd/user/${unit}";
+        value.source = "${pkgs.uwsm}/share/systemd/user/${unit}";
+      })
+      uwsmUnits));
+
   home.packages = with pkgs; [
+    (lib.mkIf isLaptop pkgs.nixgl.nixGLIntel)
+
     hyprpicker
     slurp
     wl-clip-persist
@@ -330,5 +442,6 @@ in {
     wl-screenrec
     grimblast
     ddcutil
+    blueman
   ];
 }

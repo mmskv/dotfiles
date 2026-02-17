@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./options.nix
     ./minimal
   ];
 
@@ -10,7 +11,7 @@
     homeDirectory = "/root";
 
     sessionVariables = {
-      NH_FLAKE = "/root/dotfiles";
+      NH_FLAKE = "$HOME/dotfiles";
       NH_BYPASS_ROOT_CHECK = "true";
     };
   };

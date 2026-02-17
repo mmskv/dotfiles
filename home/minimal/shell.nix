@@ -1,10 +1,15 @@
 {
   pkgs,
   lib,
-  osConfig,
+  config,
   sec,
   ...
-}: {
+} @ args: let
+  isDesktop =
+    if args ? osConfig
+    then args.osConfig.custom.desktop.enable
+    else config.custom.workLaptop.enable;
+in {
   programs.bash = {
     enable = true;
   };
@@ -12,21 +17,23 @@
   programs.fish = {
     enable = true;
 
-    shellAliases = {
-      l = "eza -l --group-directories-first";
-      ls = "eza";
-      la = "eza -a";
-      ll = "eza -al";
-      lg = "eza -al --git";
-      cat = "bat";
-      grep = "grep --color=auto -i";
-      cp = "cp -iv";
-      mv = "mv -iv";
-      rm = "rm -v";
-      ip = "ip -c";
-    };
+    shellAliases =
+      {
+        l = "eza -l --group-directories-first";
+        ls = "eza";
+        la = "eza -a";
+        ll = "eza -al";
+        lg = "eza -al --git";
+        cat = "bat";
+        grep = "grep --color=auto -i";
+        cp = "cp -iv";
+        mv = "mv -iv";
+        rm = "rm -v";
+        ip = "ip -c";
+      }
+      // sec.shellAliases;
 
-    loginShellInit = lib.mkIf osConfig.custom.desktop.enable ''
+    loginShellInit = lib.mkIf isDesktop ''
       if test (tty) = /dev/tty1 && uwsm check may-start
         exec uwsm start hyprland-uwsm.desktop
       end
@@ -103,6 +110,7 @@
             set -e VAULT_PROMPT_STR
           end
         end
+
       '';
   };
 
@@ -240,12 +248,13 @@
   };
 
   home.packages = with pkgs; [
-    (lib.mkIf
-      osConfig.custom.desktop.enable
-      fishPlugins.done)
+    (lib.mkIf isDesktop fishPlugins.done)
 
     fishPlugins.fzf-fish
     fishPlugins.hydro
     fishPlugins.grc
+    grc
+    fd
+    vault
   ];
 }
