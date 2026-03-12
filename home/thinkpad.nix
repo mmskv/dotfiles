@@ -3,8 +3,29 @@
   pkgs-unstable,
   lib,
   config,
+  sec,
   ...
-}: {
+}: let
+  # Install a file to a root-owned path, only updating when content changes.
+  # Optional postInstall runs after a successful install.
+  installSystemFile = {
+    dest,
+    content,
+    postInstall ? "",
+  }:
+    lib.hm.dag.entryAfter ["writeBoundary"] ''
+      DEST="${dest}"
+      TMP="$HOME/.cache/hm-install-$(echo "${dest}" | tr '/' '-').tmp"
+      printf '%s' ${lib.escapeShellArg content} > "$TMP"
+
+      if test ! -f "$DEST" || ! /usr/bin/sudo diff -q "$TMP" "$DEST" >/dev/null 2>&1; then
+        echo "Installing $DEST..."
+        run /usr/bin/sudo install -m 0644 "$TMP" "$DEST"
+        ${postInstall}
+      fi
+      rm -f "$TMP"
+    '';
+in {
   imports = [
     ./options.nix
     ./desktop
@@ -23,7 +44,12 @@
   };
 
   programs.home-manager.enable = true;
-  #programs.man.generateCaches = false;
+  programs.man.generateCaches = true;
+
+  programs.matterhorn = {
+    enable = true;
+    extraConfig = sec.matterhornConfig;
+  };
 
   xdg.configFile."apparmor/nix-store-profile".text = ''
     abi <abi/4.0>,
@@ -54,23 +80,87 @@
     fi
   '';
 
-  home.activation.installHyprlockPam = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    DEST="/etc/pam.d/hyprlock"
-    CONTENT="#%PAM-1.0
-    auth    include common-auth
-    account include common-account
-    password include common-password
-    session include common-session
-    "
+  home.activation.installHyprlockPam = installSystemFile {
+    dest = "/etc/pam.d/hyprlock";
+    content = ''
+      #%PAM-1.0
+      auth    include common-auth
+      account include common-account
+      password include common-password
+      session include common-session
+    '';
+  };
 
-    TMP="$HOME/.cache/hyprlock-pam.tmp"
-    printf '%s' "$CONTENT" > "$TMP"
+  home.activation.installWifiResume = installSystemFile {
+    dest = "/etc/systemd/system/wifi-resume.service";
+    content = ''
+      [Unit]
+      Description=Restart WiFi after resume from suspend
+      After=suspend.target
 
-    if test ! -f "$DEST" || ! /usr/bin/sudo diff -q "$TMP" "$DEST" >/dev/null 2>&1; then
-      echo "Installing $DEST for hyprlock..."
-      run /usr/bin/sudo install -m 0644 "$TMP" "$DEST"
+      [Service]
+      Type=oneshot
+      ExecStart=/usr/bin/nmcli radio wifi off
+      ExecStartPost=/usr/bin/sleep 2
+      ExecStartPost=/usr/bin/nmcli radio wifi on
+
+      [Install]
+      WantedBy=suspend.target
+    '';
+    postInstall = ''
+      run /usr/bin/sudo systemctl daemon-reload
+      run /usr/bin/sudo systemctl enable wifi-resume.service
+    '';
+  };
+
+  home.activation.installVpnDispatcher = installSystemFile {
+    dest = "/etc/NetworkManager/dispatcher.d/99-restart-wb-vpn";
+    content = ''
+      #!/bin/bash
+      IFACE="$1"
+      ACTION="$2"
+      if [ "$ACTION" = "up" ] && nmcli -t -f TYPE connection show --active 2>/dev/null | grep -q wifi; then
+        systemctl restart wb_vpn 2>/dev/null || true
+      fi
+    '';
+    postInstall = ''
+      run /usr/bin/sudo chmod 755 /etc/NetworkManager/dispatcher.d/99-restart-wb-vpn
+    '';
+  };
+
+  home.activation.fixWbVpnService = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    if test -f /etc/systemd/system/wb_vpn.service; then
+      if ! grep -q "network-online.target" /etc/systemd/system/wb_vpn.service; then
+        echo "Updating wb_vpn.service to depend on network-online.target..."
+        run /usr/bin/sudo ${pkgs.gnused}/bin/sed -i 's|After=network.target|After=network-online.target\nWants=network-online.target|' /etc/systemd/system/wb_vpn.service
+        run /usr/bin/sudo systemctl daemon-reload
+      fi
     fi
-    rm -f "$TMP"
+  '';
+
+  xdg.configFile."pipewire/pipewire.conf.d/10-fix-sof-hda.conf".text = ''
+    context.properties = {
+      default.clock.rate = 48000
+      default.clock.allowed-rates = [ 48000 ]
+      default.clock.quantum = 1024
+      default.clock.min-quantum = 1024
+      default.clock.max-quantum = 2048
+    }
+  '';
+
+  xdg.configFile."wireplumber/wireplumber.conf.d/51-alsa-headroom.conf".text = ''
+    monitor.alsa.rules = [
+      {
+        matches = [
+          { node.name = "~alsa_output.*" }
+        ]
+        actions = {
+          update-props = {
+            api.alsa.headroom = 1024
+          }
+        }
+      }
+    ]
   '';
 
   home.packages = with pkgs; [

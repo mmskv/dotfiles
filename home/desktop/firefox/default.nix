@@ -27,6 +27,7 @@
 
       user_pref('network.trr.mode', 5);
       user_pref('security.cert_pinning.enforcement_level', 1);
+      user_pref('media.videocontrols.picture-in-picture.enabled', false);
     '';
 in {
   imports = [

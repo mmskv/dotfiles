@@ -141,7 +141,6 @@ in {
           "$git_branch"
           "$git_commit"
           "$git_state"
-          "$git_status"
           "$direnv"
           "$cmd_duration"
           "\${env_var.VAULT_PROMPT_STR}"
@@ -172,11 +171,7 @@ in {
           format = "[$branch]($style)";
           style = "bright-black";
         };
-        git_status = {
-          format = "[[($modified)](bright-black)($ahead_behind$stashed)]($style) ";
-          style = "cyan";
-          modified = "*";
-        };
+        git_status.disabled = true;
         nix_shell = {
           format = "[$symbol]($style)";
           style = "blue";

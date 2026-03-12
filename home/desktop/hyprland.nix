@@ -2,6 +2,7 @@
   lib,
   pkgs,
   pkgs-unstable,
+  pkgs-hyprland,
   config,
   nixgl,
   ...
@@ -63,11 +64,14 @@ in {
 
     package =
       if isLaptop
-      then config.lib.nixGL.wrap pkgs-unstable.hyprland
+      then config.lib.nixGL.wrap pkgs-hyprland.hyprland
       else null;
-    portalPackage = null;
+    portalPackage =
+      if isLaptop
+      then pkgs-hyprland.xdg-desktop-portal-hyprland
+      else null;
 
-    plugins = with pkgs-unstable.hyprlandPlugins; [
+    plugins = with pkgs-hyprland.hyprlandPlugins; [
       hyprsplit
       hy3
     ];
@@ -254,6 +258,12 @@ in {
         "SUPER, mouse:273, resizewindow"
       ];
 
+      # lid switch
+      bindl = lib.optionals isLaptop [
+        ",switch:on:Lid Switch, exec, hyprctl keyword monitor eDP-1, disable && systemctl restart --user waybar"
+        ",switch:off:Lid Switch, exec, hyprctl keyword monitor eDP-1, preferred, auto-left, 2 && systemctl restart --user waybar"
+      ];
+
       gesture = [
         "3, horizontal, workspace"
         "3, up, fullscreen"
@@ -302,7 +312,7 @@ in {
         if isLaptop
         then ''
           monitor=eDP-1,preferred,auto,2
-          monitor=,highrr,auto-center-up,1
+          monitor=DP-1,highrr,auto-center-up,1,bitdepth,10
         ''
         else ''
           monitor=DP-1,3440x1440@144,0x0,1
@@ -377,7 +387,7 @@ in {
             on-timeout = "systemctl suspend";
           }
           {
-            timeout = 10 * 60;
+            timeout = 5 * 60;
             on-timeout = "hyprctl dispatch dpms off";
             on-resume = "hyprctl dispatch dpms on";
           }
@@ -390,6 +400,75 @@ in {
           }
         ];
     };
+  };
+
+  programs.hyprlock = {
+    enable = true;
+    extraConfig = ''
+        general {
+          hide_cursor = true
+      }
+
+      # BACKGROUND CONFIGURATION
+      background {
+          path = /home/suck/dotfiles/wallpaper.jpg
+          blur_passes = 0
+          blur_size = 1
+      }
+
+      # INPUT FIELD (PASSWORD)
+      input-field {
+          size = 600, 100
+          position = 0, +200
+          monitor =
+          dots_center = true
+          fade_on_empty = false
+          font_color = rgba(100, 100, 100, 0.5)
+          inner_color = rgba(255, 255, 255, 0.1)
+          outer_color = rgba(255, 255, 255, 0.3)
+          outline_thickness = 2
+          placeholder_text = Password...
+          shadow_passes = 4
+          shadow_size = 8
+          shadow_color = rgba(0, 0, 0, 0.3)
+
+          # Glossy/glass effect settings
+          rounding = 40
+
+          # Authentication feedback
+          check_color = rgba(34, 204, 136, 0.8)
+          fail_color = rgba(204, 34, 34, 0.8)
+          fail_text = <i>$FAIL <b>($ATTEMPTS)</b></i>
+
+          # Additional glass effects
+          capslock_color = rgba(255, 193, 7, 0.8)
+          numlock_color = rgba(108, 117, 125, 0.8)
+      }
+
+      # TIME DISPLAY
+      label {
+          monitor =
+          text = cmd[update:1000] echo "$(date +"%H:%M")"
+          color = rgb(24, 25, 38)
+          font_size = 55
+          font_family = Fira Semibold
+          position = 0, -150
+          halign = center
+          valign = top
+      }
+
+      # DATE DISPLAY
+      label {
+          monitor =
+          text = cmd[update:43200000] echo "$(date +"%A, %d %B %Y")"
+          color = rgb(24, 25, 38)
+          font_size = 25
+          font_family = Fira Semibold
+          position = 0, -250
+          halign = center
+          valign = top
+      }
+    '';
   };
 
   services.clipse = {

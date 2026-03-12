@@ -14,6 +14,7 @@
     ./bluelight.nix
     ./vscode.nix
     ./xkb.nix
+    ./matterhorn.nix
 
     ./firefox
   ];

@@ -5,6 +5,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    # Pin to nixpkgs commit before hyprland 0.54.0 bump (hy3 incompatibility)
+    nixpkgs-hyprland.url = "github:nixos/nixpkgs/fce9aaf986a6d8a6e7e8edfe2ca75cef51651623";
+
     impermanence.url = "github:nix-community/impermanence";
 
     home-manager = {
@@ -30,6 +33,7 @@
   outputs = {
     nixpkgs,
     nixpkgs-unstable,
+    nixpkgs-hyprland,
     impermanence,
     home-manager,
     ucodenix,
@@ -43,6 +47,11 @@
       inherit sec;
 
       pkgs-unstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
+
+      pkgs-hyprland = import nixpkgs-hyprland {
         system = "x86_64-linux";
         config.allowUnfree = true;
       };
@@ -139,6 +148,12 @@
         inherit sec nixgl;
 
         pkgs-unstable = import nixpkgs-unstable {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+          overlays = [nixgl.overlay];
+        };
+
+        pkgs-hyprland = import nixpkgs-hyprland {
           system = "x86_64-linux";
           config.allowUnfree = true;
           overlays = [nixgl.overlay];

@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  pkgs-unstable,
+  pkgs-hyprland,
   config,
   ...
 }: let
@@ -12,8 +12,8 @@ in {
       hyprland = {
         enable = true;
 
-        package = pkgs-unstable.hyprland;
-        portalPackage = pkgs-unstable.xdg-desktop-portal-hyprland;
+        package = pkgs-hyprland.hyprland;
+        portalPackage = pkgs-hyprland.xdg-desktop-portal-hyprland;
 
         withUWSM = true;
       };

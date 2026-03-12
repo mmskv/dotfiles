@@ -18,7 +18,7 @@ in {
     autocmd DocLoad ^https://github.com mode ignore
 
     ${lib.concatStringsSep "\n"
-      (lib.mapAttrsToList (key: url: "quickmark ${key} ${url}") sec.tridactyl.quickmarks)}
+      (lib.mapAttrsToList (key: url: "bind go${key} open ${url}") sec.tridactyl.quickmarks)}
 
     ${lib.concatStringsSep "\n"
       (map (url: "bmark ${url}") sec.tridactyl.bmarks)}

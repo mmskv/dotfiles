@@ -21,6 +21,7 @@
     google-chrome
     element-desktop
     gimp3
+    terraform
 
     # fonts
     fira
