@@ -40,7 +40,7 @@ in {
         "workbench.editor.empty.hint" = "hidden";
         "github.copilot.chat.anthropic.tools.websearch.maxUses" = 10;
         "extensions.ignoreRecommendations" = true;
-        "chat.agent.maxRequests" = 100;
+        "chat.agent.maxRequests" = 200;
         "terminal.integrated.profiles.linux" = {
           "Fish Private" = {
             "path" = "fish";

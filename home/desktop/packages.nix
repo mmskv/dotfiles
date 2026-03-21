@@ -21,6 +21,8 @@
     google-chrome
     element-desktop
     gimp3
+    easyeffects
+    thunderbird-bin
 
     # fonts
     fira

@@ -1,7 +1,7 @@
 {pkgs, ...}: let
   brightnessDayScript = pkgs.writeShellScriptBin "brightness-day" ''
-    ${pkgs.ddcutil}/bin/ddcutil -d 1 setvcp 10 100 && \
-    ${pkgs.ddcutil}/bin/ddcutil -d 2 setvcp 10 80 && \
+    #${pkgs.ddcutil}/bin/ddcutil -d 1 setvcp 10 100 && \
+    #${pkgs.ddcutil}/bin/ddcutil -d 2 setvcp 10 80 && \
     if ! ${pkgs.hyprland}/bin/hyprctl hyprsunset identity 2>/dev/null; then
       systemctl --user restart hyprsunset.service
       sleep 2
@@ -10,8 +10,8 @@
   '';
 
   brightnessNightScript = pkgs.writeShellScriptBin "brightness-night" ''
-    ${pkgs.ddcutil}/bin/ddcutil -d 1 setvcp 10 100 && \
-    ${pkgs.ddcutil}/bin/ddcutil -d 2 setvcp 10 80 && \
+    #${pkgs.ddcutil}/bin/ddcutil -d 1 setvcp 10 100 && \
+    #${pkgs.ddcutil}/bin/ddcutil -d 2 setvcp 10 80 && \
     if ! ${pkgs.hyprland}/bin/hyprctl hyprsunset temperature 3000 2>/dev/null; then
       systemctl --user restart hyprsunset.service
       sleep 2

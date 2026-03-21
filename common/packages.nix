@@ -31,5 +31,7 @@
 
     (pkgs.writeShellScriptBin "vim" "exec nvim $@")
     (pkgs.writeShellScriptBin "sudo" "exec doas $@")
+
+    vulkan-hdr-layer-kwin6
   ];
 }

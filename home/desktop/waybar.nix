@@ -61,10 +61,10 @@
     separate-outputs = true;
   };
 
-  primaryOutput = ["eDP-1" "DP-1"];
+  primaryOutput = ["eDP-1" "DP-1" "DP-2"];
 
   secondaryRightOutput = "DP-3";
-  secondaryTopOutput = ["HDMI-A-1"];
+  secondaryTopOutput = ["HDMI-A-1" "HDMI-A-2"];
 in {
   programs.waybar = {
     enable = true;
@@ -247,7 +247,6 @@ in {
         window#waybar.top #workspaces button.active {
           padding-bottom: 2px;
           border-bottom: 2px solid @active;
-          color: @fg;
         }
 
         window#waybar.fullscreen #workspaces button.active {
@@ -266,13 +265,16 @@ in {
         #workspaces button.empty  { color: @border; }
 
         #clock {
-          font-weight: bolder;
+          font-weight: bold;
           font-size: 16px;
           padding: 3px 5px 3px 7px;
+          color: @fg;
         }
 
 
-        #pulseaudio-slider { padding: 10px 0px; }
+        #pulseaudio-slider {
+            padding: 10px 0px 10px 1px;
+        }
 
         #pulseaudio-slider slider {
           background: none;
@@ -287,10 +289,9 @@ in {
 
         #pulseaudio-slider trough {
           min-height: 80px;
-          min-width: 4px;
+          min-width: 3px;
           border-radius: 5px;
           background: black;
-          padding: 0px;
         }
 
         #pulseaudio-slider highlight {
