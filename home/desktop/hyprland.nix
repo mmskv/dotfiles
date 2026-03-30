@@ -80,6 +80,8 @@ in {
         enable_anr_dialog = false;
         size_limits_tiled = true;
         animate_manual_resizes = true;
+        enable_swallow = true;
+        swallow_regex = "^(Alacritty)$";
       };
 
       animations = {
@@ -241,8 +243,8 @@ in {
     };
 
     extraConfig = ''
-      monitor=DP-2,5120x2160@100.03,0x0,1,bitdepth,10
-      monitor=HDMI-A-2,3440x1440@99.99,5120x-1050,1,transform,1
+      monitor=DP-1,5120x2160@165.06,0x0,1,bitdepth,10
+      monitor=HDMI-A-1,3440x1440@99.99,5120x-1050,1,transform,1
 
       xwayland {
         force_zero_scaling = true
@@ -281,7 +283,7 @@ in {
     settings = {
       ipc = false;
       preload = ["${../../wallpaper.jpg}" "${../../wallpaper2.jpg}"];
-      wallpaper = ["DP-2,${../../wallpaper.jpg}" "HDMI-A-2,${../../wallpaper2.jpg}"];
+      wallpaper = ["DP-1,${../../wallpaper.jpg}" "HDMI-A-1,${../../wallpaper2.jpg}"];
     };
   };
 

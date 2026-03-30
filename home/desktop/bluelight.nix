@@ -75,7 +75,7 @@ in {
         Description = "Timer to set nighttime monitor brightness";
       };
       Timer = {
-        OnCalendar = "*-*-* 19:00:00";
+        OnCalendar = "*-*-* 20:00:00";
         Persistent = true;
       };
       Install = {
