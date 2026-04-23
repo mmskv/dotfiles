@@ -1,6 +1,9 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  pkgs-unstable,
+  ...
+}: {
   home.packages = with pkgs; [
-    obsidian
     xfce.thunar
     xfce.thunar-volman
     pavucontrol
@@ -22,6 +25,9 @@
     element-desktop
     gimp3
     terraform
+    pkgs-unstable.glab
+
+    pkgs-unstable.obsidian
 
     # fonts
     fira
