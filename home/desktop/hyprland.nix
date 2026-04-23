@@ -2,12 +2,13 @@
   lib,
   pkgs,
   pkgs-unstable,
-  pkgs-hyprland,
+  hyprlandPackages,
   config,
   nixgl,
   ...
 }: let
   isLaptop = config.custom.workLaptop.enable;
+  xdph = hyprlandPackages.hyprland-xdph;
 
   screenshot_name = ''$HOME"/screenshots/Screenshot $(date +%F) at $(date +%T).png"'';
 
@@ -51,6 +52,41 @@
   };
 
   uwsm = "uwsm app -- ";
+
+  monitor-event-handler = pkgs.writeShellScriptBin "monitor-event-handler" ''
+    ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while IFS= read -r line; do
+      case "$line" in
+        monitorremoved*|monitoradded*)
+          sleep 1
+          systemctl --user restart hyprsunset.service
+          sleep 2
+          systemctl --user start brightness-update.service
+          ;;
+      esac
+    done
+  '';
+
+  lid-close-script = pkgs.writeShellScriptBin "lid-close" ''
+    # Only disable laptop screen if an external monitor is connected
+    external=$(${pkgs.hyprland}/bin/hyprctl -j monitors | ${pkgs.jq}/bin/jq '[.[] | select(.name != "eDP-1")] | length')
+    if [ "$external" -gt 0 ]; then
+      ${pkgs.hyprland}/bin/hyprctl keyword monitor eDP-1,disable
+      systemctl restart --user waybar
+    fi
+  '';
+
+  nixGLIntel = pkgs.nixgl.nixGLIntel;
+
+  # Systemd drop-in that replaces ExecStart with a Nix binary.
+  # On non-NixOS, system units point at /usr/bin/* which may not match
+  # the Nix client libraries.
+  mkExecOverride = service: cmd: {
+    "systemd/user/${service}.service.d/override.conf".text = ''
+      [Service]
+      ExecStart=
+      ExecStart=${cmd}
+    '';
+  };
 in {
   targets.genericLinux.nixGL = {
     packages = nixgl.packages;
@@ -64,16 +100,16 @@ in {
 
     package =
       if isLaptop
-      then config.lib.nixGL.wrap pkgs-hyprland.hyprland
+      then config.lib.nixGL.wrap hyprlandPackages.hyprland-pkg
       else null;
     portalPackage =
       if isLaptop
-      then pkgs-hyprland.xdg-desktop-portal-hyprland
+      then hyprlandPackages.hyprland-xdph
       else null;
 
-    plugins = with pkgs-hyprland.hyprlandPlugins; [
-      hyprsplit
-      hy3
+    plugins = [
+      hyprlandPackages.hyprsplit-pkg
+      hyprlandPackages.hy3-pkg
     ];
 
     settings = {
@@ -85,6 +121,7 @@ in {
         ++ lib.optionals isLaptop [
           "${uwsm} nm-applet --indicator"
           "${uwsm} blueman-applet"
+          "${monitor-event-handler}/bin/monitor-event-handler"
         ];
 
       input =
@@ -120,6 +157,7 @@ in {
       misc = {
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
+        disable_autoreload = true;
         enable_anr_dialog = false;
         size_limits_tiled = true;
         animate_manual_resizes = true;
@@ -179,8 +217,8 @@ in {
         [
           # keybindings
           "SUPER, Return, exec, ${uwsm} alacritty"
-          "SUPER, B, exec, ${uwsm} firefox"
-          "SUPER SHIFT, B, exec, ${uwsm} google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
+          "SUPER, B, exec, ${uwsm} ${nixGLIntel}/bin/nixGLIntel firefox"
+          "SUPER SHIFT, B, exec, ${uwsm} ${nixGLIntel}/bin/nixGLIntel google-chrome-stable --enable-features=VaapiVideoDecodeLinuxGL --use-gl=angle --use-angle=gl --ozone-platform=wayland"
           "SUPER, Q, killactive,"
           "SUPER, F, fullscreen, 1"
           "SUPER, Space, togglefloating"
@@ -260,7 +298,7 @@ in {
 
       # lid switch
       bindl = lib.optionals isLaptop [
-        ",switch:on:Lid Switch, exec, hyprctl keyword monitor eDP-1, disable && systemctl restart --user waybar"
+        ",switch:on:Lid Switch, exec, ${lid-close-script}/bin/lid-close"
         ",switch:off:Lid Switch, exec, hyprctl keyword monitor eDP-1, preferred, auto-left, 2 && systemctl restart --user waybar"
       ];
 
@@ -313,6 +351,7 @@ in {
         then ''
           monitor=eDP-1,preferred,auto,2
           monitor=DP-1,highrr,auto-center-up,1,bitdepth,10
+          monitor=,preferred,auto,1
         ''
         else ''
           monitor=DP-1,3440x1440@144,0x0,1
@@ -506,21 +545,62 @@ in {
     ];
   in
     lib.mkIf isLaptop (builtins.listToAttrs (map (unit: {
-        name = "systemd/user/${unit}";
-        value.source = "${pkgs.uwsm}/share/systemd/user/${unit}";
-      })
-      uwsmUnits));
+          name = "systemd/user/${unit}";
+          value.source = "${pkgs.uwsm}/share/systemd/user/${unit}";
+        })
+        uwsmUnits)
+      // {
+        "systemd/user/xdg-desktop-portal-hyprland.service".source = "${xdph}/share/systemd/user/xdg-desktop-portal-hyprland.service";
+        "xdg-desktop-portal/hyprland-portals.conf".text = ''
+          [preferred]
+          default=hyprland;gtk
+        '';
+      }
+      # Wrap XDPH with nixGLIntel so Nix mesa can find DRI drivers for DMA-BUF capture
+      // mkExecOverride "xdg-desktop-portal-hyprland"
+      "${nixGLIntel}/bin/nixGLIntel ${xdph}/libexec/xdg-desktop-portal-hyprland"
+      # Use Nix xdg-desktop-portal binary so it discovers Nix-installed .portal files
+      // mkExecOverride "xdg-desktop-portal"
+      "${pkgs.xdg-desktop-portal}/libexec/xdg-desktop-portal"
+      # Replace system PipeWire/WirePlumber with Nix versions to match client libraries
+      // mkExecOverride "pipewire" "${pkgs.pipewire}/bin/pipewire"
+      // mkExecOverride "pipewire-pulse" "${pkgs.pipewire}/bin/pipewire-pulse"
+      // {
+        # WirePlumber 0.5 needs XDG_DATA_DIRS to prefer its own config over
+        # the system's incompatible 0.4 config at /usr/share/wireplumber/
+        "systemd/user/wireplumber.service.d/override.conf".text = ''
+          [Service]
+          ExecStart=
+          ExecStart=${pkgs.wireplumber}/bin/wireplumber
+          Environment=XDG_DATA_DIRS=${pkgs.wireplumber}/share:%E:%h/.local/share:/usr/local/share:/usr/share
+        '';
+      });
 
-  home.packages = with pkgs; [
-    (lib.mkIf isLaptop pkgs.nixgl.nixGLIntel)
+  # D-Bus service files must live in ~/.local/share/dbus-1/services/ because the
+  # session D-Bus daemon starts before Nix profile is sourced and its
+  # XDG_DATA_DIRS doesn't include ~/.nix-profile/share.
+  xdg.dataFile = lib.mkIf isLaptop {
+    "dbus-1/services/org.freedesktop.impl.portal.desktop.hyprland.service".source = "${xdph}/share/dbus-1/services/org.freedesktop.impl.portal.desktop.hyprland.service";
+    # Portal definition file must be discoverable for screen sharing to work
+    "xdg-desktop-portal/portals/hyprland.portal".source = "${xdph}/share/xdg-desktop-portal/portals/hyprland.portal";
+  };
 
-    hyprpicker
-    slurp
-    wl-clip-persist
-    wl-clipboard
-    wl-screenrec
-    grimblast
-    ddcutil
-    blueman
-  ];
+  home.packages = with pkgs;
+    [
+      hyprpicker
+      slurp
+      wl-clip-persist
+      wl-clipboard
+      wl-screenrec
+      grimblast
+      ddcutil
+      blueman
+    ]
+    ++ lib.optionals isLaptop [
+      nixGLIntel
+      xdg-desktop-portal
+      xdg-desktop-portal-gtk
+      pipewire
+      wireplumber
+    ];
 }

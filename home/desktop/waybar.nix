@@ -61,9 +61,9 @@
     separate-outputs = true;
   };
 
-  primaryOutput = ["eDP-1" "DP-1"];
+  primaryOutput = ["eDP-1" "DP-1" "DP-3"];
 
-  secondaryRightOutput = "DP-3";
+  secondaryRightOutput = "DP-4";
   secondaryTopOutput = ["HDMI-A-1"];
 in {
   programs.waybar = {

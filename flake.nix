@@ -5,9 +5,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # Pin to nixpkgs commit before hyprland 0.54.0 bump (hy3 incompatibility)
-    nixpkgs-hyprland.url = "github:nixos/nixpkgs/fce9aaf986a6d8a6e7e8edfe2ca75cef51651623";
-
     impermanence.url = "github:nix-community/impermanence";
 
     home-manager = {
@@ -24,6 +21,15 @@
 
     agenix.url = "github:ryantm/agenix";
 
+    # hy3 dictates the Hyprland version — everything else follows its pin
+    hy3.url = "github:outfoxxed/hy3";
+    hyprland.follows = "hy3/hyprland";
+
+    hyprsplit = {
+      url = "github:shezdy/hyprsplit";
+      inputs.hyprland.follows = "hy3/hyprland";
+    };
+
     nixgl = {
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,25 +39,29 @@
   outputs = {
     nixpkgs,
     nixpkgs-unstable,
-    nixpkgs-hyprland,
     impermanence,
     home-manager,
     ucodenix,
     nix-index-database,
     agenix,
+    hyprland,
+    hy3,
+    hyprsplit,
     nixgl,
     ...
   }: let
+    system = "x86_64-linux";
+    hyprlandPackages = {
+      hyprland-pkg = hyprland.packages.${system}.hyprland;
+      hyprland-xdph = hyprland.packages.${system}.xdg-desktop-portal-hyprland;
+      hy3-pkg = hy3.packages.${system}.hy3;
+      hyprsplit-pkg = hyprsplit.packages.${system}.hyprsplit;
+    };
     sec = import ./secrets.nix;
     specialArgs = {
-      inherit sec;
+      inherit sec hyprlandPackages;
 
       pkgs-unstable = import nixpkgs-unstable {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-      };
-
-      pkgs-hyprland = import nixpkgs-hyprland {
         system = "x86_64-linux";
         config.allowUnfree = true;
       };
@@ -145,15 +155,9 @@
         overlays = [nixgl.overlay];
       };
       extraSpecialArgs = {
-        inherit sec nixgl;
+        inherit sec nixgl hyprlandPackages;
 
         pkgs-unstable = import nixpkgs-unstable {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-          overlays = [nixgl.overlay];
-        };
-
-        pkgs-hyprland = import nixpkgs-hyprland {
           system = "x86_64-linux";
           config.allowUnfree = true;
           overlays = [nixgl.overlay];

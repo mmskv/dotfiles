@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  pkgs-hyprland,
+  hyprlandPackages,
   config,
   ...
 }: let
@@ -12,8 +12,8 @@ in {
       hyprland = {
         enable = true;
 
-        package = pkgs-hyprland.hyprland;
-        portalPackage = pkgs-hyprland.xdg-desktop-portal-hyprland;
+        package = hyprlandPackages.hyprland-pkg;
+        portalPackage = hyprlandPackages.hyprland-xdph;
 
         withUWSM = true;
       };

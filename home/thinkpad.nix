@@ -120,7 +120,7 @@ in {
       IFACE="$1"
       ACTION="$2"
       if [ "$ACTION" = "up" ] && nmcli -t -f TYPE connection show --active 2>/dev/null | grep -q wifi; then
-        systemctl restart wb_vpn 2>/dev/null || true
+        systemctl kill wb_vpn && systemctl restart wb_vpn 2>/dev/null || true
       fi
     '';
     postInstall = ''
@@ -200,5 +200,7 @@ in {
     cargo
     man-pages
     man-pages-posix
+    ansible
+    ansible-lint
   ];
 }
