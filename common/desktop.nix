@@ -16,6 +16,8 @@ in {
     boot.kernelModules = ["i2c-dev"];
     services.udev.extraRules = ''
       KERNEL=="i2c-[0-9]*", GROUP="wheel", MODE="0660"
+      # Disable USB autosuspend for Bluetooth adapters to prevent BLE disconnects
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{bDeviceClass}=="e0", ATTR{bDeviceSubClass}=="01", ATTR{power/autosuspend}="-1"
     '';
 
     services = {
