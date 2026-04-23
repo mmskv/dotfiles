@@ -25,6 +25,7 @@
     python3
     rustc
     cargo
+    rust-analyzer
 
     pkgs.man-pages
     pkgs.man-pages-posix

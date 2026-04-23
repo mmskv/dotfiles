@@ -216,6 +216,7 @@ in {
 
           "match:class ^org.telegram.desktop$, match:title ^Media viewer$, fullscreen on"
 
+          "match:class ^thunderbird$, workspace 1 silent"
           "match:class ^thunderbird$, float on, center on"
           "match:class ^thunderbird$, match:initial_title ^Mozilla Thunderbird$, tile on"
 
@@ -243,8 +244,10 @@ in {
     };
 
     extraConfig = ''
-      monitor=DP-1,5120x2160@165.06,0x0,1,bitdepth,10
-      monitor=HDMI-A-1,3440x1440@99.99,5120x-1050,1,transform,1
+      monitor=DP-1,5120x2160@60.00,0x0,1,bitdepth,10
+      monitor=HDMI-A-1,3440x1440@60.00,5120x-1050,1,transform,1
+      monitor=DP-2,preferred,0x0,1,bitdepth,10
+      monitor=HDMI-A-2,3440x1440@100.00,5120x-1050,1,transform,1
 
       xwayland {
         force_zero_scaling = true
@@ -283,7 +286,7 @@ in {
     settings = {
       ipc = false;
       preload = ["${../../wallpaper.jpg}" "${../../wallpaper2.jpg}"];
-      wallpaper = ["DP-1,${../../wallpaper.jpg}" "HDMI-A-1,${../../wallpaper2.jpg}"];
+      wallpaper = ["DP-2,${../../wallpaper.jpg}" "DP-1,${../../wallpaper.jpg}" "HDMI-A-1,${../../wallpaper2.jpg}" "HDMI-A-2,${../../wallpaper2.jpg}"];
     };
   };
 

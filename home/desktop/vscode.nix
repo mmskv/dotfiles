@@ -50,6 +50,13 @@ in {
         };
         "terminal.integrated.defaultProfile.linux" = "Fish Private";
 
+        "github.copilot.enable" = {
+          "*" = false;
+          "plaintext" = false;
+          "markdown" = false;
+          "scminput" = false;
+        };
+
         # Theme
         "workbench.colorTheme" = "Kanagawa Dragon";
 
