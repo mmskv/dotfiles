@@ -1,15 +1,18 @@
-{
-  sec,
-  lib,
-  config,
-  ...
-}: {
+{sec, ...}: {
   programs.git = {
     enable = true;
 
     settings = {
       user = {
         inherit (sec.user) name email;
+      };
+
+      status.useBuiltinFSMonitor = true;
+
+      core = {
+        fsmonitor = true;
+        preloadIndex = true;
+        untrackedCache = true;
       };
 
       alias = {

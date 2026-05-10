@@ -4,7 +4,7 @@
 
     settings = {
       font = {
-        size = 10;
+        size = 14;
         offset = {
           x = 0;
           y = -1;
@@ -81,7 +81,7 @@
           yellow = "0xDE935F";
         };
         primary = {
-          background = "0x141212";
+          background = "0x141414";
           foreground = "0xC5C8C6";
         };
       };

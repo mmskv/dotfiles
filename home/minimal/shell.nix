@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-unstable,
   lib,
   config,
   sec,
@@ -31,7 +32,7 @@ in {
         rm = "rm -v";
         ip = "ip -c";
       }
-      // sec.shellAliases;
+      // (sec.shellAliases or {});
 
     loginShellInit = lib.mkIf isDesktop ''
       if test (tty) = /dev/tty1 && uwsm check may-start
@@ -114,6 +115,12 @@ in {
       '';
   };
 
+  programs.fzf = {
+    enable = true;
+    package = pkgs-unstable.fzf;
+    enableFishIntegration = false;
+  };
+
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
@@ -171,6 +178,7 @@ in {
           format = "[$branch]($style)";
           style = "bright-black";
         };
+        git_status.disabled = true;
         nix_shell = {
           format = "[$symbol]($style)";
           style = "blue";
@@ -244,9 +252,12 @@ in {
   home.packages = with pkgs; [
     (lib.mkIf isDesktop fishPlugins.done)
 
-    fishPlugins.fzf-fish
     fishPlugins.hydro
     fishPlugins.grc
+    (fishPlugins.fzf-fish.overrideAttrs (_: {
+      meta.broken = false;
+      doCheck = false;
+    }))
     grc
     fd
     vault

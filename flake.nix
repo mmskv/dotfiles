@@ -25,6 +25,11 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -36,6 +41,7 @@
     nix-index-database,
     agenix,
     nixgl,
+    nix-darwin,
     ...
   }: let
     sec = import ./secrets.nix;
@@ -48,6 +54,39 @@
       };
     };
     extraSpecialArgs = specialArgs;
+
+    darwinSpecialArgs = {
+      inherit sec;
+      pkgs-unstable = import nixpkgs-unstable {
+        system = "aarch64-darwin";
+        config.allowUnfree = true;
+      };
+    };
+
+    mkMacSystem = nix-darwin.lib.darwinSystem {
+      specialArgs = darwinSpecialArgs;
+      modules = [
+        ./hosts/mac
+
+        home-manager.darwinModules.home-manager
+        {
+          home-manager = {
+            users.${sec.mac.user} = {
+              imports = [
+                nix-index-database.homeModules.nix-index
+                ./home/mac
+              ];
+              programs.nix-index-database.comma.enable = true;
+            };
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            backupFileExtension = "hm-backup";
+
+            extraSpecialArgs = darwinSpecialArgs;
+          };
+        }
+      ];
+    };
   in {
     nixosConfigurations = {
       Wintermute = nixpkgs.lib.nixosSystem {
@@ -128,6 +167,8 @@
         ];
       };
     };
+
+    darwinConfigurations.${sec.mac.hostname} = mkMacSystem;
 
     homeConfigurations."suck@thinkpad" = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {

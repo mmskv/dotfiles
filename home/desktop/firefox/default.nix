@@ -4,6 +4,59 @@
   sec,
   ...
 }: let
+  policies = {
+    DisplayBookmarksToolbar = "never";
+    DefaultDownloadDirectory = "\${home}/Downloads";
+    Cookies.Allow = sec.allowCookies;
+
+    ExtensionSettings = {
+      "*" = {
+        installation_mode = "blocked";
+      };
+
+      "{17c7f098-dbb8-4f15-ad39-8b578da80f7e}" = {
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/behave/latest.xpi";
+        installation_mode = "force_installed";
+      };
+
+      "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
+        default_area = "navbar";
+        installation_mode = "force_installed";
+      };
+
+      "uBlock0@raymondhill.net" = {
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+        installation_mode = "force_installed";
+      };
+
+      "addon@darkreader.org" = {
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
+        installation_mode = "force_installed";
+      };
+
+      "firefox-compact-dark@mozilla.org" = {
+        installation_mode = "force_installed";
+      };
+
+      "tridactyl.vim.betas@cmcaine.co.uk" = {
+        install_url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl-latest.xpi";
+        installation_mode = "force_installed";
+      };
+    };
+  };
+
+  darwinFirefox = pkgs.firefox.overrideAttrs (old: {
+    postInstall =
+      (old.postInstall or "")
+      + ''
+        install -m444 ${(pkgs.formats.json {}).generate "policies.json" {
+          policies = policies // {DisableAppUpdate = true;};
+        }} \
+          $out/Applications/Firefox.app/Contents/Resources/distribution/policies.json
+      '';
+  });
+
   extraConfig =
     builtins.readFile "${pkgs.arkenfox-userjs}/user.js"
     + "\n"
@@ -31,6 +84,9 @@
       user_pref('geo.enabled', false);
       user_pref('browser.eme.ui.enabled', false);
       user_pref('media.eme.enabled', false);
+      user_pref('media.videocontrols.picture-in-picture.enabled', false);
+
+      user_pref('intl.locale.requested', 'en-US');
     '';
 in {
   imports = [
@@ -42,49 +98,11 @@ in {
   programs.firefox = {
     enable = true;
 
+    package = lib.mkIf pkgs.stdenv.isDarwin darwinFirefox;
+
     nativeMessagingHosts = [pkgs.tridactyl-native];
 
-    policies = {
-      DisplayBookmarksToolbar = "never";
-      DefaultDownloadDirectory = "\${home}/Downloads";
-      Cookies.Allow = sec.allowCookies;
-
-      ExtensionSettings = {
-        "*" = {
-          installation_mode = "blocked";
-        };
-
-        "{17c7f098-dbb8-4f15-ad39-8b578da80f7e}" = {
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/behave/latest.xpi";
-          installation_mode = "force_installed";
-        };
-
-        "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
-          default_area = "navbar";
-          installation_mode = "force_installed";
-        };
-
-        "uBlock0@raymondhill.net" = {
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
-          installation_mode = "force_installed";
-        };
-
-        "addon@darkreader.org" = {
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
-          installation_mode = "force_installed";
-        };
-
-        "firefox-compact-dark@mozilla.org" = {
-          installation_mode = "force_installed";
-        };
-
-        "tridactyl.vim.betas@cmcaine.co.uk" = {
-          install_url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl-latest.xpi";
-          installation_mode = "force_installed";
-        };
-      };
-    };
+    inherit policies;
 
     profiles.default = {
       id = 0;

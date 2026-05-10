@@ -124,6 +124,14 @@ in {
           (cmds (k "<C-n>") ["selectNextSuggestion"])
         ];
       };
+      keybindings = [
+        {
+          key = "cmd+c";
+          command = "workbench.action.terminal.sendSequence";
+          args = { text = "\\u0003"; };
+          when = "terminalFocus && !terminalHasTextSelection";
+        }
+      ];
     };
   };
 }
