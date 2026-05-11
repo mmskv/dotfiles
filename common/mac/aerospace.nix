@@ -158,6 +158,10 @@ in {
         }
       ];
 
+      after-startup-command = [
+        ''exec-and-forget /bin/launchctl kickstart -k "gui/$(/usr/bin/id -u)/com.acsandmann.swipe"''
+      ];
+
       exec-on-workspace-change = ["${onWorkspaceChange}"];
 
       workspace-to-monitor-force-assignment =
