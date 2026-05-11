@@ -6,6 +6,7 @@
   imports = [
     ../options.nix
     ./aerospace.nix
+    ./aerospace-swipe.nix
     ./sketchybar.nix
     ./vpn.nix
   ];

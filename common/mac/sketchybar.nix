@@ -13,16 +13,6 @@
   mkScripts = isExt: bin: let
     SB = bin;
   in {
-    # instance for external monitor
-    nixpkgs.overlays = [
-      (final: prev: {
-        sketchybarExt = prev.runCommand "sketchybar-ext" {} ''
-          mkdir -p $out/bin
-          ln -s ${prev.sketchybar}/bin/sketchybar $out/bin/sketchybar-ext
-        '';
-      })
-    ];
-
     workspace = pkgs.writeShellScript "sb-workspace-${baseNameOf bin}" ''
       focused=''${FOCUSED_WORKSPACE:-$(${pkgs.aerospace}/bin/aerospace list-workspaces --focused 2>/dev/null)}
       ws=''${NAME#space.}
@@ -228,6 +218,16 @@
     sketchybar-ext --update
   '';
 in {
+  # instance for external monitor
+  nixpkgs.overlays = [
+    (final: prev: {
+      sketchybarExt = prev.runCommand "sketchybar-ext" {} ''
+        mkdir -p $out/bin
+        ln -s ${prev.sketchybar}/bin/sketchybar $out/bin/sketchybar-ext
+      '';
+    })
+  ];
+
   fonts.packages = with pkgs; [
     nerd-fonts.fira-mono
   ];
@@ -257,11 +257,6 @@ in {
         scripts = main;
       }}
 
-      # Right region — `right` direction grows leftward, so add in
-      # reverse of intended display order. Display order left→right:
-      # vpn, mic, battery, kbd, date, time. padding_left=8 on the
-      # leftmost item of each "group" opens a wider gap; default
-      # padding=4 is the in-group gap.
       sketchybar                                                  \
         --add item clock_time right                               \
         --set  clock_time update_freq=30 script="${main.clock "%H:%M"}" \
