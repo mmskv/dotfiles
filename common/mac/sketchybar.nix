@@ -10,6 +10,8 @@
   colorBorder = "0xff212121";
   colorErr = "0xffF0C674";
 
+  pm = pkgs.callPackage ../pm {};
+
   mkScripts = isExt: bin: let
     SB = bin;
   in {
@@ -63,7 +65,7 @@
       fi
     '';
 
-    # Quadratic falloff white → black: brightness = (cap/100)^2 * 255.
+    # White (DCD7BA) above 50%, quadratic ease to red (FF0000) toward 0%.
     battery = pkgs.writeShellScript "sb-battery-${baseNameOf bin}" ''
       batt=$(/usr/bin/pmset -g batt 2>/dev/null)
       case "$batt" in
@@ -72,13 +74,22 @@
       esac
       cap=0
       [[ "$batt" =~ ([0-9]+)% ]] && cap=''${BASH_REMATCH[1]}
-      b=$(( cap * cap * 255 / 10000 ))
-      [ "$b" -gt 255 ] && b=255
-      hex=$(printf '%02X' "$b")
-      color="0xff''${hex}''${hex}''${hex}"
+      [ "$cap" -gt 100 ] && cap=100
+      [ "$cap" -lt 0 ] && cap=0
+      threshold=50
+      if [ "$cap" -ge "$threshold" ]; then
+        r=220; g=215; b=186
+      else
+        diff=$(( threshold - cap ))
+        t2=$(( diff * diff * 1000 / (threshold * threshold) ))
+        r=$(( 220 + t2 *  35 / 1000 ))
+        g=$(( 215 - t2 * 215 / 1000 ))
+        b=$(( 186 - t2 * 186 / 1000 ))
+      fi
+      color=$(printf '0xff%02X%02X%02X' "$r" "$g" "$b")
       case "$batt" in
-        *charging*) letter=C ;;
-        *)          letter=B ;;
+        *"; charging"*) letter=C ;;
+        *)              letter=B ;;
       esac
       ${SB} --set "$NAME" drawing=on label="$letter" label.color="$color"
     '';
@@ -114,6 +125,18 @@
         raw=$(${pkgs.coreutils}/bin/date '+${fmt}')
         ${SB} --set "$NAME" label="''${raw//  / }"
       '';
+
+    pomodoro = pkgs.writeShellScript "sb-pomodoro-${baseNameOf bin}" ''
+      out=$(${pm}/bin/pm tick)
+      if [ -z "$out" ]; then
+        ${SB} --set "$NAME" drawing=off
+      else
+        case "$out" in
+          W*) ${SB} --set "$NAME" drawing=on label="$out" label.color=${colorActive} ;;
+          *)  ${SB} --set "$NAME" drawing=on label="R" label.color=${colorBorder} ;;
+        esac
+      fi
+    '';
   };
 
   main = mkScripts false "sketchybar";
@@ -212,7 +235,12 @@
       --subscribe mic mic_toggle                                      \
       --add item vpn right                                            \
       --set  vpn update_freq=10 script="${ext.vpn}"                   \
-                 label.color=${colorBorder}
+                 label.color=${colorBorder}                           \
+      --add item pomodoro right                                       \
+      --set  pomodoro update_freq=10 updates=on                       \
+                      script="${ext.pomodoro}"                        \
+                      click_script="${pm}/bin/pm toggle"              \
+                      drawing=off
 
     sketchybar-ext --update
   '';
@@ -235,6 +263,7 @@ in {
     mos
     choose-gui
     sketchybarExt
+    pm
   ];
 
   services.sketchybar = {
@@ -275,7 +304,13 @@ in {
         --subscribe mic mic_toggle                                \
         --add item vpn right                                      \
         --set  vpn update_freq=10 script="${main.vpn}"            \
-                   label.color=${colorBorder}
+                   label.color=${colorBorder}                     \
+        --add item pomodoro right                                 \
+        --set  pomodoro update_freq=10 updates=on                 \
+                        script="${main.pomodoro}"                 \
+                        click_script="${pm}/bin/pm toggle"        \
+                        padding_left=8                            \
+                        drawing=off
 
       sketchybar --update
     '';

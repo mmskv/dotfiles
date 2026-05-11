@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
+    (pkgs.callPackage ../../common/pm {})
     obsidian
     xfce.thunar
     xfce.thunar-volman
