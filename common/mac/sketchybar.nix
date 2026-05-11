@@ -151,20 +151,19 @@
         background.drawing=off
 
     ${bin} --add event aerospace_workspace_change
+    ${bin} --add event fullscreen_changed
     ${bin} --add event mic_toggle
 
     for i in 1 2 3 4 5 6 7 8 9; do
       ws="${wsPrefix}-$i"
       ${bin} --add item space.$ws left                          \
              --set space.$ws                                    \
-                 updates=on                                     \
-                 update_freq=10                                 \
                  padding_left=${toString wsPadding}             \
                  padding_right=${toString wsPadding}            \
                  label="$i"                                     \
                  click_script="${pkgs.aerospace}/bin/aerospace workspace $ws" \
                  script="${scripts.workspace}"                  \
-             --subscribe space.$ws aerospace_workspace_change front_app_switched
+             --subscribe space.$ws aerospace_workspace_change fullscreen_changed
     done
   '';
 

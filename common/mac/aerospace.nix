@@ -41,6 +41,11 @@
     ${pkgs.sketchybarExt}/bin/sketchybar-ext    --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$AEROSPACE_FOCUSED_WORKSPACE" 2>/dev/null || true
   '';
 
+  onFullscreenChange = pkgs.writeShellScript "aerospace-fs-changed" ''
+    ${pkgs.sketchybar}/bin/sketchybar           --trigger fullscreen_changed 2>/dev/null || true
+    ${pkgs.sketchybarExt}/bin/sketchybar-ext    --trigger fullscreen_changed 2>/dev/null || true
+  '';
+
   openHmApp = app: ''exec-and-forget open -na "${sec.mac.homeDir}/Applications/Home Manager Apps/${app}.app"'';
 
   numbers = lib.range 1 9;
@@ -165,7 +170,7 @@ in {
           cmd-b = openHmApp "Firefox";
           cmd-shift-b = "exec-and-forget open -a /Applications/Safari.app";
           cmd-esc = ''${openHmApp "Alacritty-clipse"} --args -e ${pkgs.clipse}/bin/clipse'';
-          cmd-f = "fullscreen";
+          cmd-f = ["fullscreen" "exec-and-forget ${onFullscreenChange}"];
           cmd-space = "layout floating tiling";
 
           f13 = "exec-and-forget screencapture -c -w";
