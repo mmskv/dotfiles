@@ -8,6 +8,8 @@
     ./impermanence.nix
     ./k3s.nix
     ./nfs.nix
+    ./smart.nix
+    ./ntp.nix
   ];
 
   users = {
@@ -21,6 +23,11 @@
   };
 
   hardware.cpu.intel.updateMicrocode = true;
+  nixpkgs.config.allowUnfree = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
 
   networking = {
     hostName = "Hosaka";

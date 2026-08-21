@@ -1,4 +1,4 @@
-{sec, ...}: {
+{sec, pkgs-unstable, ...}: {
   networking.firewall.allowedTCPPorts = [
     6443 # api
 
@@ -11,9 +11,9 @@
   services.k3s = {
     enable = true;
     role = "server";
+    package = pkgs-unstable.k3s_1_36;
 
     extraFlags = toString [
-      "--snapshotter=zfs"
       "--disable traefik"
       "--disable metrics-server"
       "--disable-network-policy"
@@ -31,7 +31,7 @@
     };
   };
 
-  fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.zfs" = {
+  fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs" = {
     device = "wrpool/containerd";
     fsType = "zfs";
   };

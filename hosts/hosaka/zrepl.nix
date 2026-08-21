@@ -10,19 +10,28 @@
     key = config.age.secrets."zrepl/Hosaka.key".path;
   };
 in {
-  networking.firewall.allowedTCPPorts = [sec.zrepl.Hosaka.port];
+  networking.firewall.allowedTCPPorts = [sec.zrepl.Hosaka.port 9811];
 
   services.zrepl = {
     enable = true;
 
     settings = {
-      global.logging = [
-        {
-          type = "syslog";
-          level = "info";
-          format = "human";
-        }
-      ];
+      global = {
+        logging = [
+          {
+            type = "syslog";
+            level = "info";
+            format = "human";
+          }
+        ];
+        monitoring = [
+          {
+            type = "prometheus";
+            listen = ":9811";
+            listen_freebind = true;
+          }
+        ];
+      };
 
       jobs = [
         {
@@ -54,7 +63,11 @@ in {
 
           filesystems = {
             "wrpool/home/root" = true;
-            "wrpool/services" = true;
+            "wrpool/persist" = true;
+            "wrpool/services" = false;
+            "wrpool/services/gonic/cache" = false;
+            "wrpool/services/immich-mlcache" = false;
+            "wrpool/services<" = true;
           };
 
           snapshotting = {
@@ -84,6 +97,34 @@ in {
               {
                 type = "grid";
                 grid = "5x1h | 35x1d | 24x30d";
+                regex = "^zrepl_.*";
+              }
+            ];
+          };
+        }
+        {
+          type = "snap";
+          name = "snap_warehouse_services";
+
+          filesystems = {
+            "warehouse/services<" = true;
+          };
+
+          snapshotting = {
+            type = "periodic";
+            interval = "1h";
+            prefix = "zrepl_";
+          };
+
+          pruning = {
+            keep = [
+              {
+                type = "regex";
+                regex = "^manual_.*";
+              }
+              {
+                type = "grid";
+                grid = "5x1h | 35x1d | 3x30d";
                 regex = "^zrepl_.*";
               }
             ];
