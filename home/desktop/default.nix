@@ -16,7 +16,6 @@
     ./xdg-open-in-vim.nix
     ./syncthing.nix
     ./bluelight.nix
-    ./vscode.nix
     ./xkb.nix
     ./cal.nix
     ./thunar.nix

@@ -88,6 +88,8 @@
       user_pref('media.videocontrols.picture-in-picture.enabled', false);
 
       user_pref('intl.locale.requested', 'en-US');
+
+      user_pref('geo.enabled', false);
     '';
 in {
   imports = [
