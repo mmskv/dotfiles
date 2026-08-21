@@ -2,6 +2,7 @@
   lib,
   pkgs,
   sec,
+  config,
   ...
 }: let
   policies = {
@@ -99,6 +100,7 @@ in {
     enable = true;
 
     package = lib.mkIf pkgs.stdenv.isDarwin darwinFirefox;
+    configPath = lib.mkIf (!pkgs.stdenv.isDarwin) "${config.xdg.configHome}/mozilla/firefox";
 
     nativeMessagingHosts = [pkgs.tridactyl-native];
 

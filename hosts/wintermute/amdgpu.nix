@@ -1,4 +1,4 @@
-{config, ...}: {
+{...}: {
   boot = {
     kernelModules = ["kvm-amd"];
     kernelParams = ["amdgpu.ppfeaturemask=0xfffd7fff"];
@@ -31,8 +31,6 @@
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-
     modesetting.enable = true;
 
     powerManagement.finegrained = false;

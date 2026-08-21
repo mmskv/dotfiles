@@ -62,7 +62,7 @@
               }
               {
                 type = "grid";
-                grid = "10x5h | 35x1d | 24x30d";
+                grid = "1x1h(keep=all) | 10x5h | 35x1d | 24x30d";
                 regex = "^zrepl_.*";
               }
             ];

@@ -152,7 +152,7 @@ in {
           return-type = "json";
           interval = 2;
           exec = pkgs.writeShellScript "vpn-check" ''
-            if output=$(${pkgs.dogdns}/bin/dog o-o.myaddr.l.google.com --tls @dns.google txt -1 2>/dev/null); then
+            if output=$(${pkgs.doggo}/bin/doggo --short o-o.myaddr.l.google.com TXT @tls://dns.google 2>/dev/null); then
                 echo "$output" | grep -q ${sec.mysubnet} && \
                 echo '{"text": "V", "class": "off"}' || echo '{"text": "V", "class": "on"}'
             else

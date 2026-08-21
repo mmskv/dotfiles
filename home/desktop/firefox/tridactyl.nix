@@ -3,7 +3,7 @@
   sec,
   ...
 }: let
-  ch = "25.11";
+  ch = "26.05";
 in {
   xdg.configFile."tridactyl/tridactylrc".text = ''
     set searchurls.rust https://doc.rust-lang.org/std/index.html?search=

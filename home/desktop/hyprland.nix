@@ -5,51 +5,34 @@
   ...
 }: let
   screenshot_name = ''$HOME"/screenshots/Screenshot $(date +%F) at $(date +%T).png"'';
-
-  clipse = pkgs.buildGoModule rec {
-    pname = "clipse";
-    version = "1.2.1";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "savedra1";
-      repo = "clipse";
-      rev = "v${version}";
-      hash = "sha256-iDMHEhYuxspBYG54WivnVj2GfMxAc5dcrjNxtAMhsck=";
-    };
-
-    vendorHash = "sha256-rq+2UhT/kAcYMdla+Z/11ofNv2n4FLvpVgHZDe0HqX4=";
-
-    tags = ["wayland"];
-
-    env = {
-      CGO_ENABLED = "0";
-    };
-
-    meta = {
-      description = "Configurable TUI clipboard manager for Unix";
-      homepage = "https://github.com/savedra1/clipse";
-      license = pkgs.lib.licenses.mit;
-      mainProgram = "clipse";
-    };
-  };
 in {
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
+    configType = "hyprlang";
 
     package = null;
     portalPackage = null;
 
-    plugins = with pkgs-unstable.hyprlandPlugins; [
-      hyprsplit
-      hy3
+    plugins = [
+      (pkgs.hyprlandPlugins.hyprsplit.overrideAttrs (_: {
+        version = "unstable-2026-05-22";
+        src = pkgs.fetchFromGitHub {
+          owner = "shezdy";
+          repo = "hyprsplit";
+          rev = "0fc01e7930625ecb3e069f5dc8e1d61eab929f3b";
+          hash = "sha256-XpwuFhwnfwPbzImZeUWWns///UEpoKNkpl1hN90C3Ag=";
+        };
+      }))
+      pkgs.hyprlandPlugins.hy3
     ];
 
     settings = {
       exec-once = [
         "hyprctl setcursor phinger-cursors-dark 24"
         "uwsm app -- wl-clip-persist --clipboard both"
+        "uwsm app -- thunderbird"
       ];
 
       input = {
@@ -82,6 +65,8 @@ in {
         animate_manual_resizes = true;
         enable_swallow = true;
         swallow_regex = "^(Alacritty)$";
+        mouse_move_enables_dpms = true;
+        key_press_enables_dpms = true;
       };
 
       animations = {
@@ -205,8 +190,8 @@ in {
       # windowrulev2
       windowrule =
         [
-          "match:class ^tauonmb$, workspace 5"
-          "match:class ^org.telegram.desktop$, workspace 1"
+          "match:class ^tauonmb$, workspace 14"
+          "match:class ^org.telegram.desktop$, workspace 10"
           "match:class ^firefox$, idle_inhibit fullscreen"
           "match:class ^mpv$, idle_inhibit focus"
 
@@ -216,7 +201,7 @@ in {
 
           "match:class ^org.telegram.desktop$, match:title ^Media viewer$, fullscreen on"
 
-          "match:class ^thunderbird$, workspace 1 silent"
+          "match:class ^thunderbird$, workspace 10"
           "match:class ^thunderbird$, float on, center on"
           "match:class ^thunderbird$, match:initial_title ^Mozilla Thunderbird$, tile on"
 
@@ -244,10 +229,9 @@ in {
     };
 
     extraConfig = ''
-      monitor=DP-1,5120x2160@60.00,0x0,1,bitdepth,10
-      monitor=HDMI-A-1,3440x1440@60.00,5120x-1050,1,transform,1
-      monitor=DP-2,preferred,0x0,1,bitdepth,10
-      monitor=HDMI-A-2,3440x1440@100.00,5120x-1050,1,transform,1
+      monitor=DP-1,5120x2160@165.00,0x0,1
+      monitor=DP-2,preferred,0x0,1
+      monitor=DP-3,3440x1440@144.00,-1440x-640,1,transform,1
 
       xwayland {
         force_zero_scaling = true
@@ -285,8 +269,18 @@ in {
     enable = true;
     settings = {
       ipc = false;
-      preload = ["${../../wallpaper.jpg}" "${../../wallpaper2.jpg}"];
-      wallpaper = ["DP-2,${../../wallpaper.jpg}" "DP-1,${../../wallpaper.jpg}" "HDMI-A-1,${../../wallpaper2.jpg}" "HDMI-A-2,${../../wallpaper2.jpg}"];
+      # hyprpaper 0.8+ renders Hyprland's splash text itself and defaults to on
+      splash = false;
+      # hyprpaper 0.8+ config format: repeated wallpaper {} blocks, no preload
+      wallpaper =
+        (map (m: {
+          monitor = m;
+          path = "${../../wallpaper.jpg}";
+        }) ["DP-1" "DP-2"])
+        ++ (map (m: {
+          monitor = m;
+          path = "${../../wallpaper2.jpg}";
+        }) ["DP-3"]);
     };
   };
 
@@ -308,9 +302,14 @@ in {
     settings = {
       listener = [
         {
-          timeout = 5 * 60;
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          timeout = 10 * 60;
+          # wlopm (wlr-output-power-management), NOT `hyprctl dispatch dpms`:
+          # the native dpms-on path fails to re-enable the outputs on wake on
+          # this NVIDIA setup and leaves the monitors stuck black. wlopm's
+          # re-enable path wakes reliably. The intermittent wake-time crash is
+          # handled downstream (hyprsunset Restart=on-failure + Hyprland patch).
+          on-timeout = "${pkgs.wlopm}/bin/wlopm --off '*'";
+          on-resume = "${pkgs.wlopm}/bin/wlopm --on '*'";
         }
       ];
     };
@@ -318,7 +317,7 @@ in {
 
   services.clipse = {
     enable = true;
-    package = clipse;
+    package = pkgs-unstable.clipse;
     allowDuplicates = false;
     historySize = 1000;
     systemdTarget = "hyprland-session.target";

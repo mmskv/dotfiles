@@ -1,10 +1,21 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+
+    withRuby = false;
+    withPython3 = false;
+    withNodeJs = false;
   };
+
+  # I have my own init.lua outside of nix
+  xdg.configFile."nvim/init.lua".enable = lib.mkForce false;
 
   home.packages = with pkgs; [
     tree-sitter
@@ -17,7 +28,7 @@
     go
     gotools
     prettierd
-    pyright
+    basedpyright
     clang-tools
     yamlfmt
     isort

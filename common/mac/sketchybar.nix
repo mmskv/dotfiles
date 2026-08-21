@@ -45,7 +45,7 @@
     '';
 
     vpn = pkgs.writeShellScript "sb-vpn-${baseNameOf bin}" ''
-      if output=$(${pkgs.dogdns}/bin/dog o-o.myaddr.l.google.com --tls @dns.google txt -1 2>/dev/null); then
+      if output=$(${pkgs.doggo}/bin/doggo --short o-o.myaddr.l.google.com TXT @tls://dns.google 2>/dev/null); then
         if echo "$output" | grep -q ${sec.mysubnet}; then
           ${SB} --set "$NAME" label=V label.color=${colorBorder}
         else
@@ -268,7 +268,7 @@ in {
 
   services.sketchybar = {
     enable = true;
-    extraPackages = with pkgs; [coreutils jq aerospace dogdns];
+    extraPackages = with pkgs; [coreutils jq aerospace doggo];
     config = ''
       #!/usr/bin/env bash
 
@@ -327,7 +327,7 @@ in {
       RunAtLoad = true;
     };
     environment.PATH = lib.concatStringsSep ":" (
-      [(lib.makeBinPath (with pkgs; [sketchybarExt sketchybar coreutils jq aerospace dogdns]))]
+      [(lib.makeBinPath (with pkgs; [sketchybarExt sketchybar coreutils jq aerospace doggo]))]
       ++ [
         "/run/current-system/sw/bin"
         "/nix/var/nix/profiles/default/bin"

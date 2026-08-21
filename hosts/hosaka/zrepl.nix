@@ -37,6 +37,7 @@ in {
             };
 
           recv.properties.override.canmount = "off";
+          recv.properties.override.readonly = "on";
         }
         {
           type = "push";

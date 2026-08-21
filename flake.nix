@@ -2,13 +2,13 @@
   description = "mmskv's nixos infra";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     impermanence.url = "github:nix-community/impermanence";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -21,13 +21,8 @@
 
     agenix.url = "github:ryantm/agenix";
 
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -40,13 +35,12 @@
     ucodenix,
     nix-index-database,
     agenix,
-    nixgl,
     nix-darwin,
     ...
-  }: let
+  } @ inputs: let
     sec = import ./secrets.nix;
     specialArgs = {
-      inherit sec;
+      inherit sec inputs;
 
       pkgs-unstable = import nixpkgs-unstable {
         system = "x86_64-linux";
@@ -169,27 +163,5 @@
     };
 
     darwinConfigurations.${sec.mac.hostname} = mkMacSystem;
-
-    homeConfigurations."suck@thinkpad" = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-        overlays = [nixgl.overlay];
-      };
-      extraSpecialArgs = {
-        inherit sec nixgl;
-
-        pkgs-unstable = import nixpkgs-unstable {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-          overlays = [nixgl.overlay];
-        };
-      };
-      modules = [
-        nix-index-database.homeModules.nix-index
-        {programs.nix-index-database.comma.enable = true;}
-        ./home/thinkpad.nix
-      ];
-    };
   };
 }

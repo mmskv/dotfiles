@@ -2,6 +2,7 @@
   lib,
   sec,
   config,
+  inputs,
   ...
 }: {
   imports = [
@@ -11,17 +12,29 @@
 
     ./desktop.nix
     ./hyprland.nix
-    ./work.nix
   ];
 
   # agenix loads before impermanence
   age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
   hardware.enableRedistributableFirmware = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+
+  boot.zfs.forceImportRoot = false;
+  nix = {
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+
+      connect-timeout = 5;
+      stalled-download-timeout = 20;
+    };
+
+    # resolve nix-shell trough flake's nixpkgs instead of nix-channel
+    registry.nixpkgs.flake = inputs.nixpkgs;
+    nixPath = ["nixpkgs=flake:nixpkgs"];
+  };
 
   time.timeZone = sec.timezone;
 

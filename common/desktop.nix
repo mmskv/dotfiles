@@ -7,6 +7,10 @@
 }: let
   cfg = config.custom.desktop;
 in {
+  imports = [
+    ./zmk-keyboard-fixes.nix
+  ];
+
   config = lib.mkIf cfg.enable {
     inherit (sec) networking;
 
@@ -14,11 +18,6 @@ in {
 
     # DDC support for hyprland
     boot.kernelModules = ["i2c-dev"];
-    services.udev.extraRules = ''
-      KERNEL=="i2c-[0-9]*", GROUP="wheel", MODE="0660"
-      # Disable USB autosuspend for Bluetooth adapters to prevent BLE disconnects
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{bDeviceClass}=="e0", ATTR{bDeviceSubClass}=="01", ATTR{power/autosuspend}="-1"
-    '';
 
     services = {
       pipewire = {
@@ -63,10 +62,9 @@ in {
       tumbler.enable = true;
     };
 
-    hardware.bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
+    # Registers xfconfd on the session bus so thunar (and home-manager's
+    # xfconf.settings) can read/write its config outside an xfce session.
+    programs.xfconf.enable = true;
 
     virtualisation.docker.enable = true;
 

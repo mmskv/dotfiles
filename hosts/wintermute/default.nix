@@ -5,6 +5,8 @@
     ./impermanence.nix
   ];
 
+  powerManagement.cpuFreqGovernor = "performance";
+
   custom.desktop.enable = true;
   custom.work.enable = true;
 
@@ -71,6 +73,11 @@
       };
     }
     // sec.wintermute.extraMounts;
+
+  # symlink instead of mounting in $HOME: starship/fish scans of ~ stat every
+  # entry and would trigger the automount on each prompt (starship has
+  # follow_symlinks = false, so the link is never traversed implicitly)
+  systemd.tmpfiles.rules = ["L+ /home/suck/Music - - - - /mnt/music"];
 
   swapDevices = [{device = "/dev/disk/by-id/${sec.disks.wintermute.main}-part3";}];
 

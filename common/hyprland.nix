@@ -12,12 +12,28 @@ in {
       hyprland = {
         enable = true;
 
-        package = pkgs-unstable.hyprland;
-        portalPackage = pkgs-unstable.xdg-desktop-portal-hyprland;
+        package = pkgs.hyprland;
+        portalPackage = pkgs.xdg-desktop-portal-hyprland;
 
         withUWSM = true;
       };
     };
+
+    # don't restart wayland on nix configuration switch
+    systemd.user.units =
+      lib.genAttrs [
+        "wayland-session-bindpid@.service"
+        "wayland-wm@.service"
+        "wayland-wm-env@.service"
+        "wayland-session-waitenv.service"
+        "wayland-wm-app-daemon.service"
+      ] (_: {
+        overrideStrategy = "asDropin";
+        text = ''
+          [Service]
+          X-RestartIfChanged=false
+        '';
+      });
 
     services.xserver = {
       enable = true;

@@ -1,9 +1,13 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  pkgs-unstable,
+  ...
+}: {
   home.packages = with pkgs; [
     (pkgs.callPackage ../../common/pm {})
     obsidian
-    xfce.thunar
-    xfce.thunar-volman
+    thunar
+    thunar-volman
     pavucontrol
     playerctl
     libreoffice-qt
@@ -12,7 +16,6 @@
     hunspellDicts.ru_RU
     playerctl
     pamixer
-    neofetch
     btop
     imv
     tauon
@@ -23,13 +26,12 @@
     element-desktop
     gimp3
     easyeffects
-    thunderbird-bin
+    pkgs-unstable.thunderbird-bin
+    gh
 
     # fonts
-    fira
     nerd-fonts.fira-mono
     google-fonts
-    geist-font
     noto-fonts-color-emoji
 
     darktable

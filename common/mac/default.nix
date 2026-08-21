@@ -31,7 +31,7 @@
     btop
     parallel
     bind
-    dogdns
+    doggo
     nh
     python3
     rustc

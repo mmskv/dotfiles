@@ -16,7 +16,7 @@
     exiftool
     file
     fd
-    dogdns
+    doggo
     nh
     btop
     bpftrace

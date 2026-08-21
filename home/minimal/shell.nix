@@ -2,14 +2,11 @@
   pkgs,
   pkgs-unstable,
   lib,
-  config,
   sec,
+  osConfig,
   ...
-} @ args: let
-  isDesktop =
-    if args ? osConfig
-    then args.osConfig.custom.desktop.enable
-    else config.custom.workLaptop.enable;
+}: let
+  isDesktop = osConfig.custom.desktop.enable;
 in {
   programs.bash = {
     enable = true;
@@ -160,6 +157,7 @@ in {
         character.vimcmd_symbol = "[❯](bright-white)";
         directory.style = "blue";
         follow_symlinks = false;
+        scan_timeout = 100;
 
         package.disabled = true;
         jobs.disabled = true;
