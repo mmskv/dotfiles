@@ -23,7 +23,6 @@ in {
     ../minimal
 
     ../desktop/firefox
-    ../desktop/vscode.nix
     ../desktop/alacritty.nix
 
     ./gpg.nix
@@ -49,6 +48,7 @@ in {
   };
 
   programs.alacritty.settings = {
+    font.size = 14;
     selection.save_to_clipboard = true;
     mouse.bindings = [
       {

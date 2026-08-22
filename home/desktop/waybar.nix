@@ -66,8 +66,7 @@
 
   primaryOutput = ["eDP-1" "DP-1" "DP-2" "DP-4"];
 
-  secondaryRightOutput = "DP-3";
-  secondaryTopOutput = ["HDMI-A-1" "HDMI-A-2"];
+  secondaryTopOutput = ["HDMI-A-1" "HDMI-A-2" "DP-3"];
 in {
   programs.waybar = {
     enable = true;
@@ -152,8 +151,8 @@ in {
           return-type = "json";
           interval = 2;
           exec = pkgs.writeShellScript "vpn-check" ''
-            if output=$(${pkgs.doggo}/bin/doggo --short o-o.myaddr.l.google.com TXT @tls://dns.google 2>/dev/null); then
-                echo "$output" | grep -q ${sec.mysubnet} && \
+            if output=$(${pkgs.doggo}/bin/doggo --short --timeout 1s --type TXT o-o.myaddr.l.google.com @tls://dns.google 2>/dev/null); then
+                echo "$output" | grep -q ${lib.concatMapStringsSep " " (s: "-e '${s}'") sec.mysubnets} && \
                 echo '{"text": "V", "class": "off"}' || echo '{"text": "V", "class": "on"}'
             else
                 echo '{"text": "O", "class": "error"}'
@@ -219,17 +218,6 @@ in {
         inherit "hyprland/window";
       }
 
-      {
-        layer = "top";
-        position = "right";
-        reload_style_on_change = true;
-
-        output = secondaryRightOutput;
-
-        inherit modules-left;
-        inherit "hyprland/workspaces";
-        inherit "hyprland/window";
-      }
     ];
     style =
       # css

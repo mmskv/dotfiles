@@ -46,7 +46,7 @@
 
     vpn = pkgs.writeShellScript "sb-vpn-${baseNameOf bin}" ''
       if output=$(${pkgs.doggo}/bin/doggo --short o-o.myaddr.l.google.com TXT @tls://dns.google 2>/dev/null); then
-        if echo "$output" | grep -q ${sec.mysubnet}; then
+        if echo "$output" | grep -q ${lib.concatMapStringsSep " " (s: "-e '${s}'") sec.mysubnets}; then
           ${SB} --set "$NAME" label=V label.color=${colorBorder}
         else
           ${SB} --set "$NAME" label=V label.color=${colorActive}
