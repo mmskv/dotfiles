@@ -1,11 +1,14 @@
-{sec, ...}: {
+{
+  sec,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.git = {
     enable = true;
 
     settings = {
-      user = {
-        inherit (sec.user) name email;
-      };
+      user = sec.user;
 
       status.useBuiltinFSMonitor = true;
 
@@ -29,7 +32,7 @@
       url."ssh://git@github.com/".insteadOf = "https://github.com/";
     };
 
-    includes = [
+    includes = lib.optionals pkgs.stdenv.isDarwin [
       {
         condition = "gitdir:~/work/";
 
