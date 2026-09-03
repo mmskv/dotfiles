@@ -4,7 +4,6 @@
   ...
 }: {
   home.packages = with pkgs; [
-    (pkgs.callPackage ../../common/pm {})
     obsidian
     thunar
     thunar-volman

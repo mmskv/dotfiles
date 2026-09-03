@@ -1,10 +1,10 @@
-{...}: {
+{lib, ...}: {
   programs.alacritty = {
     enable = true;
 
     settings = {
       font = {
-        size = 14;
+        size = lib.mkDefault 10;
         offset = {
           x = 0;
           y = -1;

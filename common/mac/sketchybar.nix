@@ -10,8 +10,6 @@
   colorBorder = "0xff212121";
   colorErr = "0xffF0C674";
 
-  pm = pkgs.callPackage ../pm {};
-
   mkScripts = isExt: bin: let
     SB = bin;
   in {
@@ -126,17 +124,6 @@
         ${SB} --set "$NAME" label="''${raw//  / }"
       '';
 
-    pomodoro = pkgs.writeShellScript "sb-pomodoro-${baseNameOf bin}" ''
-      out=$(${pm}/bin/pm tick)
-      if [ -z "$out" ]; then
-        ${SB} --set "$NAME" drawing=off
-      else
-        case "$out" in
-          W*) ${SB} --set "$NAME" drawing=on label="$out" label.color=${colorActive} ;;
-          *)  ${SB} --set "$NAME" drawing=on label="R" label.color=${colorBorder} ;;
-        esac
-      fi
-    '';
   };
 
   main = mkScripts false "sketchybar";
@@ -235,12 +222,7 @@
       --subscribe mic mic_toggle                                      \
       --add item vpn right                                            \
       --set  vpn update_freq=10 script="${ext.vpn}"                   \
-                 label.color=${colorBorder}                           \
-      --add item pomodoro right                                       \
-      --set  pomodoro update_freq=10 updates=on                       \
-                      script="${ext.pomodoro}"                        \
-                      click_script="${pm}/bin/pm toggle"              \
-                      drawing=off
+                 label.color=${colorBorder}
 
     sketchybar-ext --update
   '';
@@ -263,7 +245,6 @@ in {
     mos
     choose-gui
     sketchybarExt
-    pm
   ];
 
   services.sketchybar = {
@@ -304,13 +285,7 @@ in {
         --subscribe mic mic_toggle                                \
         --add item vpn right                                      \
         --set  vpn update_freq=10 script="${main.vpn}"            \
-                   label.color=${colorBorder}                     \
-        --add item pomodoro right                                 \
-        --set  pomodoro update_freq=10 updates=on                 \
-                        script="${main.pomodoro}"                 \
-                        click_script="${pm}/bin/pm toggle"        \
-                        padding_left=8                            \
-                        drawing=off
+                   label.color=${colorBorder}
 
       sketchybar --update
     '';

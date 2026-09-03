@@ -9,8 +9,6 @@
   isLaptop = config.custom.workLaptop.enable;
   isDesktop = !isLaptop;
 
-  pm = pkgs.callPackage ../../common/pm {};
-
   modules-left = [
     "hyprland/workspaces"
     "hyprland/window" # for workspace states (fullscreen/empty)
@@ -20,7 +18,6 @@
     [
       "privacy#screenshare"
       "privacy#audio"
-      "custom/pomodoro"
     ]
     ++ (
       if isLaptop
@@ -161,24 +158,6 @@ in {
           on-scroll-down = pkgs.writeShellScript "vpn-stop" sec.vpn.stopcmd;
         };
 
-        "custom/pomodoro" = {
-          format = "{}";
-          return-type = "json";
-          interval = 10;
-          exec = pkgs.writeShellScript "pomodoro-tick" ''
-            out=$(${pm}/bin/pm tick)
-            if [ -z "$out" ]; then
-              echo '{"text": "", "class": "hidden"}'
-            else
-              case "$out" in
-                W*) printf '{"text": "%s", "class": "work"}\n' "$out" ;;
-                *)  echo '{"text": "R", "class": "rest"}' ;;
-              esac
-            fi
-          '';
-          on-click = "${pm}/bin/pm toggle";
-        };
-
         battery = {
           interval = 30;
           format = "B";
@@ -316,11 +295,6 @@ in {
         #custom-vpn.on { color: @active; }
         #custom-vpn.off { color: @border; }
         #custom-vpn.error { color: @fg; }
-
-        #custom-pomodoro { font-weight: bold; }
-        #custom-pomodoro.work { color: @active; }
-        #custom-pomodoro.rest { color: @border; }
-        #custom-pomodoro.hidden { padding: 0; margin: 0; min-width: 0; min-height: 0; }
 
         #tray * { padding: 0px; }
         #tray { padding: 4px 0px 4px 1.5px; margin: 4px 0px; }
