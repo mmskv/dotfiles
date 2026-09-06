@@ -12,6 +12,7 @@
 
     ./desktop.nix
     ./hyprland.nix
+    ./work.nix
   ];
 
   # agenix loads before impermanence
