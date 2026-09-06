@@ -123,6 +123,29 @@
         "type": "github"
       }
     },
+    "hyprland-preview-share-picker": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787585898,
+        "narHash": "sha256-KKLkZEYzCGrSZa03hb8I6XPAOkXfUh+lb88OSrV1A/s=",
+        "ref": "refs/heads/master",
+        "rev": "0ef9b302aee716f36ea19e33ff3cc457d8c075a8",
+        "revCount": 62,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/WhySoBad/hyprland-preview-share-picker"
+      },
+      "original": {
+        "rev": "0ef9b302aee716f36ea19e33ff3cc457d8c075a8",
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/WhySoBad/hyprland-preview-share-picker"
+      }
+    },
     "impermanence": {
       "inputs": {
         "home-manager": "home-manager_3",
@@ -251,6 +274,7 @@
       "inputs": {
         "agenix": "agenix",
         "home-manager": "home-manager_2",
+        "hyprland-preview-share-picker": "hyprland-preview-share-picker",
         "impermanence": "impermanence",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",

@@ -1,10 +1,17 @@
-{lib, ...}: {
+{
+  desktopTheme,
+  lib,
+  ...
+}: let
+  inherit (desktopTheme) colors fonts metrics;
+  hex = color: "0x${color}";
+in {
   programs.alacritty = {
     enable = true;
 
     settings = {
       font = {
-        size = lib.mkDefault 10;
+        size = lib.mkDefault metrics.terminal.fontSize;
         offset = {
           x = 0;
           y = -1;
@@ -14,11 +21,11 @@
           y = 0;
         };
         bold = {
-          family = "FiraMono Nerd Font";
+          family = fonts.terminal;
           style = "Bold";
         };
         normal = {
-          family = "FiraMono Nerd Font";
+          family = fonts.terminal;
           style = "Regular";
         };
       };
@@ -49,8 +56,8 @@
         opacity = 1.0;
         startup_mode = "Windowed";
         padding = {
-          x = 18;
-          y = 18;
+          x = metrics.terminal.padding;
+          y = metrics.terminal.padding;
         };
         dimensions = {
           columns = 0;
@@ -61,28 +68,28 @@
       colors = {
         draw_bold_text_with_bright_colors = false;
         bright = {
-          black = "0x373B41";
-          blue = "0x81A2BE";
-          cyan = "0x8ABEB7";
-          green = "0xB5BD68";
-          magenta = "0xB294BB";
-          red = "0xCC6666";
-          white = "0xC5C8C6";
-          yellow = "0xF0C674";
+          black = hex colors.terminal.bright.black;
+          blue = hex colors.terminal.bright.blue;
+          cyan = hex colors.terminal.bright.cyan;
+          green = hex colors.terminal.bright.green;
+          magenta = hex colors.terminal.bright.magenta;
+          red = hex colors.terminal.bright.red;
+          white = hex colors.terminal.bright.white;
+          yellow = hex colors.terminal.bright.yellow;
         };
         dim = {
-          black = "0x282A2E";
-          blue = "0x5F819D";
-          cyan = "0x5E8D87";
-          green = "0x8C9440";
-          magenta = "0x85678F";
-          red = "0xA54242";
-          white = "0x707880";
-          yellow = "0xDE935F";
+          black = hex colors.terminal.dim.black;
+          blue = hex colors.terminal.dim.blue;
+          cyan = hex colors.terminal.dim.cyan;
+          green = hex colors.terminal.dim.green;
+          magenta = hex colors.terminal.dim.magenta;
+          red = hex colors.terminal.dim.red;
+          white = hex colors.terminal.dim.white;
+          yellow = hex colors.terminal.dim.yellow;
         };
         primary = {
-          background = "0x141212";
-          foreground = "0xC5C8C6";
+          background = hex colors.terminal.background;
+          foreground = hex colors.foreground;
         };
       };
 

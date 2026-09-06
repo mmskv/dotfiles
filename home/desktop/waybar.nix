@@ -1,4 +1,5 @@
 {
+  desktopTheme,
   pkgs,
   pkgs-unstable,
   lib,
@@ -6,8 +7,29 @@
   sec,
   ...
 }: let
+  inherit (desktopTheme) colors fonts metrics;
   isLaptop = config.custom.workLaptop.enable;
   isDesktop = !isLaptop;
+  vpnSubnetArgs = lib.escapeShellArgs (lib.concatMap (subnet: ["-e" subnet]) sec.mysubnets);
+
+  vpnStatus = pkgs.writeShellApplication {
+    name = "waybar-vpn-status";
+    runtimeInputs = with pkgs; [
+      doggo
+      gnugrep
+    ];
+    text = ''
+      if output=$(doggo --short --timeout 1s --type TXT o-o.myaddr.l.google.com @tls://dns.google 2>/dev/null); then
+        if printf '%s\n' "$output" | grep -q ${vpnSubnetArgs}; then
+          printf '%s\n' '{"text":"V","class":"off"}'
+        else
+          printf '%s\n' '{"text":"V","class":"on"}'
+        fi
+      else
+        printf '%s\n' '{"text":"O","class":"error"}'
+      fi
+    '';
+  };
 
   modules-left = [
     "hyprland/workspaces"
@@ -85,26 +107,26 @@ in {
 
         "privacy#audio" = {
           icon-spacing = 4;
-          icon-size = 14;
+          icon-size = metrics.bar.privacyIconSize;
           transition-duration = 250;
           modules = [
             {
               type = "audio-in";
               tooltip = true;
-              tooltip-icon-size = 24;
+              tooltip-icon-size = metrics.bar.tooltipIconSize;
             }
           ];
         };
 
         "privacy#screenshare" = {
           icon-spacing = 4;
-          icon-size = 14;
+          icon-size = metrics.bar.privacyIconSize;
           transition-duration = 250;
           modules = [
             {
               type = "screenshare";
               tooltip = true;
-              tooltip-icon-size = 24;
+              tooltip-icon-size = metrics.bar.tooltipIconSize;
             }
           ];
         };
@@ -123,7 +145,7 @@ in {
           format = ''
             {:%H
             %M}'';
-          interval = 1;
+          interval = 60;
           tooltip-format = "<tt>{calendar}</tt>";
           locale = "en_GB.utf8";
           calendar = {
@@ -132,9 +154,9 @@ in {
             on-scroll = 1;
             on-click-right = "mode";
             format = {
-              today = "<span color='#EA803F'><b>{}</b></span>";
-              months = "<span color='#ffead3'><b>{}</b></span>";
-              weekdays = "<span color='#ffcc66'><b>{}</b></span>";
+              today = "<span color='#${colors.accent}'><b>{}</b></span>";
+              months = "<span color='#${colors.calendar.months}'><b>{}</b></span>";
+              weekdays = "<span color='#${colors.calendar.weekdays}'><b>{}</b></span>";
             };
           };
           actions = {
@@ -146,14 +168,8 @@ in {
         "custom/vpn" = {
           format = "{}";
           return-type = "json";
-          interval = 2;
-          exec = pkgs.writeShellScript "vpn-check" ''
-            if output=$(${pkgs.doggo}/bin/doggo --short --timeout 1s --type TXT o-o.myaddr.l.google.com @tls://dns.google 2>/dev/null); then
-                echo "$output" | grep -q ${lib.concatMapStringsSep " " (s: "-e '${s}'") sec.mysubnets} && \
-                echo '{"text": "V", "class": "off"}' || echo '{"text": "V", "class": "on"}'
-            else
-                echo '{"text": "O", "class": "error"}'
-            fi'';
+          interval = 5;
+          exec = "${vpnStatus}/bin/waybar-vpn-status";
           on-scroll-up = pkgs.writeShellScript "vpn-start" sec.vpn.startcmd;
           on-scroll-down = pkgs.writeShellScript "vpn-stop" sec.vpn.stopcmd;
         };
@@ -179,7 +195,7 @@ in {
         };
 
         tray = {
-          icon-size = 16;
+          icon-size = metrics.bar.trayIconSize;
           spacing = 8;
           show-passive-items = true;
         };
@@ -196,19 +212,18 @@ in {
         inherit "hyprland/workspaces";
         inherit "hyprland/window";
       }
-
     ];
     style =
       # css
       ''
-        @define-color active #EA803F;
-        @define-color bg #141414;
-        @define-color fg #DCD7BA;
-        @define-color border #212121;
+        @define-color active #${colors.accent};
+        @define-color bg #${colors.background};
+        @define-color fg #${colors.foregroundWarm};
+        @define-color border #${colors.border};
 
         * {
-          font-size: 14px;
-          font-family: "Fira Mono";
+          font-size: ${toString metrics.bar.fontSize}px;
+          font-family: "${fonts.ui}";
           border: 0px;
           padding: 0px;
           border-radius: 0;
@@ -254,7 +269,7 @@ in {
 
         #clock {
           font-weight: bold;
-          font-size: 16px;
+          font-size: ${toString metrics.bar.clockFontSize}px;
           padding: 3px 5px 3px 7px;
           color: @fg;
         }
@@ -279,7 +294,7 @@ in {
           min-height: 80px;
           min-width: 3px;
           border-radius: 5px;
-          background: black;
+          background: #${colors.black};
         }
 
         #pulseaudio-slider highlight {
@@ -301,17 +316,17 @@ in {
 
         #battery { font-weight: bold; }
 
-        #battery.capacity-100 { color: #ffffff; }
-        #battery.capacity-90 { color: #fff7f7; }
-        #battery.capacity-80 { color: #ffeeee; }
-        #battery.capacity-70 { color: #ffe5e5; }
-        #battery.capacity-60 { color: #ffdada; }
-        #battery.capacity-50 { color: #ffcfcf; }
-        #battery.capacity-40 { color: #ffc1c1; }
-        #battery.capacity-30 { color: #ffb1b1; }
-        #battery.capacity-20 { color: #ff9d9d; }
-        #battery.capacity-10 { color: #ff7f7f; }
-        #battery.capacity-0 { color: #ff0000; }
+        #battery.capacity-100 { color: #${colors.battery."100"}; }
+        #battery.capacity-90 { color: #${colors.battery."90"}; }
+        #battery.capacity-80 { color: #${colors.battery."80"}; }
+        #battery.capacity-70 { color: #${colors.battery."70"}; }
+        #battery.capacity-60 { color: #${colors.battery."60"}; }
+        #battery.capacity-50 { color: #${colors.battery."50"}; }
+        #battery.capacity-40 { color: #${colors.battery."40"}; }
+        #battery.capacity-30 { color: #${colors.battery."30"}; }
+        #battery.capacity-20 { color: #${colors.battery."20"}; }
+        #battery.capacity-10 { color: #${colors.battery."10"}; }
+        #battery.capacity-0 { color: #${colors.battery."0"}; }
       '';
   };
 }

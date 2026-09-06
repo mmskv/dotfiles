@@ -1,9 +1,15 @@
 {
+  desktopTheme,
   lib,
   pkgs,
   pkgs-unstable,
   ...
 }: let
+  inherit (desktopTheme) colors cursor uiScale;
+  logicalPixels = pixels: builtins.floor ((pixels / uiScale) + 0.5);
+  uiScaleText = builtins.toJSON uiScale;
+  sideMonitorX = 0 - logicalPixels 1440;
+  sideMonitorY = 0 - logicalPixels 640;
   screenshot_name = ''$HOME"/screenshots/Screenshot $(date +%F) at $(date +%T).png"'';
 in {
   wayland.windowManager.hyprland = {
@@ -30,9 +36,10 @@ in {
 
     settings = {
       exec-once = [
-        "hyprctl setcursor phinger-cursors-dark 24"
+        "hyprctl setcursor ${cursor.name} ${toString cursor.size}"
         "uwsm app -- wl-clip-persist --clipboard both"
-        "uwsm app -- thunderbird"
+        # Calino is on DP-3's first workspace; its title is generic at window creation.
+        "[monitor DP-3; workspace 10 silent] uwsm app -- firefox --new-window https://cal.int.niggalink.space:8443/week"
       ];
 
       input = {
@@ -48,13 +55,13 @@ in {
         layout = "hy3";
         gaps_in = 0;
         gaps_out = 0;
-        "col.active_border" = "rgb(4b5366) rgb(9c7446) 45deg";
-        "col.inactive_border" = "0xff212121";
+        "col.active_border" = "rgb(${colors.activeBorder}) rgb(${colors.accentMuted}) 45deg";
+        "col.inactive_border" = "0xff${colors.border}";
       };
 
       group = {
-        "col.border_active" = "rgb(4b5366)";
-        "col.border_inactive" = "0xff212121";
+        "col.border_active" = "rgb(${colors.activeBorder})";
+        "col.border_inactive" = "0xff${colors.border}";
       };
 
       misc = {
@@ -201,10 +208,6 @@ in {
 
           "match:class ^org.telegram.desktop$, match:title ^Media viewer$, fullscreen on"
 
-          "match:class ^thunderbird$, workspace 10"
-          "match:class ^thunderbird$, float on, center on"
-          "match:class ^thunderbird$, match:initial_title ^Mozilla Thunderbird$, tile on"
-
           "match:workspace w[t1], border_size 0"
         ]
         ++ (map (c: "match:class ^${c}$, float on") [
@@ -229,9 +232,9 @@ in {
     };
 
     extraConfig = ''
-      monitor=DP-1,5120x2160@165.00,0x0,1
-      monitor=DP-2,preferred,0x0,1
-      monitor=DP-3,3440x1440@144.00,-1440x-640,1,transform,1
+      monitor=DP-1,5120x2160@165.00,0x0,${uiScaleText}
+      monitor=DP-2,preferred,0x0,${uiScaleText}
+      monitor=DP-3,3440x1440@144.00,${toString sideMonitorX}x${toString sideMonitorY},${uiScaleText},transform,1
 
       xwayland {
         force_zero_scaling = true
@@ -287,10 +290,10 @@ in {
   services.mako = {
     enable = true;
     settings = {
-      font = "Fira Mono";
-      background-color = "#141414ff";
-      text-color = "#C5C8C6ff";
-      border-color = "#EA803Fff";
+      font = desktopTheme.fonts.ui;
+      background-color = "#${colors.background}ff";
+      text-color = "#${colors.foreground}ff";
+      border-color = "#${colors.accent}ff";
       default-timeout = 10000;
       border-size = 1;
       border-radius = 3;

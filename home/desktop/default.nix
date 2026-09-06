@@ -1,16 +1,19 @@
 {
   config,
-  pkgs,
+  desktopTheme,
   ...
 }: {
   imports = [
     ../minimal
 
+    ./theme.nix
     ./packages.nix
     ./mouse-gestures.nix
     ./hyprland.nix
+    ./screen-sharing.nix
     ./waybar.nix
     ./zathura.nix
+    ./imv.nix
     ./fuzzel.nix
     ./alacritty.nix
     ./telegram.nix
@@ -30,9 +33,7 @@
     };
 
     pointerCursor = {
-      name = "phinger-cursors-dark";
-      package = pkgs.phinger-cursors;
-      size = 24;
+      inherit (desktopTheme.cursor) name package size;
       x11.enable = true;
       gtk.enable = true;
     };
@@ -59,15 +60,13 @@
   gtk = {
     enable = true;
     theme = {
-      name = "Kanagawa-BL";
-      package = pkgs.kanagawa-gtk-theme;
+      inherit (desktopTheme.gtk.theme) name package;
     };
 
     gtk4.theme = config.gtk.theme;
 
     iconTheme = {
-      name = "Papirus";
-      package = pkgs.papirus-icon-theme;
+      inherit (desktopTheme.gtk.icons) name package;
     };
   };
 

@@ -5,6 +5,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    hyprland-preview-share-picker = {
+      url = "git+https://github.com/WhySoBad/hyprland-preview-share-picker?rev=0ef9b302aee716f36ea19e33ff3cc457d8c075a8&submodules=1";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
 
     home-manager = {
