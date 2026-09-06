@@ -20,6 +20,9 @@ in {
     boot.kernelModules = ["i2c-dev"];
 
     services = {
+      # Let the active desktop user send HID++ haptic commands to the Bolt mouse.
+      udev.packages = [pkgs.solaar];
+
       pipewire = {
         enable = true;
         pulse.enable = true;

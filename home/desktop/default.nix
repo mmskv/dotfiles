@@ -7,6 +7,7 @@
     ../minimal
 
     ./packages.nix
+    ./mouse-gestures.nix
     ./hyprland.nix
     ./waybar.nix
     ./zathura.nix
