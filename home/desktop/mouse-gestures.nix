@@ -1,7 +1,8 @@
-{pkgs, ...}: let
+{pkgs, sec, ...}: let
+  hosts = sec.mouse;
   notify = pkgs.writeShellApplication {
     name = "codex-haptic-notify";
-    runtimeInputs = [pkgs.coreutils pkgs.jq pkgs.solaar];
+    runtimeInputs = [pkgs.coreutils pkgs.jq pkgs.solaar pkgs.sqlite pkgs.util-linux];
     text = ''
       # Codex passes a notification as a single JSON argument.
       if ! jq -e 'type == "object" and .type == "agent-turn-complete"' \
@@ -9,9 +10,40 @@
         exit 0
       fi
 
+      event=$(jq -c '{"thread-id": ."thread-id", "turn-id": ."turn-id"}' <<< "$1")
+      thread_id=$(jq -r '."thread-id" // empty' <<< "$1")
+      # Restrict the identifier before using it in the read-only SQL query.
+      if [[ ! "$thread_id" =~ ^[0-9a-fA-F-]{36}$ ]]; then
+        logger -t codex-haptics -- "ignored completion without a valid thread ID: $event" || true
+        exit 0
+      fi
+
+      # Codex 0.153 also notifies when background sub-agents finish. Look up
+      # the notification thread's origin in the local metadata database.
+      # If the database is unavailable, keep notifications working and log it.
+      if origin=$(sqlite3 -readonly -cmd '.timeout 100' \
+        "''${CODEX_HOME:-$HOME/.codex}/state_5.sqlite" \
+        "SELECT source FROM threads WHERE id = '$thread_id';" 2>/dev/null); then
+        if jq -e 'type == "object" and has("subagent")' >/dev/null 2>&1 <<< "$origin"; then
+          logger -t codex-haptics -- "ignored sub-agent completion: $event" || true
+          exit 0
+        fi
+      else
+        logger -t codex-haptics -- "session origin unavailable: $event" || true
+      fi
+      logger -t codex-haptics -- "completion received: $event" || true
+
+      # Solaar 1.1.19 writes once from the CLI, then forwards the same write
+      # to its GUI. A haptic is an action: forwarding replays it, potentially
+      # later in the GUI's worker queue. Keep this CLI invocation headless.
+      # Force X11 with no DISPLAY so GTK cannot fall back to a Wayland socket.
       # Select this MX Master 4 by serial, independent of its receiver slot.
-      timeout --kill-after=1s 8s solaar config 9C75206B haptic-play COMPLETED \
-        >/dev/null 2>&1 || true
+      if timeout --kill-after=1s 8s env -u DISPLAY -u WAYLAND_DISPLAY GDK_BACKEND=x11 \
+        solaar config 9C75206B haptic-play COMPLETED >/dev/null 2>&1; then
+        logger -t codex-haptics -- "haptic sent: $event" || true
+      else
+        logger -t codex-haptics -- "haptic unavailable or failed: $event" || true
+      fi
     '';
   };
 
@@ -45,6 +77,13 @@
     path.write_text(yaml.safe_dump(data, sort_keys=False))
   '';
 in {
+  # ZMK sends F23 before changing its Bluetooth profile. Run Solaar headless
+  # to avoid forwarding a duplicate switch to its GUI. Also works while locked.
+  wayland.windowManager.hyprland.settings.bindli = [
+    ", F24, exec, ${pkgs.coreutils}/bin/true" # Already targeting this PC.
+    ", F23, exec, ${pkgs.coreutils}/bin/timeout --kill-after=1s 8s ${pkgs.coreutils}/bin/env -u DISPLAY -u WAYLAND_DISPLAY GDK_BACKEND=x11 ${pkgs.solaar}/bin/solaar config ${hosts.unitId} change-host ${toString hosts.macChannel}"
+  ];
+
   # ~/.codex/config.toml is maintained by Codex; its top-level notify setting
   home.file.".local/bin/codex-haptic-notify".source = "${notify}/bin/codex-haptic-notify";
 

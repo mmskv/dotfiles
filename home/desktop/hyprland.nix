@@ -311,9 +311,9 @@ in {
           # the native dpms-on path fails to re-enable the outputs on wake on
           # this NVIDIA setup and leaves the monitors stuck black. wlopm's
           # re-enable path wakes reliably. The intermittent wake-time crash is
-          # handled downstream (hyprsunset Restart=on-failure + Hyprland patch).
+          # handled downstream (supervised hyprsunset + Hyprland patch).
           on-timeout = "${pkgs.wlopm}/bin/wlopm --off '*'";
-          on-resume = "${pkgs.wlopm}/bin/wlopm --on '*'";
+          on-resume = "${pkgs.wlopm}/bin/wlopm --on '*'; ${pkgs.systemd}/bin/systemctl --user --no-block start display-refresh.service";
         }
       ];
     };

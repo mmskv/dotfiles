@@ -1,4 +1,6 @@
-{lib, ...}: let
+{lib, pkgs, sec, ...}: let
+  hosts = sec.mouse;
+  mxswitch = pkgs.callPackage ./mxswitch {};
   terminals = ["^org\\.alacritty$" "^io\\.alacritty$" "^com\\.apple\\.Terminal$"];
   browsers = ["^org\\.mozilla\\.firefox$" "^org\\.nixos\\.firefox$" "^com\\.apple\\.Safari$" "^com\\.google\\.Chrome$"];
   firefox = ["^org\\.mozilla\\.firefox$" "^org\\.nixos\\.firefox$"];
@@ -86,6 +88,28 @@
         virtual_hid_keyboard.keyboard_type_v2 = "ansi";
 
         complex_modifications.rules = [
+          (rule "ZMK: select PC or Mac for both keyboard and mouse" [
+            {
+              type = "basic";
+              from = {
+                key_code = "f24";
+                modifiers.optional = ["any"];
+              };
+              to = [{
+                shell_command = "${pkgs.coreutils}/bin/timeout --kill-after=1s 8s ${mxswitch}/bin/mxswitch ${toString hosts.pcChannel}";
+                repeat = false;
+              }];
+            }
+            {
+              type = "basic";
+              from = {
+                key_code = "f23";
+                modifiers.optional = ["any"];
+              };
+              to = [{key_code = "vk_none";}];
+            }
+          ])
+
           (rule "Built-in keyboard: F4 = screenshot selection (clipboard / +Ctrl = file)" [
             (remap {
               from = "f4";
@@ -187,6 +211,7 @@
     ];
   };
 in {
+  home.packages = [mxswitch];
   home.file.".config/karabiner/karabiner.json" = {
     force = true;
     text = builtins.toJSON config;
