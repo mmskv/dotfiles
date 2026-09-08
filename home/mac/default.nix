@@ -23,6 +23,7 @@ in {
     ../minimal
 
     ../desktop/firefox
+    ../desktop/theme.nix
     ../desktop/alacritty.nix
 
     ./gpg.nix

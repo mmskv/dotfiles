@@ -1,6 +1,46 @@
-{lib, pkgs, sec, ...}: let
+{
+  lib,
+  pkgs,
+  sec,
+  ...
+}: let
   hosts = sec.mouse;
   mxswitch = pkgs.callPackage ./mxswitch {};
+  m1ddc = pkgs.m1ddc.overrideAttrs (old: {
+    # 1.2.0 uses address 0x50 for LG input switching but checksums with 0x51.
+    # Backport https://github.com/waydabber/m1ddc/pull/52.
+    patches =
+      (old.patches or [])
+      ++ [
+        (pkgs.fetchurl {
+          url = "https://github.com/waydabber/m1ddc/commit/5f15c8e4fa4d3c119aacd52a3fc9cec84b037fbe.patch";
+          hash = "sha256-txL9yeYVuPWX2I1jKlio6r7Y7UTw/vIfYIUerlQkcSE=";
+        })
+      ];
+  });
+  selectHost = target:
+    pkgs.writeShellScript "switch-to-${target}" ''
+      ${lib.optionalString (target == "pc") ''
+        ${pkgs.coreutils}/bin/timeout --kill-after=1s 8s \
+          ${mxswitch}/bin/mxswitch ${toString hosts.pcChannel} || true
+      ''}
+      # The display is optional: keyboard/mouse switching also works undocked.
+      if ! displays=$(${pkgs.coreutils}/bin/timeout --kill-after=1s 8s ${m1ddc}/bin/m1ddc display list detailed); then
+        echo "Skipping LG input switch: no external display or detection failed" >&2
+        exit 0
+      fi
+      # Match the LG by serial; display numbers and UUIDs can change between ports.
+      display=$(${pkgs.gawk}/bin/awk -v serial=${lib.escapeShellArg sec.lgDisplay.serial} '
+          /^\[/ { id = $NF; gsub(/[()]/, "", id) }
+          $2 == "AN" && $3 == "Serial:" && $4 == serial { print id; exit }
+        ' <<< "$displays")
+      [[ -n "$display" ]] || exit 0
+      # Run even if the mouse is unavailable, including when selecting this Mac.
+      if ! ${pkgs.coreutils}/bin/timeout --kill-after=1s 8s \
+        ${m1ddc}/bin/m1ddc display "$display" set input-alt ${toString sec.lgDisplay.inputs.${target}}; then
+        echo "Skipping LG input switch: display disconnected or DDC command failed" >&2
+      fi
+    '';
   terminals = ["^org\\.alacritty$" "^io\\.alacritty$" "^com\\.apple\\.Terminal$"];
   browsers = ["^org\\.mozilla\\.firefox$" "^org\\.nixos\\.firefox$" "^com\\.apple\\.Safari$" "^com\\.google\\.Chrome$"];
   firefox = ["^org\\.mozilla\\.firefox$" "^org\\.nixos\\.firefox$"];
@@ -88,17 +128,19 @@
         virtual_hid_keyboard.keyboard_type_v2 = "ansi";
 
         complex_modifications.rules = [
-          (rule "ZMK: select PC or Mac for both keyboard and mouse" [
+          (rule "ZMK: select PC or Mac for keyboard, mouse and LG display" [
             {
               type = "basic";
               from = {
                 key_code = "f24";
                 modifiers.optional = ["any"];
               };
-              to = [{
-                shell_command = "${pkgs.coreutils}/bin/timeout --kill-after=1s 8s ${mxswitch}/bin/mxswitch ${toString hosts.pcChannel}";
-                repeat = false;
-              }];
+              to = [
+                {
+                  shell_command = "${selectHost "pc"}";
+                  repeat = false;
+                }
+              ];
             }
             {
               type = "basic";
@@ -106,7 +148,12 @@
                 key_code = "f23";
                 modifiers.optional = ["any"];
               };
-              to = [{key_code = "vk_none";}];
+              to = [
+                {
+                  shell_command = "${selectHost "mac"}";
+                  repeat = false;
+                }
+              ];
             }
           ])
 
@@ -211,7 +258,7 @@
     ];
   };
 in {
-  home.packages = [mxswitch];
+  home.packages = [mxswitch m1ddc];
   home.file.".config/karabiner/karabiner.json" = {
     force = true;
     text = builtins.toJSON config;

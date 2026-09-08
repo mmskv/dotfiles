@@ -1,5 +1,26 @@
-{pkgs, sec, ...}: let
+{
+  lib,
+  pkgs,
+  sec,
+  ...
+}: let
   hosts = sec.mouse;
+  selectHost = target:
+    pkgs.writeShellScript "switch-to-${target}" ''
+      ${lib.optionalString (target == "mac") ''
+        ${pkgs.coreutils}/bin/timeout --kill-after=1s 8s \
+          ${pkgs.coreutils}/bin/env -u DISPLAY -u WAYLAND_DISPLAY GDK_BACKEND=x11 \
+          ${pkgs.solaar}/bin/solaar config ${hosts.unitId} change-host ${toString hosts.macChannel} || true
+      ''}
+      # Switch the display last, even if the mouse is unavailable. LG input
+      # readback is unreliable; use the alternate command without verification.
+      # The display is optional, including if it disconnects during the switch.
+      if ! ${pkgs.coreutils}/bin/timeout --kill-after=1s 8s \
+        ${pkgs.ddcutil}/bin/ddcutil --sn ${lib.escapeShellArg sec.lgDisplay.serial} \
+        --noverify --i2c-source-addr=0x50 setvcp f4 ${toString sec.lgDisplay.inputs.${target}}; then
+        echo "Skipping LG input switch: display unavailable or DDC command failed" >&2
+      fi
+    '';
   notify = pkgs.writeShellApplication {
     name = "codex-haptic-notify";
     runtimeInputs = [pkgs.coreutils pkgs.jq pkgs.solaar pkgs.sqlite pkgs.util-linux];
@@ -77,11 +98,12 @@
     path.write_text(yaml.safe_dump(data, sort_keys=False))
   '';
 in {
-  # ZMK sends F23 before changing its Bluetooth profile. Run Solaar headless
-  # to avoid forwarding a duplicate switch to its GUI. Also works while locked.
+  # ZMK sends F23/F24 before changing its Bluetooth profile. Local selections
+  # also restore the display input, so repeated presses work while typing blind.
+  # Keep Solaar headless to avoid forwarding a duplicate switch to its GUI.
   wayland.windowManager.hyprland.settings.bindli = [
-    ", F24, exec, ${pkgs.coreutils}/bin/true" # Already targeting this PC.
-    ", F23, exec, ${pkgs.coreutils}/bin/timeout --kill-after=1s 8s ${pkgs.coreutils}/bin/env -u DISPLAY -u WAYLAND_DISPLAY GDK_BACKEND=x11 ${pkgs.solaar}/bin/solaar config ${hosts.unitId} change-host ${toString hosts.macChannel}"
+    ", F24, exec, ${selectHost "pc"}"
+    ", F23, exec, ${selectHost "mac"}"
   ];
 
   # ~/.codex/config.toml is maintained by Codex; its top-level notify setting
