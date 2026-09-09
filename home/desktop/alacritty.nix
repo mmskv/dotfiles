@@ -37,10 +37,29 @@ in {
           mods = "Shift";
           mode = "~Search";
         }
+        # Russian equivalents of the default Ctrl+Shift+C/V bindings.
         {
           action = "Copy";
           key = "С";
           mods = "Control|Shift";
+        }
+        {
+          action = "ClearSelection";
+          key = "С";
+          mods = "Control|Shift";
+          mode = "Vi|~Search";
+        }
+        {
+          action = "Paste";
+          key = "М";
+          mods = "Control|Shift";
+          mode = "~Vi";
+        }
+        {
+          action = "Paste";
+          key = "М";
+          mods = "Control|Shift";
+          mode = "Vi|Search";
         }
       ];
 
