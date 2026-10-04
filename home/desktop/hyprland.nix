@@ -135,8 +135,6 @@ in {
 
           "SUPER, X, split:swapactiveworkspaces, current +1"
 
-          "SUPER, mouse_down, workspace, -1"
-          "SUPER, mouse_up, workspace, +1"
           "SUPER, mouse_left, focusmonitor, -1"
           "SUPER, mouse_right, focusmonitor, +1"
 

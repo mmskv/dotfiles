@@ -21,6 +21,7 @@
       auto = config.xdg.configFile."hypr/hyprsunset.conf".source;
       day = forcedProfile "day" dayProfile;
       night = forcedProfile "night" nightProfile;
+      cinema = forcedProfile "cinema" dayProfile;
     };
     commands = {
       hyprctl = "${pkgs.hyprland}/bin/hyprctl";
@@ -36,6 +37,7 @@
         serial = "511NTYTGR482";
         day = 80;
         night = 80;
+        cinema = 100;
       }
       {
         name = "Xiaomi Mi Monitor";
@@ -44,6 +46,7 @@
         serial = "";
         day = 80;
         night = 70;
+        cinema = 100;
       }
     ];
   });
@@ -67,12 +70,13 @@ in {
   };
 
   # A forced mode uses a single native profile, so clock transitions cannot
-  # undo it. Every daemon start reads the persisted mode before connecting.
+  # undo it. Every daemon start reads the selected mode before connecting.
   systemd.user.services.hyprsunset.Service.ExecStart =
     lib.mkForce "${worker} run-hyprsunset";
 
-  # Start display-mode@day, @night or @auto. No RemainAfterExit: starting the
-  # same instance again must reapply it. The selected mode persists on disk.
+  # Start display-mode@day, @night, @cinema or @auto. No RemainAfterExit: starting the
+  # same instance again must reapply it. The selected mode lasts until reboot,
+  # then falls back to auto.
   systemd.user.services."display-mode@" = {
     Unit = {
       Description = "Select display mode: %i";

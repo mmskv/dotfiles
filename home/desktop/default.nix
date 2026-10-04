@@ -8,6 +8,7 @@
 
     ./theme.nix
     ./packages.nix
+    ./tauon.nix
     ./mouse-gestures.nix
     ./hyprland.nix
     ./screen-sharing.nix

@@ -13,7 +13,7 @@ import tempfile
 import time
 
 
-MODES = ("auto", "day", "night")
+MODES = ("auto", "day", "night", "cinema")
 
 
 def atomic_write(path, text):
@@ -114,21 +114,20 @@ def main():
         actions.add_parser(action)
     args = parser.parse_args()
     policy = json.loads(args.config.read_text())
-    state_dir = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "display-mode"
-    mode_file = state_dir / "mode"
+    # The mode lives on the runtime tmpfs, so every boot starts in auto.
+    runtime_dir = Path(os.environ["XDG_RUNTIME_DIR"]) / "display-mode"
+    mode_file = runtime_dir / "mode"
     mode = read_mode(mode_file)
 
     if args.command == "run-hyprsunset":
         binary = policy["commands"]["hyprsunset"]
         os.execv(binary, [binary, "--config", policy["profiles"][mode]])
 
-    runtime_dir = Path(os.environ["XDG_RUNTIME_DIR"]) / "display-mode"
     runtime_dir.mkdir(parents=True, exist_ok=True)
 
     systemctl = [policy["commands"]["systemctl"], "--user"]
     if args.command == "select-mode":
-        state_dir.mkdir(parents=True, exist_ok=True)
-        with (state_dir / "mode.lock").open("w") as lock:
+        with (runtime_dir / "mode.lock").open("w") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
             atomic_write(mode_file, args.mode + "\n")
             clear_brightness_cache(runtime_dir)
@@ -140,7 +139,7 @@ def main():
     profile = current_profile(mode, policy["schedule"], datetime.now())
     if args.command == "select-mode":
         print(f"Mode: {mode}; current profile: {profile}")
-        print("Temperature: " + ("default colors" if profile == "day" else f'{policy["nightTemperature"]} K'))
+        print("Temperature: " + (f'{policy["nightTemperature"]} K' if profile == "night" else "default colors"))
         for monitor in policy["monitors"]:
             print(f'{monitor["name"]}: {monitor[profile]}% target brightness')
         return 0

@@ -17,7 +17,6 @@
       playerctl
       pamixer
       btop
-      tauon
       mpv
       dragon-drop
       telegram-desktop
