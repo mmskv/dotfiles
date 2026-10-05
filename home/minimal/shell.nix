@@ -77,6 +77,13 @@ in {
         set -U grc_plugin_ignore_execs cat
 
         function fish_should_add_to_history
+            # defining this function drops fish's leading-space rule, restore it
+            string match -qr '^\s' -- $argv
+            and return 1
+
+            string match -qr '^VAULT_TOKEN=' -- $argv
+            and return 1
+
             string match -qr '^export\s+VAULT_TOKEN' -- $argv
             and return 1
 
