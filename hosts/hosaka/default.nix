@@ -10,6 +10,7 @@
     ./nfs.nix
     ./smart.nix
     ./ntp.nix
+    ./offsite.nix
   ];
 
   users = {

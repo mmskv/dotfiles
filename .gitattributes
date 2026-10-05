@@ -1,2 +1,3 @@
 agenix.nix filter=git-crypt diff=git-crypt
 secrets.nix filter=git-crypt diff=git-crypt
+hosts/hosaka/offsite.* filter=git-crypt diff=git-crypt
